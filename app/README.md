@@ -1,6 +1,6 @@
-# time-diary
+# timediary
 
-> Diário de rotina
+> A Vue.js project
 
 ## Build Setup
 
