@@ -1,4 +1,4 @@
-# timediary
+# time-diary
 
 > A Vue.js project
 
