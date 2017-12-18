@@ -1,0 +1,46 @@
+@import '../../assets/styles/config';
+
+$height: 2em;
+$font: 32px;
+
+.input-container{
+  display: flex;
+  align-items: stretch;
+  justify-content: stretch;
+  height: $height;
+  line-height: $height;
+  font-size: inherit !important;
+  margin: 2px;
+}
+
+.input{
+  background: transparent;
+  color: inherit;
+  width: 100%;
+  height: inherit;
+  line-height: inherit;
+  font-size: inherit !important;
+  padding: 0;
+  margin: 0;
+  outline: none;
+
+  transition: {
+    property: border-color, box-shadow;
+    duration: $time__transition;
+  }
+
+
+
+  &::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+    color: $color__text_lowsat;
+  }
+  &::-moz-placeholder { /* Firefox 19+ */
+    color: $color__text_lowsat;
+  }
+  &:-ms-input-placeholder { /* IE 10+ */
+    color: $color__text_lowsat;
+  }
+  &:-moz-placeholder { /* Firefox 18- */
+    color: $color__text_lowsat;
+  }
+}

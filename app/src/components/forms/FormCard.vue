@@ -16,14 +16,17 @@
 <style lang="scss" scoped>
 
   @import '../../assets/styles/config';
+  @import '../../../node_modules/media-query-mixins/mixins';
 
   form{
     display: flex;
     flex-direction: column;
     width: 100%;
     margin: 0 auto;
-    padding: 32px;
-    box-shadow: 0 0 20px -5px $color__grey;
+    padding: .5em;
+    box-shadow: 0 0 20px -5px $color__text_lowsat;
+    font-size: inherit;
   }
+
 
 </style>
