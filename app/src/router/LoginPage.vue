@@ -7,7 +7,9 @@
         <button-input text='Entrar/Cadastrar'></button-input>
       </form-card>
       <div id="providers">
-        <div class="provider" @click='googleSignIn'>
+        <div
+          class = 'provider'
+          @click="googleSignIn">
           Entrar com Google
         </div>
       </div>
@@ -69,7 +71,8 @@ export default {
   },
   methods:{
     submited(){
-
+      this.$TDAPI.postAccount();
+      console.log(this.$http);
       let emailPassword = this.validateEmailPassword();
 
       this.submitEmailPassword(emailPassword.email, emailPassword.password);
@@ -90,12 +93,10 @@ export default {
               });
     },
     googleSignIn(){
-
-      let auth = new GoogleAuthMethod();
-          auth.submit()
-              .then(account=>{
-                console.dir(account);
-              });
+      new GoogleAuthMethod()
+          .submit()
+            .then(account=>console.dir(account))
+            .catch(error=>console.log(error));
     }
   }
 }

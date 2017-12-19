@@ -4,9 +4,14 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 
+import TimeDiaryApi from '@/plugins/TimeDiaryApi/TimeDiaryApi'
+import {baseUrl} from '@/config';
+
 Vue.config.productionTip = false
 
-/* eslint-disable no-new */
+Vue.use(TimeDiaryApi, {
+  baseUrl: baseUrl
+});
 new Vue({
   el: '#app',
   router,

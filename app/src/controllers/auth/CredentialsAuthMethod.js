@@ -1,5 +1,6 @@
 import AuthMethod from './AuthMethod';
-import provider from './providers/EmailPasswordFirebase';
+import Account from '@/models/Account';
+// import provider from './providers/EmailPasswordFirebase';
 
 export default class CredentialsAuthMethod extends AuthMethod{
   constructor(email, password){
@@ -7,11 +8,11 @@ export default class CredentialsAuthMethod extends AuthMethod{
     this.email = email;
     this.password = password;
   }
-
-  exists(){
-    return provider.exists(this.email, this.password);
-  }
-  register(){
-    return provider.create(this.email, this.password);
+  submit(){
+    return new Promise((resolve)=>{
+      let acc = new Account(this.email);
+          acc.password = this.password;
+      resolve(acc);
+    });
   }
 }

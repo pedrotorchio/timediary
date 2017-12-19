@@ -19,5 +19,7 @@ export default class Error{
   }
   setLowProfile(){
     this.lowProfile = true;
+
+    return this;
   }
 }
