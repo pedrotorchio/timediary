@@ -22,22 +22,27 @@ class AccountsTableSeeder extends Seeder
           $fName = $faker->firstName($genderStr);
           $lName = $faker->lastName($genderStr);
           Account::create([
-            'email' => $faker->email,
-            'password' => bcrypt('secret'),
+
+            'password' => $faker->password,
+            'api_token' => null,
+            'email_verified' => $faker->numberBetween(0, 10) % 3  ==  0  ? false : true,
             'grant_type' => 'password',
-            'email_verified' => true,
-            'display_name' => "{$fName} {$lName}",
-            'first_name' => $fName,
-            'last_name' => $lName,
-            'pictureUrl' => $faker->imageUrl(300,300),
-            'phone' => $faker->phoneNumber,
-            'gender' => $gender,
-            'addr_country' => $faker->country,
-            'addr_state' => $faker->stateAbbr,
-            'addr_city' => $faker->city,
-            'addr_neighbourhood' => $faker->city,
-            'addr_complement' => $faker->streetAddress,
-            'addr_postal_code' => $faker->postcode
+            'pers_email' => $faker->email,
+            'pers_display_name'=> "{$fName} {$lName}",
+            'pers_first_name'=> $fName,
+            'pers_last_name'=> $lName,
+            'pers_picture_url'=> $faker->imageUrl(300,300),
+            'pers_phone'=> $faker->phoneNumber,
+            'pers_gender'=> $gender,
+            'pers_language'=> $faker->languageCode,
+            'pers_occupation'=> $faker->jobTitle,
+            'loc_country'=> $faker->country,
+            'loc_state'=> $faker->state,
+            'loc_city'=> $faker->city,
+            'loc_neighbourhood'=> $faker->city,
+            'loc_complement'=> $faker->streetAddress,
+            'loc_postal_code' => $faker->postcode
+
           ]);
         }
     }

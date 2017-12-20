@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddApiTokenToAccounts extends Migration
+class AddRememberMeAccounts extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,9 @@ class AddApiTokenToAccounts extends Migration
      */
     public function up()
     {
-        Schema::table('Accounts', function (Blueprint $table) {
-          $table->string('api_token', 60)->unique()->nullable();
+        Schema::table('accounts', function (Blueprint $table) {
+
+            $table->string('remember_token', 100)->nullable();
         });
     }
 
@@ -25,8 +26,8 @@ class AddApiTokenToAccounts extends Migration
      */
     public function down()
     {
-        Schema::table('Accounts', function (Blueprint $table) {
-            $table->dropColumn(['api_token']);
+        Schema::table('accounts', function (Blueprint $table) {
+            $table->dropColumn(['remember_token']);
         });
     }
 }

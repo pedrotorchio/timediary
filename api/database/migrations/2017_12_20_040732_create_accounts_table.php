@@ -15,24 +15,29 @@ class CreateAccountsTable extends Migration
     {
         Schema::create('accounts', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('email')->unique();
+
             $table->string('password');
+            $table->string('api_token', 60)->nullable();
+            $table->boolean('email_verified')->default(false);
             $table->string('grant_type');
-            $table->boolean('email_verified');
 
-            $table->string('display_name');
-            $table->string('first_name');
-            $table->string('last_name');
-            $table->string('pictureUrl');
-            $table->string('phone');
-            $table->string('gender');
-            $table->string('addr_country');
-            $table->string('addr_state');
-            $table->string('addr_city');
-            $table->string('addr_neighbourhood');
-            $table->string('addr_complement');
-            $table->string('addr_postal_code');
-
+            // Person
+            $table->string('pers_email')->unique();
+            $table->string('pers_display_name');
+            $table->string('pers_first_name')->nullable();
+            $table->string('pers_last_name')->nullable();
+            $table->string('pers_picture_url')->nullable();
+            $table->string('pers_phone')->nullable();
+            $table->string('pers_gender')->nullable();
+            $table->string('pers_language')->nullable();
+            $table->string('pers_occupation')->nullable();
+            // Location
+            $table->string('loc_country');
+            $table->string('loc_state');
+            $table->string('loc_city');
+            $table->string('loc_neighbourhood');
+            $table->string('loc_complement');
+            $table->string('loc_postal_code');
 
             $table->timestamps();
         });
