@@ -33,6 +33,7 @@ class CreateAccountsTable extends Migration
             $table->string('addr_complement');
             $table->string('addr_postal_code');
 
+
             $table->timestamps();
         });
     }
