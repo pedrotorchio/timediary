@@ -8,10 +8,10 @@
   input{
 
     border: 0;
-    border-bottom: 1px solid $color__text_lowsat;
+    border-bottom: 1px solid $forms__text_lowsat;
 
     &:focus, &:active, &:hover{
-      border-color: $color__highlight;
+      border-color: $forms__highlight;
     }
   }
 </style>

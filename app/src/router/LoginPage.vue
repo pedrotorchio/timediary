@@ -71,8 +71,7 @@ export default {
   },
   methods:{
     submited(){
-      this.$TDAPI.postAccount();
-      console.log(this.$http);
+      console.log(this.$TDAPI.postAccounts());
       let emailPassword = this.validateEmailPassword();
 
       this.submitEmailPassword(emailPassword.email, emailPassword.password);

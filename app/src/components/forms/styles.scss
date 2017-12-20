@@ -3,6 +3,9 @@
 $height: 2em;
 $font: 32px;
 
+$forms__text_lowsat: $color__text_lowsat;
+$forms__highlight: $color__highlight;
+$forms__transition: $time__transition;
 .input-container{
   display: flex;
   align-items: stretch;
@@ -25,22 +28,36 @@ $font: 32px;
   outline: none;
 
   transition: {
-    property: border-color, box-shadow;
+    property: border-color, box-shadow, color;
     duration: $time__transition;
   }
 
-
-
   &::-webkit-input-placeholder { /* Chrome/Opera/Safari */
-    color: $color__text_lowsat;
+    color: $forms__text_lowsat;
+    transition: color $forms__transition;
+    &:focus, &:active, &:hover{
+      color: $forms__highlight;
+    }
   }
   &::-moz-placeholder { /* Firefox 19+ */
-    color: $color__text_lowsat;
+    color: $forms__text_lowsat;
+    transition: color $forms__transition;
+    &:focus, &:active, &:hover{
+      color: $forms__highlight;
+    }
   }
   &:-ms-input-placeholder { /* IE 10+ */
-    color: $color__text_lowsat;
+    color: $forms__text_lowsat;
+    transition: color $forms__transition;
+    &:focus, &:active, &:hover{
+      color: $forms__highlight;
+    }
   }
   &:-moz-placeholder { /* Firefox 18- */
-    color: $color__text_lowsat;
+    color: $forms__text_lowsat;
+    transition: color $forms__transition;
+    &:focus, &:active, &:hover{
+      color: $forms__highlight;
+    }
   }
 }

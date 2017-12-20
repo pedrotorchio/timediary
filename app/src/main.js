@@ -10,7 +10,7 @@ import {baseUrl} from '@/config';
 Vue.config.productionTip = false
 
 Vue.use(TimeDiaryApi, {
-  baseUrl: baseUrl
+  baseUrl: `${baseUrl}/api`
 });
 new Vue({
   el: '#app',

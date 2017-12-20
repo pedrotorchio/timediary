@@ -1,36 +1,28 @@
-import Vue from 'vue'
-import axios from 'axios'
-import VueAxios from 'vue-axios'
-Vue.use(VueAxios, axios);
+import axios from 'axios';
+class TimeDiaryApi{
+  constructor(options){
+    this.__urls = {
+      accounts: '/accounts'
+    };
+    this.__fUrls = {};
 
-const apiUrl = '/api';
-const urls = {
-  accounts: '/accounts',
-};
-let fUrl = {};
-
-function appendBaseUrl(baseUrl){
-  for(let url in urls){
-
-    if(urls.hasOwnProperty(url)){
-      fUrl[url] = `${baseUrl}${apiUrl}${urls[url]}`;
+    this.setBaseUrl(options.baseUrl);
+  }
+  setBaseUrl(baseUrl){
+    this.__baseUrl = baseUrl;
+    for(let url in this.__urls){
+      if(this.__urls.hasOwnProperty(url)){
+        this.__fUrls[url] = `${this.__baseUrl}${this.__urls[url]}`;
+      }
     }
   }
+  postAccounts(){
+    console.log('axios', axios);
+    return this;
+  }
 }
-
-const api = {
+export default {
   install: function(Vue, options){
-    appendBaseUrl(options.baseUrl)
-    let TimeDiaryApi = {
-      postAccount(account){
-        // Vue.axios.post
-      }
-    };
-
-
-
-    Vue.prototype.$TDAPI = TimeDiaryApi;
+    Vue.prototype.$TDAPI = new TimeDiaryApi(options);
   }
 };
-
-export default api;
