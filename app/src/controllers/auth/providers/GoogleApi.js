@@ -3,98 +3,85 @@ import Error from '@/models/Error';
 import google from 'google-client-api';
 import {googleClient} from '@/config.js';
 
-
+let gapi = null;
+let resolve = null;
+let reject  = null;
 
 function exists(){
+  return new Promise((_resolve, _reject)=>{
+    resolve = _resolve;
+    reject  = _reject;
 
-  return new Promise((resolve, reject)=>{
-    google()
-      .then(gapi=>{
-        gapi.load('auth2', ()=>{
+    if(window.gapi !== undefined){
+      gapi = window.gapi;
+      handleClientLoad(handleSignInClick);
+    }
 
-          const auth2 = gapi.auth2.init(googleClient);
-
-            auth2.signIn({scope: 'profile email https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/plus.login'})
-             .then(user=>{
-
-               if(auth2.isSignedIn.get()){
-                  let profile = auth2.currentUser.get().getBasicProfile()
-              
-                  let account = googleProfile2Account(profile);
-                  resolve(account);
-               }
-               else
-                reject(new Error('Problema resolvendo usuário'))
-             })
-             .catch(apiError=>{
-
-               let error = api2Error(apiError).setLowProfile();
-               reject(error);
-
-             });
-        })
-      })
-
-
-    //   var token = result.credential.accessToken;
-    //   // detalhes do usuario
-    //   var additional = result.additionalUserInfo;
-    //   // The signed-in user info.
-    //   var user = result.user;
-    //
-    //   let acc = new Account(user.email);
-    //       acc.uid           = user.uid;
-    //       acc.emailVerified = user.emailVerified;
-    //       acc.displayName   = user.displayName;
-    //       acc.phone         = user.phoneNumber;
-    //       acc.photo         = user.photoURL;
-    //       acc.lastSignInTime = user.metadata.lastSignInTime;
-    //       acc.creationTime  = user.metadata.creationTime;
-    //       acc.refreshToken  = user.refreshToken;
-    //
-    //       acc.isNewUser     = additional.isNewUser;
-    //       additional        = additional.profile;
-    //       acc.lastName      = additional.family_name;
-    //       acc.gender        = additional.gender;
-    //       acc.firstName     = additional.given_name;
-    //       acc.personalPage  = additional.link;
-    //
-    //       acc.session.accessToken = token;
-    //
-    //       resolve(acc);
   });
 }
-function googleProfile2Account(profile){
-  let acc = new Account(profile.getEmail());
-      acc.id = profile.getId();
-      acc.fullName = profile.getName();
-      acc.firstName =  profile.getGivenName();
-      acc.lastName  = profile.getFamilyName();
-      acc.image     = profile.getImageUrl();
 
-  return acc;
+function handleClientLoad(callback) {
+  // Loads the client library and the auth2 library together for efficiency.
+  // Loading the auth2 library is optional here since `gapi.client.init` function will load
+  // it if not already loaded. Loading it upfront can save one network request.
+  gapi.load('client:auth2', ()=>initClient(callback));
 }
-function api2Error(apiError){
 
-  let error = new Error(resolveErrorMessage(apiError));
+function initClient(callback) {
 
-  if(apiError.code !== undefined)
-      error.code = apiError.code;
-  if(apiError.email !== undefined)
-      error.email = apiError.email;
+  // Initialize the client with API key and People API, and initialize OAuth with an
+  // OAuth 2.0 client ID and scopes (space delimited string) to request access.
+  gapi.client.init({
+      client_id: googleClient.id,
+      scope: 'profile https://www.googleapis.com/auth/user.addresses.read https://www.googleapis.com/auth/plus.login'
+  }).then(function () {
+    gapi.client.load('plus', 'v1', ()=>{
+      console.dir(gapi);
+      // Listen for sign-in state changes.
+      gapi.auth2.getAuthInstance().isSignedIn.listen(updateSigninStatus);
 
-  return error;
+      // Handle the initial sign-in state.
+      updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
+
+      callback();
+    });
+  });
 }
-function resolveErrorMessage(apiError){
-  let message = '';
 
-  if(apiError.message !== undefined)
-    message = apiError.message;
-  else if(apiError.error !== undefined)
-    message = apiError.error;
-
-  return message;
+function updateSigninStatus(isSignedIn) {
+  // When signin status changes, this function is called.
+  // If the signin status is changed to signedIn, we make an API call.
+  if (isSignedIn) {
+    makeApiCall();
+  }
 }
+
+function handleSignInClick(event) {
+  // Ideally the button should only show up after gapi.client.init finishes, so that this
+  // handler won't be called before OAuth is initialized.
+  gapi.auth2.getAuthInstance().signIn();
+}
+
+function handleSignOutClick(event) {
+  gapi.auth2.getAuthInstance().signOut();
+}
+
+function makeApiCall() {
+  // Make an API call to the People API, and print the user's given name.
+
+  gapi.client.plus.people.get({
+    'userId' : 'me',
+    'resourceName': 'people/me',
+    'requestMask.includeField': 'person.names'
+  }).then(function(response) {
+    console.log('Hello, ' + response.result.names[0].givenName);
+    resolve(response);
+  }, function(reason) {
+    reject(reason);
+    console.log('Error: ' + reason.result.error.message);
+  });
+}
+
 export default {
   exists
 }

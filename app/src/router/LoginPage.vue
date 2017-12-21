@@ -8,7 +8,7 @@
       </form-card>
       <div id="providers">
         <div
-          class = 'provider'
+          class = 'google provider'
           @click="googleSignIn">
           Entrar com Google
         </div>
@@ -33,6 +33,8 @@
   }
   #providers{
     $height: 2em;
+    $pad: .5px;
+
     height: $height;
     display: flex;
     flex-flow: wrap row;
@@ -40,17 +42,24 @@
     align-items: center;
 
     .provider{
-      $pad: .5em;
+      overflow: hidden;
+      max-height: 0;
       height: $height;
-      line-height: $height - 2*$pad;
+      line-height: $height;
       flex-grow: 0;
       padding: $pad;
       cursor: pointer;
-      transition: color .2s;
+      transition: {
+        property: color, max-height;
+        duration: .2s;
+      }
       &:hover{
         color: $color__highlight;
       }
     }
+  }
+  .gapi-loaded .google.provider{
+    max-height:100px !important;
   }
 </style>
 <script>
@@ -69,9 +78,21 @@ export default {
       passwordInput: ''
     }
   },
+  mounted(){
+    this.$googleLogin.setSignedInCallback(profile=>{
+
+    });
+    this.$googleLogin.setSignedOutCallback(()=>{
+
+    });
+    this.$googleLogin.onError(err=>{
+
+    })
+  },
   methods:{
     submited(){
       console.log(this.$TDAPI.postAccounts());
+
       let emailPassword = this.validateEmailPassword();
 
       this.submitEmailPassword(emailPassword.email, emailPassword.password);
@@ -92,11 +113,9 @@ export default {
               });
     },
     googleSignIn(){
-      new GoogleAuthMethod()
-          .submit()
-            .then(account=>console.dir(account))
-            .catch(error=>console.log(error));
+      this.$googleLogin.login();
     }
-  }
+  },
+
 }
 </script>
