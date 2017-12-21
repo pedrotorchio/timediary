@@ -27,3 +27,6 @@ Route::post('accounts', 'AccountController@store');
 Route::put('accounts/{account}', 'AccountController@update');
 
 Route::delete('accounts/{account}', 'AccountController@delete');
+
+Route::post('login', 'API\PassportController@login');
+Route::post('register', 'API\PassportController@register');

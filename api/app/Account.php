@@ -1,15 +1,26 @@
 <?php
-
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
+use Laravel\Passport\HasApiTokens;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class Account extends Model
+class Account extends Authenticatable
 {
-    protected $fillable = [
+    use HasApiTokens, Notifiable;
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+
+    protected $fillable = self::FIELDS;
+
+    public const FIELDS = [
       'password',
-      //'api_token',
-      //'remember_token',
+      'api_token',
+      'remember_token',
       'email_verified',
       'grant_type',
       'pers_email',
@@ -27,6 +38,16 @@ class Account extends Model
       'loc_neighbourhood',
       'loc_complement',
       'loc_postal_code'
+    ];
+
+
+    /**
+     * The attributes that should be hidden for arrays.
+     *
+     * @var array
+     */
+    protected $hidden = [
+        //'password', 'remember_token', 'api_token'
     ];
 
 
