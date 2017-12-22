@@ -26,9 +26,9 @@ class GoogleLoginApi{
         userId: 'me'
       })
       .then(resp=>{
-
-        this.__signedInCallback(resp);
-
+        
+        if(this.__signedInCallback)
+          this.__signedInCallback(resp.result);
       })
       .catch(this.__loadingError);
 
@@ -37,7 +37,10 @@ class GoogleLoginApi{
   }
   logout(){
     gapi.auth2.getAuthInstance().signOut()
-      .then(this.__signedOutCallback)
+      .then(()=>{
+        if(this.__signedOutCallback)
+          this.__signedOutCallback
+      })
       .catch(this.__loadingError);
   }
   setSignedInCallback(callback){
@@ -79,14 +82,15 @@ class GoogleLoginApi{
     document.querySelector('body')
       .classList.add('gapi-loaded');
 
-    this.__readyCallback();
+    if(this.__readyCallback)
+      this.__readyCallback();
   }
   whenReady(callback){
     this.__readyCallback = callback;
   }
 
   __loadingError(error){
-    console.error(error);
+    console.error('GoogleLoginApi', error);
     if(this.__errorCallback)
       this.__errorCallback(error);
   }

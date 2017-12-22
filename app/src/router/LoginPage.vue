@@ -1,7 +1,59 @@
+<script>
+// UI
+import TextInput from '@/components/forms/TextInput.vue';
+import ButtonInput from '@/components/forms/ButtonInput.vue';
+import FormCard from '@/components/forms/FormCard.vue';
+// Login
+import GooglePlusAccount from '@/models/Account/GooglePlusAccount';
+// Validators
+import EmailValidator from '@/models/validators/EmailValidator';
+
+export default {
+  name: 'LoginPage',
+  components:{TextInput, ButtonInput, FormCard},
+  data () {
+    return {
+      emailInput: '',
+      passwordInput: ''
+    }
+  },
+  mounted(){
+    this.$googleLogin.setSignedInCallback(profile=>{
+      new GooglePlusAccount(profile);
+    });
+    this.$googleLogin.setSignedOutCallback(()=>{
+
+    });
+    this.$googleLogin.onError(err=>{
+
+    });
+  },
+  methods:{
+    passwordSignIn(){
+
+      let email = EmailValidator(this.emailInput);
+      let passw = PasswordValidator(this.passwordInput);
+
+
+      // let auth = new CredentialsAuthMethod(email, password);
+      //     auth.submit()
+      //         .then(account=>{
+      //           console.dir(account);
+      //         });
+    },
+    googleSignIn(){
+      this.$googleLogin.login();
+    }
+  },
+
+}
+</script>
+
+
 <template>
   <div id="loginPage" class="page">
     <div id="content">
-      <form-card id="login-form" @submit='submited'>
+      <form-card id="login-form" @submit='passwordSignIn'>
         <text-input v-model='emailInput' type='text' placeholder='Email'></text-input>
         <text-input v-model='passwordInput' type='password' placeholder='Senha'></text-input>
         <button-input text='Entrar/Cadastrar'></button-input>
@@ -16,6 +68,7 @@
     </div>
   </div>
 </template>
+
 <style lang="scss" scoped>
   @import '../assets/styles/config';
   #loginPage{
@@ -62,60 +115,3 @@
     max-height:100px !important;
   }
 </style>
-<script>
-import TextInput from '@/components/forms/TextInput.vue';
-import ButtonInput from '@/components/forms/ButtonInput.vue';
-import FormCard from '@/components/forms/FormCard.vue';
-import CredentialsAuthMethod from '@/controllers/auth/CredentialsAuthMethod';
-import GoogleAuthMethod from '@/controllers/auth/GoogleAuthMethod';
-
-export default {
-  name: 'LoginPage',
-  components:{TextInput, ButtonInput, FormCard},
-  data () {
-    return {
-      emailInput: '',
-      passwordInput: ''
-    }
-  },
-  mounted(){
-    this.$googleLogin.setSignedInCallback(profile=>{
-
-    });
-    this.$googleLogin.setSignedOutCallback(()=>{
-
-    });
-    this.$googleLogin.onError(err=>{
-
-    })
-  },
-  methods:{
-    submited(){
-      console.log(this.$TDAPI.postAccounts());
-
-      let emailPassword = this.validateEmailPassword();
-
-      this.submitEmailPassword(emailPassword.email, emailPassword.password);
-    },
-    validateEmailPassword(){
-      let email = this.emailInput;
-      let password = this.passwordInput;
-      return {
-        email,
-        password
-      }
-    },
-    submitEmailPassword(email, password){
-      let auth = new CredentialsAuthMethod(email, password);
-          auth.submit()
-              .then(account=>{
-                console.dir(account);
-              });
-    },
-    googleSignIn(){
-      this.$googleLogin.login();
-    }
-  },
-
-}
-</script>
