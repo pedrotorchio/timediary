@@ -18,6 +18,9 @@ export default {
     }
   },
   mounted(){
+    this.$sysMsg.whenReady(()=>setTimeout(()=>{
+      greetings(this.$sysMsg);
+    }, 1000));
     this.$googleLogin.setSignedInCallback(profile=>{
       new GooglePlusAccount(profile);
     });
@@ -33,18 +36,21 @@ export default {
 
       let email = EmailValidator(this.emailInput);
       let passw = PasswordValidator(this.passwordInput);
-
-
-      // let auth = new CredentialsAuthMethod(email, password);
-      //     auth.submit()
-      //         .then(account=>{
-      //           console.dir(account);
-      //         });
     },
     googleSignIn(){
       this.$googleLogin.login();
     }
   },
+
+}
+function greetings(msg){
+
+  msg.showCheeringMessage('Olá, seja bem vindo ao Time Diary')
+  .then(()=>{
+
+    msg.showCheeringMessage('Escolha um email e senha para começar a usar.', msg.LONG_DURATION);
+
+  });
 
 }
 </script>

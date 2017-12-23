@@ -11,6 +11,8 @@ import {baseUrl} from '@/config';
 
 import GoogleLoginApi from '@/plugins/GoogleLoginApi/GoogleLoginApi';
 
+import SystemMessage from '@/plugins/SystemMessage/SystemMessage';
+
 Vue.config.productionTip = false
 
 Vue.use(TimeDiaryApi, {
@@ -19,7 +21,8 @@ Vue.use(TimeDiaryApi, {
 Vue.use(GoogleLoginApi, {
     client_id: googleClientConfig.id,
     scope: 'profile https://www.googleapis.com/auth/user.addresses.read https://www.googleapis.com/auth/plus.login'
-  });
+});
+Vue.use(SystemMessage);
 
 new Vue({
   el: '#app',

@@ -1,6 +1,10 @@
 <template>
 
+  <main>
     <router-view/>
+
+    <system-message></system-message>
+  </main>
 
 </template>
 
@@ -29,12 +33,16 @@ html::-webkit-scrollbar-thumb {
   outline: 1px solid slategrey;
 }
 body{
+  margin: 0;
+}
+main{
   display: flex;
   flex-direction: column;
   align-items: stretch;
   justify-content: stretch;
-  min-height: 100vh;
   margin: 0;
+  min-height: 100vh;
+
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
