@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "axios": "^0.17.1",
+    "fifo": "^2.3.0",
     "google-client-api": "^1.0.4",
     "validator": "^9.2.0",
     "vue": "^2.5.2",

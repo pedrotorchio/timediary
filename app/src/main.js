@@ -11,7 +11,7 @@ import {baseUrl} from '@/config';
 
 import GoogleLoginApi from '@/plugins/GoogleLoginApi/GoogleLoginApi';
 
-import SystemMessage from '@/plugins/SystemMessage/SystemMessage';
+import SystemMessenger from '@/plugins/SystemMessenger/SystemMessenger';
 
 Vue.config.productionTip = false
 
@@ -22,7 +22,7 @@ Vue.use(GoogleLoginApi, {
     client_id: googleClientConfig.id,
     scope: 'profile https://www.googleapis.com/auth/user.addresses.read https://www.googleapis.com/auth/plus.login'
 });
-Vue.use(SystemMessage);
+Vue.use(SystemMessenger);
 
 new Vue({
   el: '#app',

@@ -19,6 +19,7 @@ export default {
   },
   mounted(){
     this.$sysMsg.whenReady(()=>setTimeout(()=>{
+      
       greetings(this.$sysMsg);
     }, 1000));
     this.$googleLogin.setSignedInCallback(profile=>{
@@ -43,14 +44,14 @@ export default {
   },
 
 }
-function greetings(msg){
-
-  msg.showCheeringMessage('Olá, seja bem vindo ao Time Diary')
-  .then(()=>{
-
-    msg.showCheeringMessage('Escolha um email e senha para começar a usar.', msg.LONG_DURATION);
-
-  });
+function greetings(sm){
+  
+  sm.push(
+    sm.makeMessage('Olá, seja bem vindo ao Time Diary', 'cheer')
+  );
+  sm.push(
+    sm.makeMessage('Escolha um email e senha para começar a usar.', 'cheer', sm.DURATION_STAY)
+  )
 
 }
 </script>
