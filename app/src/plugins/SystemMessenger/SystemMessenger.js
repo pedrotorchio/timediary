@@ -32,13 +32,7 @@ class SystemMessenger{
 
         this.readyCallback = null;
     }
-    makeMessage(text, humor, duration){
-        let m = new Message();
-            m.text = text;
-            m.humor = humor;
-            m.duration = duration || this.DURATION_NORMAL;
-        return m;
-    }
+    
     whenReady(callback){
         this.readyCallback = callback;
     }
@@ -53,6 +47,8 @@ class SystemMessenger{
         return this;
     }
     interrupt(message){
+        if(typeof message === 'string')
+            message = this.__makeMessage(message, humor, duration);
         this.queue.unshift(message);
         this.__dismiss();
     }
@@ -61,9 +57,25 @@ class SystemMessenger{
         hide()
             .then(()=>this.__process());
     }
-    push(message){
+    push(message, humor, duration){
+        if(typeof message === 'string')
+            message = this.__makeMessage(message, humor, duration);
+
         this.queue.push(message);
         this.__execute();
+    }
+    __makeMessage(text, humor, duration){
+        
+        if(typeof humor === 'number'){
+            duration = humor;
+            humor    = null;
+        }
+
+        let m = new Message();
+            m.text = text;
+            m.humor = humor || 'info';
+            m.duration = duration || this.DURATION_NORMAL;
+        return m;
     }
     __execute(){        
         if(!this.isRunning)

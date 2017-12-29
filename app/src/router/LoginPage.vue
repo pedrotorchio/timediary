@@ -46,12 +46,9 @@ export default {
 }
 function greetings(sm){
   
-  sm.push(
-    sm.makeMessage('Olá, seja bem vindo ao Time Diary', 'cheer')
-  );
-  sm.push(
-    sm.makeMessage('Escolha um email e senha para começar a usar.', 'cheer', sm.DURATION_STAY)
-  )
+  sm.push('Olá, seja bem vindo ao Time Diary', 'cheer');
+  sm.push('Entre usando um email Google', 'cheer');
+  sm.push('... ou escolha um email e senha para começar a usar.', 'cheer', sm.DURATION_STAY);
 
 }
 </script>
