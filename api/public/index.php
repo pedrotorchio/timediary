@@ -17,10 +17,12 @@ if (PHP_SAPI == 'cli-server') {
 require __DIR__ . '/../vendor/autoload.php';
 
 // Instantiate the app
+
 global $APP;
 
 $settings = require __DIR__ . '/../settings.php';
 $APP = new Slim\App($settings);
+
 
 // // Set up dependencies
 require __DIR__ . '/../services/dependencies.php';

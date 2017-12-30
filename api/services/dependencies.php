@@ -10,6 +10,7 @@ $capsule->bootEloquent();
 
 $container = $APP->getContainer();
 
+
 // view renderer
 $container['renderer'] = function ($c) {
     $settings = $c->get('settings')['renderer'];

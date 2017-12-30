@@ -1,12 +1,15 @@
 <?php
 namespace App\models;
+
 use Illuminate\Database\Eloquent\Model;
 use \Illuminate\Database\Capsule\Manager as Capsule;
+
 class Account extends BaseModel{
     public const TABLE = 'account';
     public const ID_FIELD = 'pers_email';
     protected $hidden = ['password'];
     protected $table = self::TABLE;
+
     protected $fillable = [
         'api_token',
         'remember_token',
@@ -31,5 +34,4 @@ class Account extends BaseModel{
         'status'
     ];
 
-    
 }

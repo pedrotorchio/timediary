@@ -8,7 +8,9 @@ abstract class BaseModel extends Model{
     protected $guarded = [
         'id'
     ];
+
     protected $fillable = ['*'];
+
 
     public function disable(){
         $this->status = 0;
@@ -24,9 +26,11 @@ abstract class BaseModel extends Model{
         }
     }
     public static function exists($id){
+
         $acc = self::where(static::$ID_FIELD, $id)->take(1);
         
         return $acc->count() > 0;
+
     }
     public static function count($where = null){
         $count = 0;
@@ -35,6 +39,7 @@ abstract class BaseModel extends Model{
 
         return $count;
     }
+
     public static function fromId($id){
         $results = self::where(static::ID_FIELD, $id)->take(1);
         

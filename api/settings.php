@@ -31,5 +31,4 @@ return [
             'account' => 'AccountController'
         ]
     ]
-    
 ];
