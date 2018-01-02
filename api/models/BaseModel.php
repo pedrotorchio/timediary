@@ -4,13 +4,16 @@ namespace App\models;
 use Illuminate\Database\Eloquent\Model;
 
 abstract class BaseModel extends Model{
+
+
+    public function __construct(){
+        $this->table = static::TABLE;
+    }
     
     protected $guarded = [
         'id'
     ];
-
-    protected $fillable = ['*'];
-
+    protected $table = '';
 
     public function disable(){
         $this->status = 0;
@@ -20,14 +23,14 @@ abstract class BaseModel extends Model{
     }
 
     public function massiveSet(array $data){
-        foreach($this->fillable as $field){
+        foreach(static::FIELDS as $field){
             if(isset($data[$field]))
                 $this->$field = $data[$field];
         }
     }
     public static function exists($id){
 
-        $acc = self::where(static::$ID_FIELD, $id)->take(1);
+        $acc = self::where(static::ID_FIELD, $id)->take(1);
         
         return $acc->count() > 0;
 

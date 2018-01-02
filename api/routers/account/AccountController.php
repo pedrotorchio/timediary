@@ -3,15 +3,13 @@ namespace App\routers\account;
 use \Slim\Http\Request;
 use \Slim\Http\Response;
 
-use \App\models\Account;
+use \App\models\account\Account;
 use \App\routers\BaseRestController;
 use \App\routers\exceptions\HttpException;
 
 class AccountController extends BaseRestController {
     
     protected function readOne(string $id){
-        $id = 
-        // $acc = Account::where(Account::ID_FIELD, $id)->take(1);
         $acc = Account::fromId($id);
         
         if($acc === null){

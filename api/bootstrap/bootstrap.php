@@ -7,8 +7,7 @@ accountsUpTo(10);
 
 
 // PROCEDIMENTOS FIM
-use \App\models\Account;
-use \Illuminate\Database\Capsule\Manager as Capsule;
+use \App\models\account\Account;
 
 
 function accountsUpTo($num){
