@@ -2,6 +2,7 @@
 return [
     // permissoes
     '00'=>'Ação não permitida',
-    // accounts    
-    '10'=>'ID inválido'
+    // validacao    
+    '10'=>'ID inválido',
+    '11'=>'Campo inválido'
 ];

@@ -2,43 +2,42 @@
 namespace App\models;
 
 use Illuminate\Database\Eloquent\Model;
+use \App\models\validators\ValitronValidator;
 
 abstract class BaseModel extends Model{
 
 
-    public function __construct(){
-        $this->table = static::TABLE;
+    public function __construct(array $data = array()){
+        parent::__construct($data);
+        $this->table = static::TABLE ?: null;
     }
     
     protected $guarded = [
         'id'
     ];
-    protected $table = '';
+    protected $table = null;
+    protected $validator = null;
 
     public function disable(){
         $this->status = 0;
+        $this->save();
     }
     public function enable(){
         $this->status = 1;
+        $this->save();        
     }
 
-    public function massiveSet(array $data){
-        foreach(static::FIELDS as $field){
-            if(isset($data[$field]))
-                $this->$field = $data[$field];
-        }
-    }
     public static function exists($id){
 
-        $acc = self::where(static::ID_FIELD, $id)->take(1);
+        $acc = self::fromId($id);
         
-        return $acc->count() > 0;
+        return $acc !== null;
 
     }
     public static function count($where = null){
         $count = 0;
-        if($where == null)
-            $count = count(self::all());
+        $results = self::all();
+        $count = $results->count();
 
         return $count;
     }
@@ -50,5 +49,14 @@ abstract class BaseModel extends Model{
             return null;
 
         return $results->first();
+    }
+
+    public function fill(array $data){
+        if($this->validator !== null){
+            $this->validator->setData($data);
+            $this->validator->validate();            
+        }
+            
+        parent::fill($data);
     }
 }
