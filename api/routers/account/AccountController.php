@@ -5,7 +5,7 @@ use \Slim\Http\Response;
 
 use \App\models\account\Account;
 use \App\routers\BaseRestController;
-use \App\routers\exceptions\HttpException;
+use \App\exceptions\HttpException;
 
 class AccountController extends BaseRestController {
     
@@ -13,11 +13,11 @@ class AccountController extends BaseRestController {
         $acc = Account::fromId($id);
         
         if($acc === null){
-            throw new HttpException(
+            throw (new HttpException(
                 "Email não encontrado",
-                11,
+                21,
                 404
-            );
+            ))->setData(['pers_email'=>'Email não encontrado']);
         }
 
         return $acc;
@@ -34,6 +34,16 @@ class AccountController extends BaseRestController {
     protected function update($id, array $data){
         $acc = Account::fromId($id);
         
+
+        if($acc === null){
+            throw (new HttpException(
+                "Email não encontrado",
+                21,
+                404
+            ))->setData(['pers_email'=>'Email não encontrado']);
+        }
+
+
         $acc->fill($data);
         $acc->save();
 

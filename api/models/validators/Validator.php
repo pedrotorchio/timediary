@@ -5,6 +5,8 @@ abstract class Validator{
     protected $rules = [];
     protected $data  = [];
     protected $basic = ['optional'];
+    
+    
     protected function isFunction($rule){
         return false;
     }

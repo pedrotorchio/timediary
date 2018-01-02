@@ -3,7 +3,7 @@ namespace App\routers;
 
 use \Slim\Http\Request;
 use \Slim\Http\Response;
-use \App\routers\exceptions\HttpException;
+use \App\exceptions\HttpException;
 
 abstract class BaseRestController{
     public const STATUS_CODE = [
@@ -33,10 +33,11 @@ abstract class BaseRestController{
             
             return $this->makeResponse(
                 $response,
-                json_encode([
+                [
                     'code' => $e->getCode(),
-                    'message' => $e->getMessage()
-                ]),
+                    'message' => $e->getMessage(),                     
+                    'data' => $e->getData()
+                ],
                 $e->getHttpStatusCode());
         }
 
@@ -56,10 +57,11 @@ abstract class BaseRestController{
 
             return $this->makeResponse(
                 $response,
-                json_encode([
+                [
                     'code' => $e->getCode(),
-                    'message' => $e->getMessage()
-                ]),
+                    'message' => $e->getMessage(),
+                    'data' => $e->getData()
+                ],
                 $e->getHttpStatusCode());
         }
 
@@ -72,20 +74,20 @@ abstract class BaseRestController{
     public function postOne(Request $request, Response $response, array $args){
         return $this->makeResponse(
             $response,
-            json_encode([
+            [
                 'code' => '00',
                 'message' => 'Ação não permitida'
-            ]),
+            ],
             self::STATUS_CODE['metodo_invalido']
         );
     }
     public function putAll(Request $request, Response $response, array $args){
         return $this->makeResponse(
             $response,
-            json_encode([
+            [
                 'code' => '00',
                 'message' => 'Ação não permitida'
-            ]),
+            ],
             self::STATUS_CODE['metodo_invalido']
         );
     }
@@ -102,10 +104,11 @@ abstract class BaseRestController{
 
             return $this->makeResponse(
                 $response,
-                json_encode([
+                [
                     'code' => $e->getCode(),
-                    'message' => $e->getMessage()
-                ]),
+                    'message' => $e->getMessage(),                     
+                    'data' => $e->getData()
+                ],
                 $e->getHttpStatusCode());
         
         }
@@ -119,10 +122,10 @@ abstract class BaseRestController{
     public function deleteAll(Request $request, Response $response, array $args){
         return $this->makeResponse(
             $response,
-            json_encode([
+            [
                 'code' => '00',
                 'message' => 'Ação não permitida'
-            ]),
+            ],
             self::STATUS_CODE['metodo_invalido']
         );
     }
@@ -137,10 +140,11 @@ abstract class BaseRestController{
             
             return $this->makeResponse(
                 $response,
-                json_encode([
+                [
                     'code' => $e->getCode(),
-                    'message' => $e->getMessage()
-                ]),
+                    'message' => $e->getMessage(),                     
+                    'data' => $e->getData()
+                ],
                 $e->getHttpStatusCode());
         }
 
@@ -150,7 +154,7 @@ abstract class BaseRestController{
             $one->toJson()
         );
     }
-    protected function makeResponse(Response $response, string $json, int $status = 200){
+    protected function makeResponse(Response $response, $json, int $status = 200){
         return $response
             ->withStatus($status)
             ->withJson($json);
