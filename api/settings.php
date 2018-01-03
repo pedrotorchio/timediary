@@ -29,7 +29,8 @@ return [
         ],
         'routers' => [
             'account' => 'AccountController',
-            'subject' => 'SubjectController'
+            'subject' => 'SubjectController',
+            'diagnostic' => 'DiagnosticController'
         ]
     ]
 ];

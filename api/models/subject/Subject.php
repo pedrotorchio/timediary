@@ -32,5 +32,17 @@ class Subject extends BaseModel{
     public function diagnostics(){
         return $this->belongsToMany('App\models\diagnostic\Diagnostic', 'diagnostic_x_subject', 'subject', 'diagnostic');
     }
+    public function diagnostic()
+    {
+        return $this->hasOne('App\models\diagnostic\Diagnostic', 'main_diagnostic');
+    }
+    public function fill(array $data){
+        // var_dump($data); die();
+        if(isset($data['diagnostics']))
+            $this->diagnostics()->attach($data['diagnostics']);
+        unset($data['diagnostics']);
+        
+        parent::fill($data);
+    }
 
 }
