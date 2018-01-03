@@ -2,7 +2,7 @@
 namespace App\models;
 
 use Illuminate\Database\Eloquent\Model;
-use \App\models\validators\ValitronValidator;
+use \App\models\validators\ValitronValidator as Validator;
 
 abstract class BaseModel extends Model{
 
@@ -10,6 +10,7 @@ abstract class BaseModel extends Model{
     public function __construct(array $data = array()){
         parent::__construct($data);
         $this->table = static::TABLE ?: null;
+        $this->validator = (new Validator())->setRules(static::FIELDS);
     }
     
     protected $guarded = [

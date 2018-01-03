@@ -1,18 +1,14 @@
 <?php
-namespace App\models\account;
+namespace App\models\subject;
 
 use \App\models\BaseModel;
 use \App\models\validators\ValitronValidator as Validator;
 
-class Account extends BaseModel{
-    public const TABLE = 'account';
+class Subject extends BaseModel{
+    public const TABLE = 'subject';
     public const ID_FIELD = 'id';
     public const FIELDS = [
         'id' => '',
-        'api_token' => '',
-        'remember_token' => '',
-        'email_verified' => '',
-        'grant_type' => '',
         'pers_email' => 'email',
         'pers_display_name' => 'alphaNum',
         'pers_first_name' => 'alphaNum',
@@ -29,8 +25,12 @@ class Account extends BaseModel{
         'loc_neighbourhood' => 'alphaNum',
         'loc_complement' => 'alphaNum',
         'loc_postal_code' => 'alphaNum', 
-        'password' => '',
+        'education_years' => 'integer',
+        'diagnostic' => 'integer',
         'status' => 'boolean'
     ];
-    protected $hidden = ['password'];
+    public function diagnostics(){
+        return $this->belongsToMany('App\models\diagnostic\Diagnostic', 'diagnostic_x_subject', 'subject', 'diagnostic');
+    }
+
 }

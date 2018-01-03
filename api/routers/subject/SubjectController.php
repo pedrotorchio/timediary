@@ -1,16 +1,16 @@
 <?php
-namespace App\routers\account;
+namespace App\routers\subject;
 use \Slim\Http\Request;
 use \Slim\Http\Response;
 
-use \App\models\account\Account;
+use \App\models\subject\Subject;
 use \App\routers\BaseRestController;
 use \App\exceptions\HttpException;
 
-class AccountController extends BaseRestController {
+class SubjectController extends BaseRestController {
     
     protected function readOne(string $id){
-        $acc = Account::fromId($id);
+        $acc = Subject::fromId($id);
         
         if($acc === null){
             $this->_404();
@@ -19,16 +19,16 @@ class AccountController extends BaseRestController {
         return $acc;
     }
     protected function readAll(){
-        return Account::all();
+        return Subject::all();
     }
     protected function create(array $data){
-        $acc = new Account($data);
+        $acc = new Subject($data);
         $acc->save();
 
         return $acc;
     }
     protected function update($id, array $data){
-        $acc = Account::fromId($id);
+        $acc = Subject::fromId($id);
         
         if($acc === null){
             $this->_404();
@@ -40,11 +40,11 @@ class AccountController extends BaseRestController {
         return $acc;
     }
     protected function delete($id){}
-        protected function _404(){
-            throw (new HttpException(
-                "Email não encontrado",
-                21,
-                404
-            ))->setData(['pers_email'=>'Email não encontrado']);
-        }
+    protected function _404(){
+        throw (new HttpException(
+            "Sujeito não encontrado",
+            21,
+            404
+        ))->setData([Subject::ID_FIELD=>'Sujeito não encontrado']);
+    }
 }

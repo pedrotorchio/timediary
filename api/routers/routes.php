@@ -19,7 +19,6 @@ function registerController(string $key , string $className){
 }
 function generateRoutes(string $key, string $controller){
     global $APP;
-
     $APP->get("/{$key}", "{$controller}:getAll");
     $APP->get("/{$key}/{id}", "{$controller}:getOne");
     $APP->post("/{$key}", "{$controller}:postAll");

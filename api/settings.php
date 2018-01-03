@@ -28,7 +28,8 @@ return [
             'level' => \Monolog\Logger::DEBUG,
         ],
         'routers' => [
-            'account' => 'AccountController'
+            'account' => 'AccountController',
+            'subject' => 'SubjectController'
         ]
     ]
 ];
