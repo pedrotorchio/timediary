@@ -25,7 +25,4 @@ class Task extends BaseModel{
     public function secondary_activity(){
         $this->belongsTo(Activity::class, 'secondary_activity');
     }
-    public function subject(){
-        $this->belongsTo(Subject::class, 'subject');
-    }
 }
