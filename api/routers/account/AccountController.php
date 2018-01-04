@@ -45,6 +45,6 @@ class AccountController extends BaseRestController {
                 "Email não encontrado",
                 21,
                 404
-            ))->setData(['pers_email'=>'Email não encontrado']);
+            ));
         }
 }

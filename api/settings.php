@@ -30,7 +30,10 @@ return [
         'routers' => [
             'account' => 'AccountController',
             'subject' => 'SubjectController',
-            'diagnostic' => 'DiagnosticController'
+            'diagnostic' => 'DiagnosticController',
+            'category'   => 'CategoryController',
+            'activity' => 'ActivityController',
+            'task'     => 'TaskController'
         ]
     ]
 ];

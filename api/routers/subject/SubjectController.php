@@ -45,6 +45,6 @@ class SubjectController extends BaseRestController {
             "Sujeito não encontrado",
             21,
             404
-        ))->setData([Subject::ID_FIELD=>'Sujeito não encontrado']);
+        ));
     }
 }

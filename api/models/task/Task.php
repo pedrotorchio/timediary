@@ -1,0 +1,31 @@
+<?php
+namespace App\models\task;
+
+use \App\models\BaseModel;
+use \App\models\validators\ValitronValidator as Validator;
+use \App\models\activity\Activity;
+use \App\models\subject\Subject;
+
+class Task extends BaseModel{
+    public const TABLE = 'task';
+    public const ID_FIELD = 'id';
+    public const RELATIONSHIP_FIELDS = ['secondary_activity', 'subject'];
+    public const FIELDS = [
+        'id' => '',
+        'title' => '',
+        'root' => 'integer&required',
+        'duration' => 'integer',
+        'location' => '',
+        'company' => '',
+        'secondary_activity' => 'integer',
+        'independency_lvl' => 'integer',
+        'subject' => 'integer&required',                
+        'status' => 'boolean'
+    ];
+    public function secondary_activity(){
+        $this->belongsTo(Activity::class, 'secondary_activity');
+    }
+    public function subject(){
+        $this->belongsTo(Subject::class, 'subject');
+    }
+}

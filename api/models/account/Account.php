@@ -3,12 +3,14 @@ namespace App\models\account;
 
 use \App\models\BaseModel;
 use \App\models\validators\ValitronValidator as Validator;
+use \App\models\subject\Subject;
 
 class Account extends BaseModel{
     public const TABLE = 'account';
-    public const ID_FIELD = 'id';
+    public const ID_FIELD = 'pers_email';
+    public const RELATIONSHIP_FIELDS = ['children', 'subjects'];
     public const FIELDS = [
-        'id' => '',
+        
         'api_token' => '',
         'remember_token' => '',
         'email_verified' => '',
@@ -29,8 +31,16 @@ class Account extends BaseModel{
         'loc_neighbourhood' => 'alphaNum',
         'loc_complement' => 'alphaNum',
         'loc_postal_code' => 'alphaNum', 
-        'password' => '',
-        'status' => 'boolean'
+        'password' => ''
+        
+        
     ];
     protected $hidden = ['password'];
+
+    public function children(){
+        return $this->hasMany(Account::class, 'root');
+    }
+    public function subjects(){
+        return $this->belongsToMany(Subject::class, 'account_x_subject', 'account', 'subject');
+    }
 }

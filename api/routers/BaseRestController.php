@@ -4,12 +4,14 @@ namespace App\routers;
 use \Slim\Http\Request;
 use \Slim\Http\Response;
 use \App\exceptions\HttpException;
+use \Illuminate\Database\QueryException;
 
 abstract class BaseRestController{
     public const STATUS_CODE = [
         'ok' => 200,
         'created' => 201,
-        'metodo_invalido' => 405
+        'metodo_invalido' => 405,
+        'erro_interno' => 500
     ];
     public const STATUS_MESSAGE = [
         'ok' => 'OK!'
@@ -39,6 +41,16 @@ abstract class BaseRestController{
                     'data' => $e->getData()
                 ],
                 $e->getHttpStatusCode());
+        }catch(QueryException $e){
+            return $this->makeResponse(
+                $response,
+                [
+                    'code' => $e->getCode(),
+                    'message' => $e->getMessage()
+                ],
+                self::STATUS_CODE['erro_interno']);
+                
+                
         }
 
         return $this->makeResponse(
@@ -63,6 +75,15 @@ abstract class BaseRestController{
                     'data' => $e->getData()
                 ],
                 $e->getHttpStatusCode());
+        }catch(QueryException $e){
+            return $this->makeResponse(
+                $response,
+                [
+                    'code' => $e->getCode(),
+                    'message' => $e->getMessage()
+                ],
+                self::STATUS_CODE['erro_interno']);
+                
         }
 
         return $this->makeResponse(
@@ -97,7 +118,7 @@ abstract class BaseRestController{
         $id = $request->getAttribute('id');
         
         try{
-
+            
             $one  = $this->update($id, $data);
 
         }catch(HttpException $e){
@@ -111,6 +132,15 @@ abstract class BaseRestController{
                 ],
                 $e->getHttpStatusCode());
         
+        }catch(QueryException $e){
+            return $this->makeResponse(
+                $response,
+                [
+                    'code' => $e->getCode(),
+                    'message' => $e->getMessage()
+                ],
+                self::STATUS_CODE['erro_interno']);
+
         }
 
         return $this->makeResponse(
@@ -135,6 +165,7 @@ abstract class BaseRestController{
         try{
          
             $one = $this->readOne($id);
+            $one->delete();
 
         }catch(HttpException $e){
             
@@ -146,9 +177,19 @@ abstract class BaseRestController{
                     'data' => $e->getData()
                 ],
                 $e->getHttpStatusCode());
+
+        }catch(QueryException $e){
+            return $this->makeResponse(
+                $response,
+                [
+                    'code' => $e->getCode(),
+                    'message' => $e->getMessage()
+                ],
+                self::STATUS_CODE['erro_interno']);
+
         }
 
-        $one->delete();
+        
         return $this->makeResponse(
             $response,
             $one->toJson()

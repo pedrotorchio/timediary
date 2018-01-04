@@ -1,14 +1,16 @@
 <?php
-namespace App\models\diagnostic;
+namespace App\models\category;
 
 use \App\models\BaseModel;
 use \App\models\validators\ValitronValidator as Validator;
 
-class Diagnostic extends BaseModel{
-    public const TABLE = 'diagnostic';
+class Category extends BaseModel{
+    public const TABLE = 'activity_category';
     public const ID_FIELD = 'id';
     public const FIELDS = [
         
-        'title' => 'alphaNum'
+        'title' => '',
+        'macro' => '',
     ];
+
 }
