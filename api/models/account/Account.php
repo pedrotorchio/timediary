@@ -42,4 +42,5 @@ class Account extends BaseModel{
     public function subjects(){
         return $this->belongsToMany(Subject::class, 'account_x_subject', 'account', 'subject');
     }
+
 }

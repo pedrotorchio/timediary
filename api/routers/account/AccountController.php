@@ -22,7 +22,7 @@ class AccountController extends BaseRestController {
     }
     public function create(array $data){
         $data = $this->preFillData($data);
-
+        
         $acc = new Account($data);
         $acc->save();
 

@@ -7,19 +7,18 @@ use \App\models\account\Account;
 
 abstract class BaseModel extends Model{
 
-
+    
     public function __construct(array $data = array()){
-        parent::__construct($data);
-        
+
         $this->table = static::TABLE ?: null;
-        $this->validator = (new Validator())->setRules(self::getFields());
+
+        parent::__construct($data);
     }
     
     protected $guarded = [
         'id'
     ];
     protected $table = null;
-    protected $validator = null;
     protected $relationshipFields;
     public function disable(){
         $this->status = 0;
@@ -85,11 +84,12 @@ abstract class BaseModel extends Model{
 
     public function fill(array $data){
         
+        $validator = (new Validator())->setRules(self::getFields()); 
         
-        if($this->validator !== null){
-        
-            $this->validator->setData($data);
-            $this->validator->validate();            
+        if($validator !== null){
+            
+            $validator->setData($data);
+            $validator->validate();            
         }
             
         parent::fill($data);

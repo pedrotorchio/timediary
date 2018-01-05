@@ -31,11 +31,11 @@ class ValitronValidator extends Validator{
         }
     }
     protected function makeExceptionData(array $errors){
-        $errorz = [];
+        $errorz = ['format'=>'errors[field_name][rule][message]'];
         foreach($errors as $field => $error){
             
             foreach($error as $rule){
-                $errorz[$field][$rule] = $this->errorMessage($field, $rule);
+                $errorz['errors'][$field][$rule] = $this->errorMessage($field, $rule);
             }
         }
 

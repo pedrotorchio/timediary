@@ -51,7 +51,6 @@ class SystemMessenger{
             message = this.__makeMessage(message, humor, duration);
         this.queue.unshift(message);
         this.dismiss();
-        console.dir(this);
         return this;
     }
     dismiss(){
