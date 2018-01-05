@@ -9,25 +9,27 @@ use \App\exceptions\HttpException;
 
 class AccountController extends BaseRestController {
     
-    protected function readOne(string $id){
+    public function readOne(string $id){
         $acc = Account::fromId($id);
         
         if($acc === null){
             $this->_404();
         }
-
         return $acc;
     }
-    protected function readAll(){
+    public function readAll(){
         return Account::all();
     }
-    protected function create(array $data){
+    public function create(array $data){
+        $data = $this->preFillData($data);
+
         $acc = new Account($data);
         $acc->save();
 
         return $acc;
     }
-    protected function update($id, array $data){
+    public function update($id, array $data){
+        $data = $this->preFillData($data);
 
         $acc = Account::fromId($id);
 
@@ -41,12 +43,22 @@ class AccountController extends BaseRestController {
         
         return $acc;
     }
-    protected function delete($id){}
-        protected function _404(){
-            throw (new HttpException(
-                "Email não encontrado",
-                21,
-                404
-            ));
-        }
+    public function preFillData($data = []){
+        if(isset($data['password']))
+            $data['password'] = self::passwordHash($data['password']);
+
+
+        return $data;
+    }
+    public function delete($id){}
+    public function _404(){
+        throw (new HttpException(
+            "Email não encontrado",
+            21,
+            404
+        ));
+    }
+    public static function passwordHash($password){
+        return \crypt($password, base64_encode('pedrotorchio'));
+    }
 }

@@ -195,15 +195,15 @@ abstract class BaseRestController{
             $one->toJson()
         );
     }
-    protected function makeResponse(Response $response, $json, int $status = 200){
+    public function makeResponse(Response $response, $json, int $status = 200){
         return $response
             ->withStatus($status)
             ->withJson($json);
     }
-    protected abstract function readOne(string $id);
-    protected abstract function readAll();
-    protected abstract function create(array $data);
-    protected abstract function update($id, array $data);
-    protected abstract function delete($id);
+    public abstract function readOne(string $id);
+    public abstract function readAll();
+    public abstract function create(array $data);
+    public abstract function update($id, array $data);
+    public abstract function delete($id);
     
 }

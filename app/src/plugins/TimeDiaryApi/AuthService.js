@@ -2,12 +2,12 @@ import Service from './TimediaryApiService';
 
 export default class AuthService extends Service{
     constructor(baseUrl){
-        super(base, 'auth');
+        super(baseUrl, 'auth');
     }
     login(email, password){
         let authorization = btoa(`${email}:${password}`);
-        console.log(authorization);
-        super.get('', {
+        
+        return super.get('', {
             headers: {
                 Authorization: `basic ${authorization}`
             }

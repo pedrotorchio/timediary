@@ -16,7 +16,7 @@ import SystemMessenger from '@/plugins/SystemMessenger/SystemMessenger';
 Vue.config.productionTip = false
 
 Vue.use(TimeDiaryApi, {
-  baseUrl: `${baseUrl}/api`
+  baseUrl: 'http://local.api.timediary.com.br'
 });
 Vue.use(GoogleLoginApi, {
     client_id: googleClientConfig.id,

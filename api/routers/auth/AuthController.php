@@ -3,11 +3,19 @@ namespace App\routers\auth;
 use \Slim\Http\Request;
 use \Slim\Http\Response;
 
-use \App\models\account\Account;
+use \App\routers\account\AccountController;
 use \App\exceptions\HttpException;
+use \App\services\Authentication;
 
 class AuthController {
-    public function getAll(Request $request, Response $response, array $args){
+    protected $accountController = null;
+    // pra fazer testes sem codificar authorization: basic username:password
+    protected $encodedAuthorizationHeader = true;
+    public function __construct(){
+        $this->accountController = new AccountController();
+    }
+
+    public function inOrUpOrFail($request, $response){
         
         $auth = $this->extractAuthorizationHeader($request);
         $username = $auth[0];
@@ -16,7 +24,7 @@ class AuthController {
         
         try{
             $acc = $this->login($username, $password);
-            
+
         }catch(HttpException $e){
             return $this->makeResponse(
                 $response,
@@ -26,69 +34,71 @@ class AuthController {
                     'data' => $e->getData()
                 ],
                 $e->getHttpStatusCode());
-        }        
+        }     
+        
+        return $acc;
+    }
+    public function getAll(Request $request, Response $response, array $args){
+        
+        $acc = $this->inOrUpOrFail($request, $response);
+        
         
         return $this->makeResponse($response, $acc->toJson(), 200);
     }
-    public function getOne(Request $request, Response $response, array $args){
-        
-    }
+
     public function postAll(Request $request, Response $response, array $args){
         $data = $request->getParsedBody();
 
         
-        $auth = $this->extractAuthorizationHeader();
-        $username = $auth[0];
-        $password = $auth[1];
-        $method   = $auth[2];
+        $acc = $this->inOrUpOrFail($request, $response);
 
-        try{
-        $acc = $this->login($username, $password);
-        }catch(HttpException $e){
-            return $this->makeResponse(
-                $response,
-                [
-                    'code' => $e->getCode(),
-                    'message' => $e->getMessage(),                     
-                    'data' => $e->getData()
-                ],
-                $e->getHttpStatusCode());
-        }
         $acc->fill($data);
         $acc->save();
         
         
         return $this->makeResponse($response, $acc->toJson(), 200);
     }
-    public function postOne(Request $request, Response $response, array $args){
+    public function getOne(Request $request, Response $response, array $args){
+        return $this->_405();
         
     }
+    public function postOne(Request $request, Response $response, array $args){
+        return $this->_405();
+    }
     public function putAll(Request $request, Response $response, array $args){
+        return $this->_405();
         
     }
     public function putOne(Request $request, Response $response, array $args){
+        return $this->_405();
     
     }
     public function deleteAll(Request $request, Response $response, array $args){
+        return $this->_405();
         
     }
     public function deleteOne(Request $request, Response $response, array $args){
+        return $this->_405();
        
     }
-    protected function login($email, $password){
+    public function login($email, $password){
         
-        $acc = Account::fromId($email);
-        
-        
-        if($acc === null){
-            return Account::create([
+
+        try{
+            $acc = $this->accountController->readOne($email);        
+        }catch(HttpException $e){
+            $acc = $this->accountController->create([
                 'pers_email' => $email,
                 'password' => $password,
                 'grant_type' => 'password',
                 'root' => null,
                 'role' => 'ROOT' 
             ]);
-        }else if(Account::passwordHash($password) != $acc->password){
+
+            return $acc;
+        }
+        
+        if(AccountController::passwordHash($password) != $acc->password){
             
             throw (new HttpException(
                 "Email encontrado. Senha errada",
@@ -101,21 +111,32 @@ class AuthController {
         return $acc;
          
     }
-    protected function makeResponse(Response $response, $json, int $status = 200){
+    public function makeResponse(Response $response, $json, int $status = 200){
         
         return $response
             ->withStatus($status)
             ->withJson($json);
     }
-    protected function extractAuthorizationHeader($request){
+    public function extractAuthorizationHeader($request){
         $auth = $request->getHeader('Authorization')[0];
         $parts = explode(' ', $auth);
         $meth = $parts[0]; 
         $auth = $parts[1];
-        $auth = base64_decode($auth);
+        if($this->encodedAuthorizationHeader)
+            $auth = base64_decode($auth);
         $auth = explode(':', $auth);
         $auth[2] = $meth;
 
         return $auth;
+    }
+    public function _405(){
+        return $this->makeResponse(
+            $response,
+            [
+                'code' => '00',
+                'message' => 'Ação não permitida'
+            ],
+            405
+        );
     }
 }

@@ -9,7 +9,7 @@ use \App\exceptions\HttpException;
 
 class TaskController extends BaseRestController {
     
-    protected function readOne(string $id){
+    public function readOne(string $id){
         $acc = Task::fromId($id);
         
         if($acc === null){
@@ -18,16 +18,16 @@ class TaskController extends BaseRestController {
 
         return $acc;
     }
-    protected function readAll(){
+    public function readAll(){
         return Task::all();
     }
-    protected function create(array $data){
+    public function create(array $data){
         $acc = new Task($data);
         $acc->save();
 
         return $acc;
     }
-    protected function update($id, array $data){
+    public function update($id, array $data){
         $acc = Task::fromId($id);
         
         if($acc === null){
@@ -39,8 +39,8 @@ class TaskController extends BaseRestController {
 
         return $acc;
     }
-    protected function delete($id){}
-    protected function _404(){
+    public function delete($id){}
+    public function _404(){
         throw (new HttpException(
             "Categoria não encontrada",
             21,

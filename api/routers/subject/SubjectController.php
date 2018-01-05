@@ -9,7 +9,7 @@ use \App\exceptions\HttpException;
 
 class SubjectController extends BaseRestController {
     
-    protected function readOne(string $id){
+    public function readOne(string $id){
         $acc = Subject::fromId($id);
         
         if($acc === null){
@@ -18,16 +18,16 @@ class SubjectController extends BaseRestController {
 
         return $acc;
     }
-    protected function readAll(){
+    public function readAll(){
         return Subject::all();
     }
-    protected function create(array $data){
+    public function create(array $data){
         $acc = new Subject($data);
         $acc->save();
 
         return $acc;
     }
-    protected function update($id, array $data){
+    public function update($id, array $data){
         $acc = Subject::fromId($id);
         
         if($acc === null){
@@ -39,8 +39,8 @@ class SubjectController extends BaseRestController {
 
         return $acc;
     }
-    protected function delete($id){}
-    protected function _404(){
+    public function delete($id){}
+    public function _404(){
         throw (new HttpException(
             "Sujeito não encontrado",
             21,

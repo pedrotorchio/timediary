@@ -42,15 +42,4 @@ class Account extends BaseModel{
     public function subjects(){
         return $this->belongsToMany(Subject::class, 'account_x_subject', 'account', 'subject');
     }
-    public function fill(array $data = []){
-        if(isset($data['password']))
-            $data['password'] = self::passwordHash($data['password']);
-
-        parent::fill($data);
-    }
-    
-    
-    public static function passwordHash($password){
-        return \crypt($password, 'pedrotorchio');
-    }
 }

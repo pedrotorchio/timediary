@@ -25,7 +25,7 @@ class SystemMessenger{
         this.colors.cheer = options.colors.cheer || '#329462';
         
         this.messenger = null;
-        this.delay     = options.delay || 1000;
+        this.delay     = options.delay || 500;
         this.currTimer = null;
         this.isRunning = false;
         this.queue     = Queue();
@@ -46,15 +46,17 @@ class SystemMessenger{
 
         return this;
     }
-    interrupt(message){
+    interrupt(message, humor, duration){
         if(typeof message === 'string')
             message = this.__makeMessage(message, humor, duration);
         this.queue.unshift(message);
-        this.__dismiss();
+        this.dismiss();
+        console.dir(this);
+        return this;
     }
     dismiss(){
-        clearTimeOut(this.currTimer);
-        hide()
+        clearTimeout(this.currTimer);
+        this.__hide()
             .then(()=>this.__process());
     }
     push(message, humor, duration){
@@ -118,14 +120,14 @@ class SystemMessenger{
     }
     __show(){
         return new Promise(resolve=>{
-            console.log('show');            
+                   
             this.messenger.addClass('shown');
             this.currTimer = setTimeout(resolve, this.delay);
         });
     }
     __hide(){
         return new Promise(resolve=>{
-            console.log('hide');
+            
             this.messenger.removeClass('shown');
             this.currTimer = setTimeout(resolve, this.delay);
         })

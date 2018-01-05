@@ -7,6 +7,7 @@ import FormCard from '@/components/forms/FormCard.vue';
 import GooglePlusAccount from '@/models/Account/GooglePlusAccount';
 // Validators
 import EmailValidator from '@/models/validators/EmailValidator';
+import PasswordValidator from '@/models/validators/PasswordValidator';
 
 export default {
   name: 'LoginPage',
@@ -31,12 +32,26 @@ export default {
     this.$googleLogin.onError(err=>{
 
     });
+    this.$TDAPI.onError(error=>{
+      if(error.message)
+        this.$sysMsg.interrupt(error.message, 'error');
+      else
+        this.$sysMsg.interrupt('Erro de conexão', 'error');
+    })
   },
   methods:{
     passwordSignIn(){
 
       let email = EmailValidator(this.emailInput);
       let passw = PasswordValidator(this.passwordInput);
+
+      this.$TDAPI.login(email, passw)
+          .then(response=>{
+            console.log(response.data);
+          })
+          .catch(error=>{
+            console.dir(error);
+          });
     },
     googleSignIn(){
       this.$googleLogin.login();
