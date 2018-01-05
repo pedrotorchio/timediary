@@ -3,7 +3,7 @@ use \Firebase\JWT\JWT;
 
 class Authentication{
     protected const SERVER_NAME = 'Timediary Host';
-
+    protected const ALGORITHM = 'HS512';
     public static function makeJwt($data){
         $secret = self::currentSecretKey();
         
@@ -24,14 +24,18 @@ class Authentication{
 
         $jwt = JWT::encode(
             $jwt,
-            $secrete,
-            'HS512'
+            $secret,
+            self::ALGORITHM
         );
 
-        return json_encode([
+        return [
             'token' => $jwt,
-            'secret' => $secret
-        ]);
+            // para ajudar a testar
+            // 'secret' => $secret
+        ];
+    }
+    public static function getTokenData($jwt){
+        return (array)(JWT::decode($jwt, self::currentSecretKey(), [self::ALGORITHM]));
     }
     public static function currentSecretKey(){
         return base64_encode(date("WY"));

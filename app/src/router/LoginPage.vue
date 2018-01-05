@@ -33,18 +33,19 @@ export default {
 
     });
     this.$TDAPI.onError(error=>{
-      
-      console.dir(error);
-
       this.$sysMsg.interrupt(error.message, 'error');
-      
     })
   },
   methods:{
     passwordSignIn(){
-
-      let email = EmailValidator(this.emailInput);
-      let passw = PasswordValidator(this.passwordInput);
+      let email, passw;
+      try{
+        email = EmailValidator(this.emailInput);
+        passw = PasswordValidator(this.passwordInput);
+      }catch(e){
+        this.$sysMsg.interrupt(e, 'error');
+      }
+      
 
       this.$TDAPI.login(email, passw)
           .then(response=>{

@@ -37,7 +37,6 @@ export default class TimediaryApiService {
         response
       });
     }).catch(error => {
-      console.dir(error);
       let code, message, data;      
       if (error.response) {
         // The request was made and the server responded with a status code

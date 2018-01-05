@@ -10,7 +10,7 @@ use \App\services\Authentication;
 class AuthController {
     protected $accountController = null;
     // pra fazer testes sem codificar authorization: basic username:password
-    protected $encodedAuthorizationHeader = false;
+    protected $encodedAuthorizationHeader = true;
     public function __construct(){
         $this->accountController = new AccountController();
     }
@@ -41,8 +41,13 @@ class AuthController {
                 ],
                 $e->getHttpStatusCode());
         }        
+        $JWT =  Authentication::makeJwt([
+            'display_name'=>$acc->display_name,
+            'role'=>$acc->role,
+            'pers_email'=>$acc->pers_email
+        ]);
         
-        return $this->makeResponse($response, $acc->toJson(), 200);
+        return $this->makeResponse($response, $JWT, 200);
     }
 
     public function postAll(Request $request, Response $response, array $args){
