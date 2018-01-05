@@ -11,13 +11,7 @@ $APP->options('/{route:.+}', function ($request, $response, $args) {
     
     return $response;
 });
-$APP->add(function ($req, $res, $next) {
-    $response = $next($req, $res);
-    return $response
-            ->withHeader('Access-Control-Allow-Origin', 'http://localhost:8080, *')
-            ->withHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept, Origin, Authorization')
-            ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
-});
+
 
 function registerController(string $key , string $className){
     global $APP;
