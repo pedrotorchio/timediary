@@ -28,15 +28,17 @@ class AccountController extends BaseRestController {
         return $acc;
     }
     protected function update($id, array $data){
+
         $acc = Account::fromId($id);
+
         
         if($acc === null){
             $this->_404();
         }
-
+        
         $acc->fill($data);
         $acc->save();
-
+        
         return $acc;
     }
     protected function delete($id){}

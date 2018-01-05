@@ -3,7 +3,7 @@ namespace bootstrap\procedures;
 
 // PROCEDIMENTOS
 
-accountsUpTo(10);
+// accountsUpTo(10);
 
 
 // PROCEDIMENTOS FIM

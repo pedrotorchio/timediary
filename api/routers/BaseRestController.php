@@ -19,7 +19,7 @@ abstract class BaseRestController{
     public function getAll(Request $request, Response $response, array $args){
         
         $many = $this->readAll();
-
+        
         return $this->makeResponse(
             $response,
             $many->toJson());

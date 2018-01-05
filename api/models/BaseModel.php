@@ -10,6 +10,7 @@ abstract class BaseModel extends Model{
 
     public function __construct(array $data = array()){
         parent::__construct($data);
+        
         $this->table = static::TABLE ?: null;
         $this->validator = (new Validator())->setRules(self::getFields());
     }
@@ -20,7 +21,6 @@ abstract class BaseModel extends Model{
     protected $table = null;
     protected $validator = null;
     protected $relationshipFields;
-
     public function disable(){
         $this->status = 0;
         $this->save();
@@ -43,9 +43,11 @@ abstract class BaseModel extends Model{
             'id' => ''
         ];
 
+        
+
         if(defined('static::FIELDS') && static::FIELDS !== null)
             $fields = array_merge($fields, static::FIELDS);
-
+            
         return $fields;
     }
     public static function exists($id){
@@ -63,9 +65,10 @@ abstract class BaseModel extends Model{
         return $count;
     }
     public static function all($columns = ['*']){
-        $fields = self::getRelFields();        
+        
+        $fields = self::getRelFields();
         $results = self::with($fields)->get($columns);
-
+        
         return $results;
     }
     public static function fromId($id){
@@ -81,7 +84,10 @@ abstract class BaseModel extends Model{
     }
 
     public function fill(array $data){
+        
+        
         if($this->validator !== null){
+        
             $this->validator->setData($data);
             $this->validator->validate();            
         }
@@ -91,4 +97,5 @@ abstract class BaseModel extends Model{
     public function root(){
         return $this->belongsTo(Account::class, 'root');
     }
+        
 }

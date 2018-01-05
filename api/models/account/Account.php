@@ -31,16 +31,26 @@ class Account extends BaseModel{
         'loc_neighbourhood' => 'alphaNum',
         'loc_complement' => 'alphaNum',
         'loc_postal_code' => 'alphaNum', 
+        'salt' => '',
         'password' => ''
-        
-        
     ];
-    protected $hidden = ['password'];
+    protected $hidden = ['password', 'salt'];
 
     public function children(){
         return $this->hasMany(Account::class, 'root');
     }
     public function subjects(){
         return $this->belongsToMany(Subject::class, 'account_x_subject', 'account', 'subject');
+    }
+    public function fill(array $data = []){
+        if(isset($data['password']))
+            $data['password'] = self::passwordHash($data['password']);
+
+        parent::fill($data);
+    }
+    
+    
+    public static function passwordHash($password){
+        return \crypt($password, 'pedrotorchio');
     }
 }

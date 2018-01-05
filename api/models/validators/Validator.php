@@ -32,10 +32,7 @@ abstract class Validator{
             if(!empty(trim($ruleStr)))
                 $rulex[] = $ruleStr;
             
-            $ruleStr   = implode('&', $rulex);
-            $ruleSplit = explode('&', $ruleStr);
-
-            foreach($ruleSplit as $fieldRuleStr){
+            foreach($rulex as $fieldRuleStr){        
                 $rulez[$field][] = trim($fieldRuleStr);
             }
         }

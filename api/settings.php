@@ -33,7 +33,8 @@ return [
             'diagnostic' => 'DiagnosticController',
             'category'   => 'CategoryController',
             'activity' => 'ActivityController',
-            'task'     => 'TaskController'
+            'task'     => 'TaskController',
+            'auth'     => 'AuthController'
         ]
     ]
 ];

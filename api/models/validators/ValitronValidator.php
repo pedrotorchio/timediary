@@ -6,6 +6,8 @@ use \App\exceptions\ValidationException;
 
 class ValitronValidator extends Validator{
     public function validate(){
+        
+        
         if($this->data === null || empty($this->data))
             return;
         $v = new Valitron($this->data);
