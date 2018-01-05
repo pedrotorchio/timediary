@@ -1,6 +1,6 @@
 <template id="">
   <div class="input-container text">
-    <input class="input" :type="type" :name="name" :placeholder="placeholder" :value="value" @input="changed">
+    <input :id="id" class="input" :type="type" :name="name" :placeholder="placeholder" :value="value" @input="changed">
   </div>
 </template>
 <style lang="scss" scoped>
@@ -19,6 +19,11 @@
   export default {
     name: 'TextInput',
     props: ['name', 'value', 'placeholder', 'type'],
+    data(){
+      return {
+        id: `input-${this.name}`
+      };
+    },
     methods:{
       changed(ev){
         this.$emit('input', ev.target.value);

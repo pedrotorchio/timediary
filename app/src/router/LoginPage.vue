@@ -33,10 +33,11 @@ export default {
 
     });
     this.$TDAPI.onError(error=>{
-      if(error.message)
-        this.$sysMsg.interrupt(error.message, 'error');
-      else
-        this.$sysMsg.interrupt('Erro de conexão', 'error');
+      
+      console.dir(error);
+
+      this.$sysMsg.interrupt(error.message, 'error');
+      
     })
   },
   methods:{
@@ -47,10 +48,7 @@ export default {
 
       this.$TDAPI.login(email, passw)
           .then(response=>{
-            console.log(response.data);
-          })
-          .catch(error=>{
-            console.dir(error);
+            console.dir(response);
           });
     },
     googleSignIn(){
@@ -73,8 +71,8 @@ function greetings(sm){
   <div id="loginPage" class="page">
     <div id="content">
       <form-card id="login-form" @submit='passwordSignIn'>
-        <text-input v-model='emailInput' type='text' placeholder='Email'></text-input>
-        <text-input v-model='passwordInput' type='password' placeholder='Senha'></text-input>
+        <text-input name='login_email' v-model='emailInput' type='email' placeholder='Email'></text-input>
+        <text-input name='login_password' v-model='passwordInput' type='password' placeholder='Senha'></text-input>
         <button-input text='Entrar/Cadastrar'></button-input>
       </form-card>
       <div id="providers">

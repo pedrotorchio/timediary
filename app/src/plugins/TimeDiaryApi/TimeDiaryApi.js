@@ -13,14 +13,15 @@ class TimeDiaryApi{
   }
   repromise(promise){
     return new Promise((resolve, reject)=>{
-      promise.then(resolve)
-             .catch(error=>{
-               if(this.errorCallback)
-                this.errorCallback(error.data, error.response);
+      promise
+            .then(resolve)
+            .catch(error=>{
+              if(this.errorCallback)
+              this.errorCallback(error);
 
-               reject(error);
-             });
-    })
+              reject(error);
+            });
+    });
   }
   onError(callback){
     this.errorCallback = callback;

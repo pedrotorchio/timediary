@@ -31,18 +31,41 @@ export default class TimediaryApiService {
     return this.repromise(axios.delete('', config));
   }
   repromise(_promise) {
-    return new Promise((resolve, reject) => _promise.then(resolve).catch(error => {
-      if (error.request) {
-        reject({
-          data: error.request,
-          error
-        })
-      } else
-        reject({
-          data: error.response.data,
-          response: error.response,
-          error
-        });
+    return new Promise((resolve, reject) => _promise.then(response=>{
+      resolve({
+        data: response.data,
+        response
+      });
+    }).catch(error => {
+      console.dir(error);
+      let code, message, data;      
+      if (error.response) {
+        // The request was made and the server responded with a status code
+        // that falls out of the range of 2xx
+        data = error.response.data.data;
+        code = error.response.data.code;
+        message = error.response.data.message;
+
+      } else if (error.request) {
+        // The request was made but no response was received
+        // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+        // http.ClientRequest in node.js
+        
+          code = error.request.status;
+          message = error.request.statusText;
+          data = error.request;
+
+        
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        code = -1;
+        message = "Erro de conexão";
+        data = error;
+      }
+
+      reject({code, message, data});
+      
+
     }));
   }
   url(id = '') {

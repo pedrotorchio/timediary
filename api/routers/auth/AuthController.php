@@ -10,7 +10,7 @@ use \App\services\Authentication;
 class AuthController {
     protected $accountController = null;
     // pra fazer testes sem codificar authorization: basic username:password
-    protected $encodedAuthorizationHeader = true;
+    protected $encodedAuthorizationHeader = false;
     public function __construct(){
         $this->accountController = new AccountController();
     }
@@ -42,7 +42,7 @@ class AuthController {
                 $e->getHttpStatusCode());
         }        
         
-        // return $this->makeResponse($response, $acc->toJson(), 200);
+        return $this->makeResponse($response, $acc->toJson(), 200);
     }
 
     public function postAll(Request $request, Response $response, array $args){

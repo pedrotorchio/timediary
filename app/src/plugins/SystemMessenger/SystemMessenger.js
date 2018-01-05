@@ -142,7 +142,9 @@ export default {
         mounted(){
           if(!this.$parent){
             this.$sysMsg.init();
+            console.log(this);
           }
+          
         
         }
       })
