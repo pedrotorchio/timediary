@@ -50,9 +50,11 @@ class Account extends BaseModel{
                     $data['pers_display_name'] .= ' ' . $data['pers_last_name'];
             }
             else if(!empty($data['pers_email']))
-                $data['pers_display_name'] = $data['pers_email'];
-                
+                $data['pers_display_name'] = $data['pers_email'];  
         }
+        if(empty($data['role']) && empty($data['root']))
+            $data['role'] = 'ROOT';
+        
         parent::fill($data);
     }
 }

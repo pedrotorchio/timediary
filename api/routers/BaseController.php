@@ -4,43 +4,45 @@ abstract class BaseController{
     
     public function readOne(string $id, array $fields = ['*'], array $relations = []){
         
-        $acc = self::modelCall('fromId', [$id, $fields, $relations]);
+        $one = self::modelCall('fromId', [$id, $fields, $relations]);
         
-        if($acc === null){
-            $this->_404();
-        }
-        return $acc;
+        return $one;
     }
     public function readAll(array $fields = ['*'], array $relations = []){
         return self::modelCall('all', [$fields, $relations]);
     }
     public function create(array $data){
         $data = $this->preFillData($data);
-        
-        $acc = new Account($data);
-        $acc->save();
+        $model = static::MODEL;
+        $one = new $model($data);
+        $one->save();
 
-        return $acc;
+        return $one;
     }
     public function update($id, array $data){
         $data = $this->preFillData($data);
 
-        $acc = Account::fromId($id);
-
+        $one = $this->readOne($id);
         
-        if($acc === null){
-            $this->_404();
-        }
+        if($one === null)
+            return null;
         
-        $acc->fill($data);
-        $acc->save();
+        $one->fill($data);
+        $one->save();
         
-        return $acc;
+        return $one;
     }
+    public function delete($id){
+        $one = $this->readOne($id);
+        $one->delete();
+
+        return $one;            
+    }
+    
     protected static function modelCall(string $method, array $parameters = []){
         return call_user_func_array(static::MODEL.'::'.$method, $parameters);
     }
-    public function delete($id){return null;}
+    
 
     public function preFillData($data = []){return $data;}
 }
