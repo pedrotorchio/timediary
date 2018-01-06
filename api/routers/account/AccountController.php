@@ -8,42 +8,43 @@ use \App\routers\BaseRestController;
 use \App\exceptions\HttpException;
 
 class AccountController extends BaseRestController {
-    
-    public function readOne(string $id, array $fields = ['*'], $relations = null){
-        
-        $acc = Account::fromId($id, $fields, $relations);
-        
-        if($acc === null){
-            $this->_404();
-        }
-        return $acc;
-    }
-    public function readAll(){
-        return Account::all();
-    }
-    public function create(array $data){
-        $data = $this->preFillData($data);
-        
-        $acc = new Account($data);
-        $acc->save();
+    public const MODEL = Account::class;
 
-        return $acc;
-    }
-    public function update($id, array $data){
-        $data = $this->preFillData($data);
+    // public function readOne(string $id, array $fields = ['*'], $relations = null){
+        
+    //     $acc = Account::fromId($id, $fields, $relations);
+        
+    //     if($acc === null){
+    //         $this->_404();
+    //     }
+    //     return $acc;
+    // }
+    // public function readAll(){
+    //     return Account::all();
+    // }
+    // public function create(array $data){
+    //     $data = $this->preFillData($data);
+        
+    //     $acc = new Account($data);
+    //     $acc->save();
 
-        $acc = Account::fromId($id);
+    //     return $acc;
+    // }
+    // public function update($id, array $data){
+    //     $data = $this->preFillData($data);
+
+    //     $acc = Account::fromId($id);
 
         
-        if($acc === null){
-            $this->_404();
-        }
+    //     if($acc === null){
+    //         $this->_404();
+    //     }
         
-        $acc->fill($data);
-        $acc->save();
+    //     $acc->fill($data);
+    //     $acc->save();
         
-        return $acc;
-    }
+    //     return $acc;
+    // }
     public function preFillData($data = []){
         if(isset($data['password']))
             $data['password'] = self::passwordHash($data['password']);
@@ -51,13 +52,9 @@ class AccountController extends BaseRestController {
 
         return $data;
     }
-    public function delete($id){}
+    
     public function _404(){
-        throw (new HttpException(
-            "Email não encontrado",
-            21,
-            404
-        ));
+        parent::_404('Email');
     }
     public static function passwordHash($password){
         return \crypt($password, base64_encode('pedrotorchio'));

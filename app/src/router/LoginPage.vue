@@ -53,7 +53,7 @@ export default {
             let email = this.emailInput;
             this.$sysMsg.clear();
             
-            this.$store.commit('login', {token, email});
+            this.$store.commit('login', email, token);
             this.$router.push({
               name: 'Dashboard'
             });

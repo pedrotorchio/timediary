@@ -5,28 +5,40 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
     state:{
-        account: null
+        account: null,
+        token: null
     },
     getters:{
-        isLogged(state, getters){
-            return state.account !== null && state.account.token != undefined;
+        token(state){
+            return state.token;
         },
-        accountToken(state, getters){
+        isLogged(state, getters){
+            return getters.token != null;
+        },
+        account(state, getters){
             if(getters.isLogged)
-                return state.account.token;
+                return state.account;
             else
                 return null;
         },
-        account(state){
-            return state.account;
+        loginInfo(state, getters){
+            if(getters.isLogged)
+                return {
+                    email: getters.account.login_email,
+                    token: getters.token
+                };
+            else
+                return null;
         }
     },
     mutations:{
-        login(state, tokenEmail){
-            state.account = tokenEmail;
+        login(state, email, token){
+            state.account = {
+                login_email: email
+            }
+            state.token = token;
         },
-        accountDetails(state, details){
-            
+        account(state, details){
             state.account = {...state.account, ...details};
         }
     }

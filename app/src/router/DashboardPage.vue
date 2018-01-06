@@ -12,7 +12,7 @@ export default {
     this.$TDAPI.getAccountInformation(this.$store.getters.account.email)
         .then(response=>{
           let details = response.data;
-          this.$store.commit('accountDetails', details);
+          this.$store.commit('account', details);
 
           greetings(this.$sysMsg, details.pers_display_name);
           

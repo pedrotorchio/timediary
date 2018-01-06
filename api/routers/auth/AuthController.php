@@ -6,11 +6,12 @@ use \Slim\Http\Response;
 use \App\routers\account\AccountController;
 use \App\exceptions\HttpException;
 use \App\services\Authentication;
+use \App\routers\BaseRestController;
 
-class AuthController {
+class AuthController extends BaseRestController{
     protected $accountController = null;
     // pra fazer testes sem codificar authorization: basic username:password
-    protected $encodedAuthorizationHeader = true;
+    protected $encodedAuthorizationHeader = false;
     public function __construct(){
         $this->accountController = new AccountController();
     }
@@ -115,12 +116,7 @@ class AuthController {
         return $acc;
          
     }
-    public function makeResponse(Response $response, $json, int $status = 200){
-        
-        return $response
-            ->withStatus($status)
-            ->withJson($json);
-    }
+    
     public function extractAuthorizationHeader($request){
         $auth = $request->getHeader('Authorization');
         if(empty($auth))
@@ -157,14 +153,5 @@ class AuthController {
         return $auth;
         
     }
-    public function _405(){
-        return $this->makeResponse(
-            $response,
-            [
-                'code' => '00',
-                'message' => 'Ação não permitida'
-            ],
-            405
-        );
-    }
+    
 }
