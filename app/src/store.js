@@ -26,7 +26,7 @@ export default new Vuex.Store({
             state.account = tokenEmail;
         },
         accountDetails(state, details){
-            console.dir(details);
+            
             state.account = {...state.account, ...details};
         }
     }

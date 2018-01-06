@@ -11,18 +11,21 @@ export default {
   mounted(){
     this.$TDAPI.getAccountInformation(this.$store.getters.account.email)
         .then(response=>{
-          this.$store.commit('accountDetails', response.data);
+          let details = response.data;
+          this.$store.commit('accountDetails', details);
+
+          greetings(this.$sysMsg, details.pers_display_name);
+          
         })
-    setTimeout(()=>{greetings(this.$sysMsg);}, 1000);
   },
   methods:{
     
   },
 
 }
-function greetings(sm){
+function greetings(sm, display_name){
   
-  sm.interrupt('Olá, pedrotorchio, seja bem vindo.', 'cheer', sm.DURATION_LONG);
+  sm.interrupt(`Olá, ${display_name}, seja bem vindo.`, 'cheer', sm.DURATION_LONG);
 
 }
 </script>

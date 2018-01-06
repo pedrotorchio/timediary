@@ -70,16 +70,15 @@ abstract class BaseModel extends Model{
         
         return $results;
     }
-    public static function fromId($id){
+    public static function fromId($id, array $columns = ['*'], $relations = []){
         // $results = self::where(static::ID_FIELD, $id)->take(1);
         
-        $fields = self::getRelFields();
-        $results = self::with($fields)->where(static::ID_FIELD, $id)->take(1);
+        $results = self::with($relations)->where(static::ID_FIELD, $id)->take(1);
         
         if($results->count() < 1)
             return null;
         
-        return $results->first();
+        return $results->first($columns);
     }
 
     public function fill(array $data){

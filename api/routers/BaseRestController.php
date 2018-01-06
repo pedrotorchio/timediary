@@ -17,7 +17,8 @@ abstract class BaseRestController{
         'ok' => 'OK!'
     ];
     public function getAll(Request $request, Response $response, array $args){
-        
+        $params = $request->getQueryParams();
+        $params = $this->queryParamsInterpret($params);        
         $many = $this->readAll();
         
         return $this->makeResponse(
@@ -25,11 +26,14 @@ abstract class BaseRestController{
             $many);
     }
     public function getOne(Request $request, Response $response, array $args){
+        $params = $request->getQueryParams();
+        $params = $this->queryParamsInterpret($params);
+        
         $id = $request->getAttribute('id');
         
         try{
          
-            $one = $this->readOne($id);
+            $one = $this->readOne($id, $params['fields'], $params['relationships']);
 
         }catch(HttpException $e){
             
@@ -59,8 +63,9 @@ abstract class BaseRestController{
         );
     }
     public function postAll(Request $request, Response $response, array $args){
+        $params = $request->getQueryParams();
+        
         $data = $request->getParsedBody();
-
         try{
 
             $one  = $this->create($data);
@@ -93,6 +98,8 @@ abstract class BaseRestController{
         );
     }
     public function postOne(Request $request, Response $response, array $args){
+        $params = $request->getQueryParams();
+        
         return $this->makeResponse(
             $response,
             [
@@ -103,6 +110,8 @@ abstract class BaseRestController{
         );
     }
     public function putAll(Request $request, Response $response, array $args){
+        $params = $request->getQueryParams();
+        
         return $this->makeResponse(
             $response,
             [
@@ -113,6 +122,8 @@ abstract class BaseRestController{
         );
     }
     public function putOne(Request $request, Response $response, array $args){
+        $params = $request->getQueryParams();
+        
         $data = $request->getParsedBody();
         
         $id = $request->getAttribute('id');
@@ -150,6 +161,8 @@ abstract class BaseRestController{
         );
     }
     public function deleteAll(Request $request, Response $response, array $args){
+        $params = $request->getQueryParams();
+        
         return $this->makeResponse(
             $response,
             [
@@ -160,6 +173,8 @@ abstract class BaseRestController{
         );
     }
     public function deleteOne(Request $request, Response $response, array $args){
+        $params = $request->getQueryParams();
+        
         $id = $request->getAttribute('id');
         
         try{
@@ -196,10 +211,22 @@ abstract class BaseRestController{
         );
     }
     public function makeResponse(Response $response, $json, int $status = 200){
+        
         return $response
             ->withStatus($status)
             ->withJson($json);
     }
+    protected function queryParamsInterpret($params = []){
+        
+        $params['fields'] = isset($params['fields']) ? $this->queryParamList2Array($params['fields']) : ['*'];
+        $params['relationships'] = isset($params['relationships']) ? $this->queryParamList2Array($params['relationships']) : [];
+
+        return $params;
+    }
+    protected function queryParamList2Array($param){
+        
+        return explode(',', $param);
+    } 
     public abstract function readOne(string $id);
     public abstract function readAll();
     public abstract function create(array $data);

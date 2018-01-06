@@ -49,7 +49,7 @@ class Account extends BaseModel{
                 if(!empty($data['pers_last_name']))
                     $data['pers_display_name'] .= ' ' . $data['pers_last_name'];
             }
-            else
+            else if(!empty($data['pers_email']))
                 $data['pers_display_name'] = $data['pers_email'];
                 
         }

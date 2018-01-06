@@ -9,8 +9,9 @@ use \App\exceptions\HttpException;
 
 class AccountController extends BaseRestController {
     
-    public function readOne(string $id){
-        $acc = Account::fromId($id);
+    public function readOne(string $id, array $fields = ['*'], $relations = null){
+        
+        $acc = Account::fromId($id, $fields, $relations);
         
         if($acc === null){
             $this->_404();
