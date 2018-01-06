@@ -18,8 +18,8 @@ class AccountController extends BaseRestController {
         return $data;
     }
     
-    public function _404(){
-        parent::_404('Email');
+    public function _404(string $field = 'Email'){
+        parent::_404($field);
     }
     public static function passwordHash($password){
         return \crypt($password, base64_encode('pedrotorchio'));

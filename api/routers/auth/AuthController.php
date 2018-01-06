@@ -9,9 +9,10 @@ use \App\services\Authentication;
 use \App\routers\BaseRestController;
 
 class AuthController extends BaseRestController{
+
     protected $accountController = null;
     // pra fazer testes sem codificar authorization: basic username:password
-    protected $encodedAuthorizationHeader = false;
+    protected $encodedAuthorizationHeader = true;
     public function __construct(){
         $this->accountController = new AccountController();
     }

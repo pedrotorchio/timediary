@@ -63,7 +63,7 @@ abstract class BaseModel extends Model{
 
         return $count;
     }
-    public static function all(array $columns = ['*'], $relations = []){
+    public static function getAll(array $columns = ['*'], $relations = []){
         
         $results = self::with($relations)->get($columns);
         

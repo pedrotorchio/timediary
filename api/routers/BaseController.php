@@ -9,7 +9,7 @@ abstract class BaseController{
         return $one;
     }
     public function readAll(array $fields = ['*'], array $relations = []){
-        return self::modelCall('all', [$fields, $relations]);
+        return self::modelCall('getAll', [$fields, $relations]);
     }
     public function create(array $data){
         $data = $this->preFillData($data);
@@ -42,7 +42,9 @@ abstract class BaseController{
     protected static function modelCall(string $method, array $parameters = []){
         return call_user_func_array(static::MODEL.'::'.$method, $parameters);
     }
-    
+    protected static function getModel(){
+        return static::MODEL;
+    }
 
     public function preFillData($data = []){return $data;}
 }
