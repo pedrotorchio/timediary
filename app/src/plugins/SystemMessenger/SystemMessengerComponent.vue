@@ -2,14 +2,12 @@
 export default {
   name: 'SystemMessenger',
   props: {
-    position: {
-      default: 'bottom'
-    }
+
   },
 }
 </script>
 <template>
-  <div id="system-messenger-plugin" :class="position"></div>
+  <div  id="system-messenger-plugin" class='bottom'></div>
 </template>
 <style scoped>
 /*
@@ -25,22 +23,24 @@ div{
   padding: 0;
   font-size: 40px;
   color: white;
-  transition-property: color, background-color, padding, top, bottom, left, right; /*color, max-height, min-height, min-width, max-width, padding;*/
+  transition-property: color, background-color, padding, top, bottom;
 }
 .bottom.shown{
- bottom:0; 
+ bottom:0 !important; 
 }
 .top, .bottom{
   left: 0;
   right: 0;
   width: 100%;
-  max-height: 240px;
+  
+  
+  /* max-height: 240px; */
 }
 .bottom{
-  bottom: -240px;
+  bottom: -500px;
 }
 .top{
-  top: -240px;
+  /* top: -240px; */
 }
 div{
   padding: 30px;  

@@ -8,11 +8,10 @@ export default class TimediaryApiService {
 
     axios = Axios.create({});
   }
-
   get(id = '', config = {}) {
 
     id = this.url(id);
-
+    
     return this.repromise(axios.get(id, config));
   }
   post(data, config = {}) {
@@ -68,10 +67,10 @@ export default class TimediaryApiService {
     }));
   }
   url(id = '') {
-
+    
     let url = `${this.baseUrl}/${this.endpoint}`;
     if (id !== '')
-      url = `/${id}`;
+      url += `/${id}`;
 
     return url;
   }

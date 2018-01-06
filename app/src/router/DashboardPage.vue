@@ -1,13 +1,4 @@
 <script>
-// UI
-import TextInput from '@/components/forms/TextInput.vue';
-import ButtonInput from '@/components/forms/ButtonInput.vue';
-import FormCard from '@/components/forms/FormCard.vue';
-// Login
-import GooglePlusAccount from '@/models/Account/GooglePlusAccount';
-// Validators
-import EmailValidator from '@/models/validators/EmailValidator';
-import PasswordValidator from '@/models/validators/PasswordValidator';
 
 export default {
   name: 'DashboardPage',
@@ -18,6 +9,10 @@ export default {
     }
   },
   mounted(){
+    this.$TDAPI.getAccountInformation(this.$store.getters.account.email)
+        .then(response=>{
+          this.$store.commit('accountDetails', response.data);
+        })
     setTimeout(()=>{greetings(this.$sysMsg);}, 1000);
   },
   methods:{
@@ -27,14 +22,14 @@ export default {
 }
 function greetings(sm){
   
-  sm.push('Olá, pedrotorchio, seja bem vindo.', 'cheer');
+  sm.interrupt('Olá, pedrotorchio, seja bem vindo.', 'cheer', sm.DURATION_LONG);
 
 }
 </script>
 
 
 <template>
-  <div id="loginPage" class="page">
+  <div id="dashboardPage" class="page">
     <div id="content">
       
     </div>

@@ -35,13 +35,20 @@ class SystemMessenger{
     
     whenReady(callback){
         this.readyCallback = callback;
+
+        return this;
+    }
+    clear(dismiss = true){
+        this.queue.clear();
+        this.dismiss();
+        return this;
     }
     init(){
 
         this.messenger = new DOMMessenger('#system-messenger-plugin');
         this.messenger.setStyle('transitionDuration', `${this.delay}ms`);
         
-        if(this.readyCallback !== undefined)
+        if(this.readyCallback !== null)
             this.readyCallback();
 
         return this;
@@ -57,6 +64,8 @@ class SystemMessenger{
         clearTimeout(this.currTimer);
         this.__hide()
             .then(()=>this.__process());
+    
+        return this;
     }
     push(message, humor, duration){
         if(typeof message === 'string')
@@ -96,7 +105,13 @@ class SystemMessenger{
     __display(message){
         return new Promise(resolve=>{
             
-            this.messenger.setText(message.text);
+            this.messenger.setText(message.text)
+                .then(height=>{
+                    
+                   this.messenger.setStyle('bottom', `-${height}px`); 
+
+                });
+            
             this.messenger.setHumor(message.humor);
             if(this.colors[message.humor] !== undefined)
                 this.messenger.setStyle('backgroundColor', this.colors[message.humor]);
@@ -119,16 +134,20 @@ class SystemMessenger{
     }
     __show(){
         return new Promise(resolve=>{
-                   
             this.messenger.addClass('shown');
+            this.messenger.setStyle('visibility', 'visible');
+            
             this.currTimer = setTimeout(resolve, this.delay);
         });
     }
     __hide(){
         return new Promise(resolve=>{
-            
             this.messenger.removeClass('shown');
-            this.currTimer = setTimeout(resolve, this.delay);
+            this.currTimer = setTimeout(()=>{
+            
+                this.messenger.setStyle('visibility', 'hidden');            
+                resolve();                
+            }, this.delay);
         })
     }
 }
@@ -142,7 +161,6 @@ export default {
         mounted(){
           if(!this.$parent){
             this.$sysMsg.init();
-            console.log('SM mounted', this);
           }
           
         

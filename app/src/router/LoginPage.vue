@@ -49,7 +49,14 @@ export default {
 
       this.$TDAPI.login(email, passw)
           .then(response=>{
-            console.dir(response);
+            let token = response.data.token;
+            let email = this.emailInput;
+            this.$sysMsg.clear();
+            
+            this.$store.commit('login', {token, email});
+            this.$router.push({
+              name: 'Dashboard'
+            });
           });
     },
     googleSignIn(){

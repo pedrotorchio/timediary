@@ -34,6 +34,7 @@ export default class DOMElement{
         return this;
     }
     setStyle(prop, value){
+        
         this.element.style[prop] = value;
 
         return this;
