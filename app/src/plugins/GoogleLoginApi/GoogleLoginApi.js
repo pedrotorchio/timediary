@@ -106,7 +106,7 @@ export default {
 
     Vue.mixin({
       mounted() {
-        if(!this.$parent){
+        if(!this.$parent && this.$route && this.$route.path == '/'){
           api.loadGapi(options);
         }
       }

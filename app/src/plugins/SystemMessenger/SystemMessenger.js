@@ -35,13 +35,20 @@ class SystemMessenger{
     
     whenReady(callback){
         this.readyCallback = callback;
+
+        return this;
+    }
+    clear(dismiss = true){
+        this.queue.clear();
+        this.dismiss();
+        return this;
     }
     init(){
 
         this.messenger = new DOMMessenger('#system-messenger-plugin');
         this.messenger.setStyle('transitionDuration', `${this.delay}ms`);
         
-        if(this.readyCallback !== undefined)
+        if(this.readyCallback !== null)
             this.readyCallback();
 
         return this;
@@ -57,6 +64,8 @@ class SystemMessenger{
         clearTimeout(this.currTimer);
         this.__hide()
             .then(()=>this.__process());
+    
+        return this;
     }
     push(message, humor, duration){
         if(typeof message === 'string')
@@ -152,7 +161,6 @@ export default {
         mounted(){
           if(!this.$parent){
             this.$sysMsg.init();
-            console.log('SM mounted', this);
           }
           
         
