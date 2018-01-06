@@ -22,7 +22,7 @@ abstract class BaseRestController{
         
         return $this->makeResponse(
             $response,
-            $many->toJson());
+            $many);
     }
     public function getOne(Request $request, Response $response, array $args){
         $id = $request->getAttribute('id');
@@ -55,7 +55,7 @@ abstract class BaseRestController{
 
         return $this->makeResponse(
             $response,
-            $one->toJson()
+            $one
         );
     }
     public function postAll(Request $request, Response $response, array $args){
@@ -88,7 +88,7 @@ abstract class BaseRestController{
 
         return $this->makeResponse(
             $response,
-            $one->toJson(),
+            $one,
             self::STATUS_CODE['created']
         );
     }
@@ -145,7 +145,7 @@ abstract class BaseRestController{
 
         return $this->makeResponse(
             $response,
-            $one->toJson(),
+            $one,
             self::STATUS_CODE['created']
         );
     }
@@ -192,7 +192,7 @@ abstract class BaseRestController{
         
         return $this->makeResponse(
             $response,
-            $one->toJson()
+            $one
         );
     }
     public function makeResponse(Response $response, $json, int $status = 200){
