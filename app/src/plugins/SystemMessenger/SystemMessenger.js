@@ -96,7 +96,13 @@ class SystemMessenger{
     __display(message){
         return new Promise(resolve=>{
             
-            this.messenger.setText(message.text);
+            this.messenger.setText(message.text)
+                .then(height=>{
+                    
+                   this.messenger.setStyle('bottom', `-${height}px`); 
+
+                });
+            
             this.messenger.setHumor(message.humor);
             if(this.colors[message.humor] !== undefined)
                 this.messenger.setStyle('backgroundColor', this.colors[message.humor]);
@@ -119,16 +125,20 @@ class SystemMessenger{
     }
     __show(){
         return new Promise(resolve=>{
-                   
             this.messenger.addClass('shown');
+            this.messenger.setStyle('visibility', 'visible');
+            
             this.currTimer = setTimeout(resolve, this.delay);
         });
     }
     __hide(){
         return new Promise(resolve=>{
-            
             this.messenger.removeClass('shown');
-            this.currTimer = setTimeout(resolve, this.delay);
+            this.currTimer = setTimeout(()=>{
+            
+                this.messenger.setStyle('visibility', 'hidden');            
+                resolve();                
+            }, this.delay);
         })
     }
 }
