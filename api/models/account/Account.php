@@ -16,9 +16,9 @@ class Account extends BaseModel{
         'email_verified' => '',
         'grant_type' => '',
         'pers_email' => 'email',
-        'pers_display_name' => 'alphaNum',
-        'pers_first_name' => 'alphaNum',
-        'pers_last_name' => 'alphaNum',
+        'pers_display_name' => '',
+        'pers_first_name' => '',
+        'pers_last_name' => '',
         'pers_birth' => 'date',
         'pers_picture_url' => 'url',
         'pers_phone' => 'alphaNum',
@@ -42,5 +42,17 @@ class Account extends BaseModel{
     public function subjects(){
         return $this->belongsToMany(Subject::class, 'account_x_subject', 'account', 'subject');
     }
-
+    public function fill(array $data=[]){
+        if(empty($data['pers_display_name'])){
+            if(!empty($data['pers_first_name'])){
+                $data['pers_display_name'] = $data['pers_first_name'];
+                if(!empty($data['pers_last_name']))
+                    $data['pers_display_name'] .= ' ' . $data['pers_last_name'];
+            }
+            else
+                $data['pers_display_name'] = $data['pers_email'];
+                
+        }
+        parent::fill($data);
+    }
 }
