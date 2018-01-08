@@ -9,6 +9,7 @@ import GooglePlusAccount from '@/models/Account/GooglePlusAccount';
 import EmailValidator from '@/models/validators/EmailValidator';
 import PasswordValidator from '@/models/validators/PasswordValidator';
 
+import {mapActions} from 'vuex';
 export default {
   name: 'LoginPage',
   components:{TextInput, ButtonInput, FormCard},
@@ -32,29 +33,27 @@ export default {
     // this.$googleLogin.onError(err=>{});
   },
   methods:{
+    ...mapActions(['login']),
     passwordSignIn(){
-      let email, passw;
+      let email, password;
       try{
         email = EmailValidator(this.emailInput);
-        passw = PasswordValidator(this.passwordInput);
+        password = PasswordValidator(this.passwordInput);
+
+        this.login({email, password})
+            .then(()=>{
+              this.$sysMsg.clear();
+              this.$router.push({
+                name: 'Dashboard'
+              })
+            })
+            .catch(error=>{
+              this.$sysMsg.interrupt(error.message)
+            });
+
       }catch(e){
         this.$sysMsg.interrupt(e, 'error');
       }
-      
-
-      this.$timeDiary.api().login(email, passw)
-          .then(response=>{
-            
-            let token = response.token;
-            let email = this.emailInput;
-
-            this.$sysMsg.clear();
-            
-            this.$store.commit('login', {email, token});
-            this.$router.push({
-              name: 'Dashboard'
-            });
-          });
     },
     googleSignIn(){
       this.$googleLogin.login();

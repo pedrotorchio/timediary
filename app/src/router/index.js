@@ -22,10 +22,26 @@ let router = new Router({
   ],
   
 });
+
 router.beforeEach((to, from, next)=>{
-  
   let isLogged = store.getters.isLogged;
-  
+
+  guardModules(isLogged);
+  guardPages(to, isLogged, next);
+});
+
+function guardModules(isLogged){
+  let doneLoadingModules = store.getters.isDoneLoading;
+
+  if(isLogged){
+    if(!doneLoadingModules);
+      store.dispatch('modulesLoad');
+  }else{
+    if(doneLoadingModules);
+      store.dispatch('modulesClear');
+  }
+}
+function guardPages(to, isLogged, next){
   if(to.path != '/login'){
     if(isLogged)
       next();
@@ -43,6 +59,5 @@ router.beforeEach((to, from, next)=>{
       next();
     
   }
-});
-
+}
 export default router;
