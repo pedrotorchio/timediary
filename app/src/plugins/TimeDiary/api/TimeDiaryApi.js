@@ -1,23 +1,28 @@
 import axios from 'axios';
 import AuthService from './AuthService';
 import AccountService from './AccountService';
-class TimeDiaryApi{
+export default class TimeDiaryApi{
   constructor(options){
     options = options || {};
-    this.baseUrl = options.baseUrl || '';
+    this.baseUrl = options.baseApiUrl || '';
     this.errorCallback = null;
     this.authToken = null;
     this.auth = new AuthService(this.baseUrl);
     this.account = new AccountService(this.baseUrl);
+    this.email = null;
   }
+
   login(email, password){
     return this.repromise(this.auth.login(email, password));
   }
-  getAccountInformation(email){
-    return this.repromise(this.account.getInfo(email, this.__authorizationOptions()));
+  getModules(email){
+    
+      return this.repromise(this.account.getModules(email, this.__authorizationOptions()));
   }
-  setToken(token){
-    this.authToken = token;
+  getAccountInformation(email){
+
+    
+    return this.repromise(this.account.getInfo(email, this.__authorizationOptions()));
   }
   repromise(promise){
     return new Promise((resolve, reject)=>{
@@ -25,8 +30,9 @@ class TimeDiaryApi{
             .then(resolve)
             .catch(error=>{
               if(this.errorCallback)
-              this.errorCallback(error);
-
+                this.errorCallback(error);
+                
+              
               reject(error);
             });
     });
@@ -45,8 +51,4 @@ class TimeDiaryApi{
     }
   }
 }
-export default {
-  install: function(Vue, options){
-    Vue.prototype.$TDAPI = new TimeDiaryApi(options);
-  }
-};
+

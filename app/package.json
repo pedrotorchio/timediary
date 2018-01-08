@@ -13,13 +13,16 @@
     "axios": "^0.17.1",
     "fifo": "^2.3.0",
     "google-client-api": "^1.0.4",
+    "load-script": "^1.0.0",
     "validator": "^9.2.0",
     "vue": "^2.5.2",
     "vue-router": "^3.0.1",
-    "vuex": "^3.0.1"
+    "vuex": "^3.0.1",
+    "vuex-persist": "^1.1.0"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.2",
+    "babel-cli": "^6.26.0",
     "babel-core": "^6.22.1",
     "babel-helper-vue-jsx-merge-props": "^2.0.3",
     "babel-loader": "^7.1.1",

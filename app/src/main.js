@@ -6,27 +6,30 @@ import router from './router'
 import {googleClientConfig, apiUrl} from '@/config.js';
 
 
-import TimeDiaryApi from '@/plugins/TimeDiaryApi/TimeDiaryApi'
+import TimeDiary from '@/plugins/TimeDiary/TimeDiaryPlugin'
 import {baseUrl} from '@/config';
+import Tasks from '@/modules/Tasks/TimeDiaryTasks';
+Vue.use(TimeDiary, {
+  baseApiUrl: apiUrl,
+  nativeModules:[
+    Tasks
+  ]
+});
 
 import GoogleLoginApi from '@/plugins/GoogleLoginApi/GoogleLoginApi';
+Vue.use(GoogleLoginApi, {
+  client_id: googleClientConfig.id,
+  scope: googleClientConfig.scope
+});
 
 import SystemMessenger from '@/plugins/SystemMessenger/SystemMessenger';
+Vue.use(SystemMessenger);
 
 import store from './store';
 
 Vue.config.productionTip = false
 
-Vue.use(TimeDiaryApi, {
-  baseUrl: apiUrl
-});
-Vue.use(GoogleLoginApi, {
-    client_id: googleClientConfig.id,
-    scope: googleClientConfig.scope
-});
-Vue.use(SystemMessenger);
-
-new Vue({
+window.APP = new Vue({
   el: '#app',
   router,
   store,
@@ -34,4 +37,4 @@ new Vue({
   components: { App },
   created(){
   }
-})
+});

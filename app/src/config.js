@@ -1,3 +1,4 @@
+export const appName = 'Timediary';
 export const baseUrl = 'http://localhost:8080';
 
 export const googleClientConfig = {

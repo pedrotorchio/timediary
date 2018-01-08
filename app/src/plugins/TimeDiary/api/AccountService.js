@@ -7,4 +7,9 @@ export default class AccountService extends Service{
     getInfo(email, options){
         return super.get(email, options);
     }
+    getModules(email, options){
+        return new Promise((resolve, reject)=>{
+            resolve([]);            
+        });
+    }
 }

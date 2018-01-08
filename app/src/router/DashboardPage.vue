@@ -1,27 +1,32 @@
 <script>
 
 export default {
+
   name: 'DashboardPage',
   components:{},
-  data () {
-    return {
-      
-    }
-  },
-  mounted(){
-    this.$TDAPI.getAccountInformation(this.$store.getters.account.email)
-        .then(response=>{
-          let details = response.data;
-          this.$store.commit('account', details);
 
+  mounted(){
+    function logout(){
+      this.$store.commit('logout');      
+    }
+    
+    let email = this.$store.getters.account.login_email;
+    this.$timeDiary.getModules(email);
+    this.$timeDiary.api().getAccountInformation(email)
+        .then(details=>{
+          
+          this.$store.commit('account', details);
+          
           greetings(this.$sysMsg, details.pers_display_name);
           
         })
+        // .catch(logout.bind(this));
   },
-  methods:{
-    
-  },
-
+    computed:{
+    tabs(){
+      return this.$store.getters.dbSidetabs;
+    }
+  }
 }
 function greetings(sm, display_name){
   
@@ -33,9 +38,14 @@ function greetings(sm, display_name){
 
 <template>
   <div id="dashboardPage" class="page">
-    <div id="content">
+    <div id="widgets">
       
     </div>
+    <aside id="tabs">
+      <ul>
+        <li v-for="tab in tabs">{{tab.title}}</li>
+      </ul>
+    </aside>
   </div>
 </template>
 

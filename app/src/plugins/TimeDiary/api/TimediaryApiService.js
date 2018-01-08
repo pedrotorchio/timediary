@@ -31,11 +31,9 @@ export default class TimediaryApiService {
   }
   repromise(_promise) {
     return new Promise((resolve, reject) => _promise.then(response=>{
-      resolve({
-        data: response.data,
-        response
-      });
+      resolve(response.data);
     }).catch(error => {
+      
       let code, message, data;      
       if (error.response) {
         // The request was made and the server responded with a status code
@@ -50,7 +48,7 @@ export default class TimediaryApiService {
         // http.ClientRequest in node.js
         
           code = error.request.status;
-          message = error.request.statusText;
+          message = error.request.statusText || error.message;
           data = error.request;
 
         

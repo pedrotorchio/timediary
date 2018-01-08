@@ -1,22 +1,53 @@
 <template>
 
   <main>
+    <header-bar v-if='logged'></header-bar>
     <router-view/>
-
     <system-message></system-message>
   </main>
 
 </template>
 
 <script>
+import HeaderBar from '@/components/header/HeaderBar';
 export default {
   name: 'app',
-
+  components: {HeaderBar},
+  mounted(){
+    this.$timeDiary.api().onError(error=>{
+      this.$sysMsg.interrupt(error.message, 'error');
+    });
+  },
+  computed:{
+    logged(){
+      return this.$store.getters.isLogged;
+    }
+  }
 }
 </script>
 
 <style lang="scss">
 @import './assets/styles/config';
+.clickable{
+  cursor: pointer;
+  transition: color;
+  transition-duration: $time__transition;
+}
+.column{
+  display: flex;
+  flex-direction: column;
+}
+.center{
+  justify-content: center;          
+}
+span{
+  &.clickable{
+    &:hover{
+      color: $color__highlight;
+    }
+  }
+}
+
 html{
   overflow-x:hidden;
   overflow-y:scroll;

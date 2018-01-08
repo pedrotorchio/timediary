@@ -19,22 +19,17 @@ export default {
     }
   },
   mounted(){
+    
     this.$sysMsg.whenReady(()=>setTimeout(()=>{
       
       greetings(this.$sysMsg);
     }, 1000));
-    this.$googleLogin.setSignedInCallback(profile=>{
-      new GooglePlusAccount(profile);
-    });
-    this.$googleLogin.setSignedOutCallback(()=>{
 
-    });
-    this.$googleLogin.onError(err=>{
-
-    });
-    this.$TDAPI.onError(error=>{
-      this.$sysMsg.interrupt(error.message, 'error');
-    })
+    // this.$googleLogin.setSignedInCallback(profile=>{
+    //   new GooglePlusAccount(profile);
+    // });
+    // this.$googleLogin.setSignedOutCallback(()=>{});
+    // this.$googleLogin.onError(err=>{});
   },
   methods:{
     passwordSignIn(){
@@ -47,13 +42,15 @@ export default {
       }
       
 
-      this.$TDAPI.login(email, passw)
+      this.$timeDiary.api().login(email, passw)
           .then(response=>{
-            let token = response.data.token;
+            
+            let token = response.token;
             let email = this.emailInput;
+
             this.$sysMsg.clear();
             
-            this.$store.commit('login', email, token);
+            this.$store.commit('login', {email, token});
             this.$router.push({
               name: 'Dashboard'
             });
