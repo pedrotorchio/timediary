@@ -1,8 +1,12 @@
 <template>
 
   <main>
-    <header-bar v-if='logged'></header-bar>
+    <header-bar v-if='showGuardedUi'></header-bar>
+    <side-tab-container v-if='showGuardedUi' :tabs='moduleTabs' position='left' :topPosition='200'/>
+
     <router-view/>
+    
+    <side-tab-container v-if='showGuardedUi' :tabs='configTabs' position='right' :topPosition='200'/>    
     <system-message></system-message>
   </main>
 
@@ -10,63 +14,34 @@
 
 <script>
 import HeaderBar from '@/components/header/HeaderBar';
+import SideTabContainer from '@/components/sidetab/SideTabContainer';
+
 export default {
   name: 'app',
-  components: {HeaderBar},
+  components: {HeaderBar, SideTabContainer},
+
   mounted(){
-    this.$timeDiary.api().onError(error=>{
-      this.$sysMsg.interrupt(error.message, 'error');
-    });
+    
   },
   computed:{
-    logged(){
-      return this.$store.getters.isLogged;
+    showGuardedUi(){
+      return this.$store.getters.uiLogged;
+    },
+    moduleTabs(){
+      return this.$store.getters.modulesSidetabs;
+    },
+    configTabs(){
+      return this.$store.getters.configTabs;
     }
+  },
+  created(){
+    
   }
 }
 </script>
 
-<style lang="scss">
+<style lang='scss' scoped>
 @import './assets/styles/config';
-.clickable{
-  cursor: pointer;
-  transition: color;
-  transition-duration: $time__transition;
-}
-.column{
-  display: flex;
-  flex-direction: column;
-}
-.center{
-  justify-content: center;          
-}
-span{
-  &.clickable{
-    &:hover{
-      color: $color__highlight;
-    }
-  }
-}
-
-html{
-  overflow-x:hidden;
-  overflow-y:scroll;
-}
-html::-webkit-scrollbar {
-    width: .5em;
-}
-
-html::-webkit-scrollbar-track {
-    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
-}
-
-html::-webkit-scrollbar-thumb {
-  background-color: darkgrey;
-  outline: 1px solid slategrey;
-}
-body{
-  margin: 0;
-}
 main{
   display: flex;
   flex-direction: column;
@@ -81,10 +56,8 @@ main{
   text-align: center;
   color: $color__text;
 }
-html {
-  box-sizing: border-box;
-}
-*, *:before, *:after {
-  box-sizing: inherit;
-}
+</style>
+
+
+<style lang="scss" src='./assets/styles/global.scss'>
 </style>

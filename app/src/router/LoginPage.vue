@@ -41,14 +41,17 @@ export default {
         password = PasswordValidator(this.passwordInput);
 
         this.login({email, password})
-            .then(()=>{
+            .then((account)=>{
+
+              
               this.$sysMsg.clear();
+              
               this.$router.push({
                 name: 'Dashboard'
-              })
+              });
             })
             .catch(error=>{
-              this.$sysMsg.interrupt(error.message)
+              this.$sysMsg.interrupt(error.message, 'error')
             });
 
       }catch(e){
@@ -59,6 +62,10 @@ export default {
       this.$googleLogin.login();
     }
   },
+  created(){
+
+
+  }
 
 }
 function greetings(sm){

@@ -2,51 +2,74 @@ import Router from '../../router';
 import ApiService from './ApiService';
 
 let accountService = new ApiService('account');
-let authService = new ApiService('auth');
 
+import Tasks from '../../modules/Tasks';
+import Patients from '../../modules/Patients';
+
+const nativeModules = [
+    Tasks, Patients
+]
 export default {
     state: {
-        modules: [],
-        doneLoading: false
+        modulesList: {},
+        modulesDoneLoading: false,
+        modulesSidetabs: [],
+        modulesWidgets: []
     },
     getters: {
-        modules(state){
-            return state.modules;
+        modulesList(state){
+            return state.list;
         },
-        isDoneLoading(state){
+        modulesIsDoneLoading(state){
             return state.doneLoading;
+        },
+        modulesSidetabs(state){
+            return state.modulesSidetabs;
+        },
+        modulesWidgets(state){
+            return state.modulesWidgets;
         }
     },
     mutations: {
-        addModule(state, module){
-            state.modules.push(module);
+        modulesAdd(state, {uid, module}){
+            
+            module.sidetabs.forEach(tab=>{
+                state.modulesSidetabs.push(tab);
+            });
+            module.widgets.forEach(widget=>{
+                state.modulesWidgets.push(widget);
+            });
+            state.modulesList[uid] = module;
+        },
+        modulesDoneLoading(state){
+            state.modulesDoneLoading = true;
         }
     },
     actions: {
-        clearModules(state){
-            state.modules.length = 0;
+        modulesClear({state}){
+            for(module in state.modulesList)
+                if(state.modulesList.hasOwnProperty(module))
+                    delete state.modulesList[module];
         },
-        clear(state){
-            state.loginEmail = null;
-            state.token = null;
-            state.account = null;
+        clear({state, dispatch}){
+            dispatch('modulesClear');
         },
-        modulesLoad({rootGetters}){
-            let email = rootGetters.loginInfo.email;
-
-            return new Promise((resolve, reject)=>{
-                accountService.get(`${email}?relationships=modules`)
-                .then(response=>{
-                    let modules = response.data;
-                    console.dir(modules);
-                })
-                .catch((error)=>{
-                    reject({
-                        message: 'Impossível carregar Módulos'
-                    });
-                });
-            });
+        modulesLoad({commit}){
             
+            // install native async
+            setTimeout(()=>{
+                nativeModules.forEach(className=>{
+                    let module = new className();
+                });
+
+                // fetch remote modules
+                // get [{url, title, icon, uid}] = modules
+                // then modules => each module modulesAdd(new Module(module))
+                // --> Module constructor => if url then Module.loadScript(url)
+                // --> loaded script => store.getters.modulesList[uid] = new Module();
+            });
+
+            commit('modulesDoneLoading');
         }
     }    
 }

@@ -5,21 +5,21 @@ import App from './App'
 import router from './router'
 import {googleClientConfig, apiUrl} from '@/config.js';
 
-
-import TimeDiary from '@/plugins/TimeDiary/TimeDiaryPlugin'
-import {baseUrl} from '@/config';
-import Tasks from '@/modules/Tasks/TimeDiaryTasks';
-Vue.use(TimeDiary, {
-  baseApiUrl: apiUrl,
-  nativeModules:[
-    Tasks
-  ]
-});
-
 import GoogleLoginApi from '@/plugins/GoogleLoginApi/GoogleLoginApi';
 Vue.use(GoogleLoginApi, {
   client_id: googleClientConfig.id,
   scope: googleClientConfig.scope
+});
+
+import Vuetify from 'vuetify';
+import ('../node_modules/vuetify/dist/vuetify.min.css');
+Vue.use(Vuetify,{
+  theme: {
+    primary: '#3f51b5',
+    secondary: '#b0bec5',
+    accent: '#8c9eff',
+    error: '#b71c1c'
+  }
 });
 
 import SystemMessenger from '@/plugins/SystemMessenger/SystemMessenger';
@@ -29,7 +29,7 @@ import store from './store';
 
 Vue.config.productionTip = false
 
-window.APP = new Vue({
+window.DIARY = new Vue({
   el: '#app',
   router,
   store,

@@ -4,16 +4,16 @@
     props: [],
     computed: {
       displayName(){
-        if(this.$store.getters.isLogged)
-          return this.$store.getters.account.pers_display_name;
-        else
-          return '';
+        return this.$store.getters.account.pers_display_name;
+      },
+      accountImage(){
+        return this.$store.getters.account.pers_picture_url;
       }
       
     },
     methods:{
       logout(){
-        this.$store.commit('logout');
+        this.$store.dispatch('logout');
       }
     }
   }
@@ -30,7 +30,7 @@
           <span title="Sair do TimeDiary" @click='logout' class="clickable">Sair</span>
         </div>
         <div class="img">
-          <img :title="displayName" src="http://www.mulierchile.com/profile-pictures/profile-pictures-004.jpg" alt="">
+          <img :title="displayName" :src="accountImage" alt="">
         </div>
     </div>
   </header>

@@ -13,6 +13,8 @@ export default class ApiService {
   
   get(id = '', config = {}) {
 
+    config.Authenticatino
+
     id = this.url(id);
     
     return this.repromise(axios.get(id, config));

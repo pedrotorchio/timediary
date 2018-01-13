@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import LoginPage from './LoginPage'
 import DashboardPage from './DashboardPage'
 import store from '../store';
+import {unguardedPages as publicPages, mainPage} from '../config';
 
 Vue.use(Router)
 
@@ -26,38 +27,34 @@ let router = new Router({
 router.beforeEach((to, from, next)=>{
   let isLogged = store.getters.isLogged;
 
-  guardModules(isLogged);
   guardPages(to, isLogged, next);
 });
-
-function guardModules(isLogged){
-  let doneLoadingModules = store.getters.isDoneLoading;
-
+router.afterEach((to, from)=>{
+  let isLogged = store.getters.isLogged;
+  
   if(isLogged){
-    if(!doneLoadingModules);
-      store.dispatch('modulesLoad');
+    store.commit('uiLogged', true);
+    store.dispatch('modulesLoad');
   }else{
-    if(doneLoadingModules);
-      store.dispatch('modulesClear');
+    store.commit('uiLogged', false);
+    store.dispatch('modulesClear');
   }
-}
+});
+
 function guardPages(to, isLogged, next){
-  if(to.path != '/login'){
-    if(isLogged)
-      next();
-    else
+  
+  if(publicPages.indexOf(to.name) == -1 && !isLogged){
+    // se é pagina reservada e nao está logado, login
       next({
         name: 'Login'
       })
-  }else{
-    if(isLogged){
-      next({
-        name: 'Dashboard'
-      });
-    }
-    else
-      next();
+  }else if(publicPages.indexOf(to.name) != -1 && isLogged){
+    // se é pagina publica e está logado, vai para principal
     
+    next({
+      name: mainPage
+    });
   }
+  next();
 }
 export default router;

@@ -8,3 +8,8 @@ export const googleClientConfig = {
 };
 
 export const apiUrl = 'http://local.api.timediary.com.br';
+
+export const unguardedPages = [
+  'Login'
+];
+export const mainPage = 'Dashboard';
