@@ -65,7 +65,7 @@ export default {
                 :disabled='tab.component == null' 
                 @click='showComponent' />
         </aside>
-        <aside ref='side-tab-component' class='side-tab-component' :class="[shown ? 'shown' : '', `_${position}`]" :style='{top: `${topPosition}px`, maxHeight: `${maxHeight}px`}'>
+        <aside ref='side-tab-component' class='side-tab-component elevation-24' :class="[shown ? 'shown' : '', `_${position}`]" :style='{top: `${topPosition}px`, maxHeight: `${maxHeight}px`}'>
             <v-layout row class="controllers">
                 <v-btn flat icon @click='show(false)'>
                     <v-icon>close</v-icon>
@@ -84,12 +84,14 @@ export default {
         position: absolute;
         left: 0;
         top:0;
+        z-index: 99;
     }
     .side-tab-container, .side-tab-component{
         
         transition-duration: .5s;
         transition-property: left, right;
         position: fixed;
+
         
         &._left{
             
@@ -104,6 +106,8 @@ export default {
                 right:0;
             }
         }
+
+
         
     }
     .side-tab-container{

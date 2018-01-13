@@ -35,7 +35,7 @@ export default {
 
 </script>
 <template>
-<div class="side-tab" v-bind:class="[`_${position}`, disabled ? 'disabled' : 'enabled']" v-bind:style='{width:sidePx, height:sidePx}'
+<div class="side-tab elevation-3" v-bind:class="[`_${position}`, disabled ? 'disabled' : 'enabled']" v-bind:style='{width:sidePx, height:sidePx}'
 @click='clicked'>
     <component v-if='tab.icon' class="icon" :is="tab.icon"></component>
 </div>
