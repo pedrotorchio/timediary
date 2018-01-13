@@ -1,6 +1,6 @@
 <template>
 
-  <main>
+  <v-app id="main">
     <header-bar v-if='showGuardedUi'></header-bar>
     <side-tab-container v-if='showGuardedUi' :tabs='moduleTabs' position='left' :topPosition='200'/>
 
@@ -8,7 +8,7 @@
     
     <side-tab-container v-if='showGuardedUi' :tabs='configTabs' position='right' :topPosition='200'/>    
     <system-message></system-message>
-  </main>
+  </v-app>
 
 </template>
 
@@ -42,7 +42,7 @@ export default {
 
 <style lang='scss' scoped>
 @import './assets/styles/config';
-main{
+#main{
   display: flex;
   flex-direction: column;
   align-items: stretch;

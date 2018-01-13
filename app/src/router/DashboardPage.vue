@@ -1,6 +1,4 @@
 <script>
-  
-
   export default {
     name: 'DashboardPage',
     data(){
@@ -35,7 +33,7 @@ function greetings(sm, display_name){
 <template>
   <div id="dashboardPage" class="page">
     <section id="widgets" >
-      <component v-for='widget in widgets' :is="widget.component" :class='{fullWidth: widget.fulWidth}' class="widget"></component>
+      <component v-for='widget in widgets' :key='widget.uid' :is="widget.component" :class='{fullWidth: widget.fulWidth}' class="widget"></component>
     </section>
   </div>
 </template>

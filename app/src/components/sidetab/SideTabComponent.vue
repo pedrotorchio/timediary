@@ -35,9 +35,10 @@ export default {
 
 </script>
 <template>
-  <div class="side-tab" v-bind:class="[`_${position}`, disabled ? 'disabled' : 'enabled']" v-bind:style='{width:sidePx, height:sidePx}' @click='clicked'>
+<div class="side-tab" v-bind:class="[`_${position}`, disabled ? 'disabled' : 'enabled']" v-bind:style='{width:sidePx, height:sidePx}'
+@click='clicked'>
     <component v-if='tab.icon' class="icon" :is="tab.icon"></component>
-  </div>
+</div>
 </template>
 <style lang='scss' scoped>
     @import '../../assets/styles/config';

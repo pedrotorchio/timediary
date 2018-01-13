@@ -1,7 +1,8 @@
 
 export class Base{
-    constructor(title){
+    constructor(title, extra){
         this.setTitle(title);
+        this.extra = extra || {};
     }
     setTitle(title){
         this.title = title;
@@ -9,8 +10,8 @@ export class Base{
     }
 }
 export class ModuleElement extends Base{
-    constructor({icon, title, component, module}){
-        super(title);
+    constructor({icon, title, component, module, extra}){
+        super(title, extra);
         this.icon = icon;
         this.component = component;
         this.module = module || null;

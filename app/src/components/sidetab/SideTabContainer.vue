@@ -45,14 +45,17 @@ export default {
 <template>
     <section>
         <aside class="side-tab-container" :class="[!shown ? 'shown' : '', `_${position}`]" :style='{top:`${top(0)}px`}'>
-            <side-tab v-for="(tab, i) in tabs" 
-            class='tab'
-            :side='side' 
-            :key='tab.uid' 
-            :position='position' 
-            :tab='tab'
-            :disabled='tab.component == null' 
-            @click='showComponent' />
+                <side-tab
+                class='tab'
+                
+                v-for='(tab, i) in tabs' 
+                :key='tab.uid'
+                :title = "tab.title"            
+                :side='side' 
+                :position='position' 
+                :tab='tab'
+                :disabled='tab.component == null' 
+                @click='showComponent' />
         </aside>
         <aside class='side-tab-component' :class="[shown ? 'shown' : '', `_${position}`]" :style='{top:`${top(0)}px`}'>
             <v-layout row class="controllers">
@@ -69,12 +72,19 @@ export default {
     @import '../../assets/styles/config';
     $width: 600px;
 
+    .controllers{
+        position: absolute;
+        left: 0;
+        top:0;
+    }
     .side-tab-container, .side-tab-component{
         
-        transition: right .5s;
+        transition-duration: .5s;
+        transition-property: left, right;
         position: fixed;
         
         &._left{
+            
             left: -$width;
             &.shown{
                 left: 0;
@@ -96,11 +106,12 @@ export default {
         }
     }
     .side-tab-component{
+        min-height: 60px;
         display:flex;
         flex-direction: column;
         width: $width - 8px;
-        
-        background-color: $color__base_lowsat;
+        box-sizing: border-box;
+        background-color: white;
         border: 4px solid $color__base;
 
         &._left{
