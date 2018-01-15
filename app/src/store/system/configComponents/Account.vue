@@ -46,7 +46,7 @@ export default {
   },
   computed:{
     account(){
-      return this.$store.getters.account;
+      return this.$store.state.account.info;
     }
   }
   

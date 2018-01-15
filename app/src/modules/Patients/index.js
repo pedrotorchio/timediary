@@ -35,7 +35,8 @@ export default class TasksModule{
         this.router = this.app.$router;
 
         this.store.registerModule('patients', {
-            patientsList: []
+            patientsList: ['pedro', 'lucas']
+
         });
         
         let module = new Module({title, routes})
