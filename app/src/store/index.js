@@ -21,11 +21,31 @@ const persistence = new VuexPersist({
         }
     }
 });
+
 export default new Vuex.Store({
     modules: {
         account,
         modules, 
         ui
+    },
+    getters:{
+        namespaces(state){
+            let nsList = [];
+            for(module in state){
+                if(state.hasOwnProperty(module))
+                    nsList.push(module);
+            }
+
+            return nsList;
+        }
+    },
+    actions:{
+        clear({getters, dispatch}){
+            getters.namespaces.forEach(module=>{
+                
+                dispatch(`${module}/clear`);
+            });
+        }
     },
     plugins: [persistence.plugin]
 });

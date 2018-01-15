@@ -15,28 +15,30 @@
 <script>
 import HeaderBar from '@/components/header/HeaderBar';
 import SideTabContainer from '@/components/sidetab/SideTabContainer';
+import {mapState} from 'vuex';
 
 export default {
   name: 'app',
   components: {HeaderBar, SideTabContainer},
 
   mounted(){
-    
+    if(this.showGuardedUi)
+      greetings(this.$sysMsg, this.displayName);
+
   },
   computed:{
-    showGuardedUi(){
-      return this.$store.getters.uiLogged;
-    },
-    moduleTabs(){
-      return this.$store.getters.modulesSidetabs;
-    },
-    configTabs(){
-      return this.$store.getters.configTabs;
-    }
-  },
-  created(){
-    
+    ...mapState({
+      displayName: state=>state.account.info.pers_display_name,
+      showGuardedUi: state => state.ui.uiLogged,
+      moduleTabs: state => state.modules.sidetabs,
+      configTabs: state => state.ui.configTabs
+    })
   }
+}
+function greetings(sm, displayName){
+  
+  sm.interrupt(`Olá, ${displayName}, seja bem vindo.`, 'cheer', sm.DURATION_LONG);
+
 }
 </script>
 

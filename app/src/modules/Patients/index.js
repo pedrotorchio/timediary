@@ -1,12 +1,19 @@
 import {ModuleElement, Module} from '../../store/Module';
+import Registration from './RegistrationSidebar';
+import RegistrationIcon from './patient.svg';
+
+import store from './store';
 
 let tab = new ModuleElement({
     icon: {
-        template: `<div></div>`
+        template: `<img src='${RegistrationIcon}' class>`
     },
-    title: 'Cadastro de Pacientes',
-    component: {template:'<div>Pacientes tab</div>'}
-});
+    title: 'Pacientes',
+    component: Registration,
+    extra:{
+        tooltip: 'Gerencie Pacientes'
+    }
+})
 let widget = new ModuleElement({
     icon: '',
     title: 'Pacientes',
@@ -26,12 +33,16 @@ export default class TasksModule{
         this.app = window.DIARY;
         this.store = this.app.$store;
         this.router = this.app.$router;
+
+        this.store.registerModule('patients', {
+            patientsList: []
+        });
         
         let module = new Module({title, routes})
             .addTab(tab)
             .addWidget(widget);
         let uid = module.uid;
 
-        this.store.commit('modulesAdd', {module, uid});
+        this.store.commit('modules/add', {module, uid});
     }
 }

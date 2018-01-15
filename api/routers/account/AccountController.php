@@ -14,7 +14,7 @@ class AccountController extends BaseRestController {
         if(isset($data['password']))
             $data['password'] = self::passwordHash($data['password']);
 
-
+        
         return $data;
     }
     

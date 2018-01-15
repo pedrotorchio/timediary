@@ -20,7 +20,6 @@ export default {
     }
   },
   mounted(){
-    
     this.$sysMsg.whenReady(()=>setTimeout(()=>{
       
       greetings(this.$sysMsg);
@@ -33,22 +32,21 @@ export default {
     // this.$googleLogin.onError(err=>{});
   },
   methods:{
-    ...mapActions(['login']),
+    ...mapActions(['account/login']),
     passwordSignIn(){
       let email, password;
       try{
         email = EmailValidator(this.emailInput);
         password = PasswordValidator(this.passwordInput);
-
-        this.login({email, password})
+        
+        this['account/login']({email, password})
             .then((account)=>{
 
-              
               this.$sysMsg.clear();
-              
               this.$router.push({
                 name: 'Dashboard'
               });
+              
             })
             .catch(error=>{
               this.$sysMsg.interrupt(error.message, 'error')
@@ -98,7 +96,7 @@ function greetings(sm){
 </template>
 
 <style lang="scss" scoped>
-  @import '../assets/styles/config';
+  @import '../../assets/styles/config';
   #loginPage{
     flex:1;
     display: flex;

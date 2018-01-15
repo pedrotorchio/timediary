@@ -1,5 +1,4 @@
-<div>
-    <h2>Usuário</h2>
+
     <v-stepper v-model="step">
         <v-stepper-header>
             <v-stepper-step editable step="1" v-bind:complete="true">
@@ -19,30 +18,29 @@
           <div class="steps">
               <v-stepper-content step="1">
                   <v-text-field
-                                                        @blur='blurDetected'
+                                                       @focus='focusDetected' @blur='blurDetected'
                         label="Nome de Exibição"
                         v-model='account.pers_display_name'
                   ></v-text-field>
           
-                  <v-text-field                         @blur='blurDetected'
+                  <v-text-field                        @focus='focusDetected' @blur='blurDetected'
                         v-model='account.pers_first_name'
                         label="Primeiro Nome"
                   ></v-text-field>
-                  <v-text-field                         @blur='blurDetected'
+                  <v-text-field                        @focus='focusDetected' @blur='blurDetected'
                       v-model='account.pers_last_name'
                         label="Sobrenome"
                   ></v-text-field>
-                  <v-text-field                         @blur='blurDetected'
+                  <v-text-field                        @focus='focusDetected' @blur='blurDetected'
                         v-model="account.pers_phone"
                         label="Telefone"
                   ></v-text-field>
-                  <v-text-field                         @blur='blurDetected'
+                  <v-text-field                        @focus='focusDetected' @blur='blurDetected'
                         v-model="account.pers_occupation"
                         label="Ocupação"
                   ></v-text-field>
           
                   <div>
-          
                 <v-dialog
                   persistent
                   v-model="modal"
@@ -55,9 +53,9 @@
                     label="Data de Nascimento"
                     v-model="dateFormatted"
                     prepend-icon="event"
-                    @blur="date = parseDate(dateFormatted)"
+                    @blur="account.pers_birth = parseDate(dateFormatted)"
                   ></v-text-field>
-                  <v-date-picker v-model="account.pers_birth" @input="dateFormatted = formatDate($event)" no-title scrollable actions>
+                  <v-date-picker v-model="account.pers_birth" @input="dateFormatted = formatDate(event)" no-title scrollable actions>
                     <template slot-scope="{ save, cancel }">
                       <v-card-actions>
                         <v-spacer></v-spacer>
@@ -75,32 +73,32 @@
                 
                 <v-stepper-content step="2">
                   
-                  <v-text-field                         @blur='blurDetected'
+                  <v-text-field                        @focus='focusDetected' @blur='blurDetected'
                     v-model="account.loc_complement"
                     label="Endereço"
-                    hint="Rua, Número"
+                    hint="Rua, Número, Apt"
                     persistent-hint
                   ></v-text-field>
                   <div class="fieldset">
-                      <v-text-field                         @blur='blurDetected'
+                      <v-text-field                        @focus='focusDetected' @blur='blurDetected'
                       v-model="account.loc_neighbourhood"
                       label="Bairro"
                     ></v-text-field>
-                    <v-text-field                         @blur='blurDetected'
+                    <v-text-field                        @focus='focusDetected' @blur='blurDetected'
                     v-model="account.loc_city"
                       label="Cidade"
                     ></v-text-field>
                   </div>
                   <div class="fieldset">
-                      <v-text-field                         @blur='blurDetected'
+                      <v-text-field                        @focus='focusDetected' @blur='blurDetected'
                       v-model="account.loc_state"
                       label="Estado"
                     ></v-text-field>
-                    <v-text-field                         @blur='blurDetected'
-                      v-model="account.loc_state"
-                      label="Estado"
+                    <v-text-field                        @focus='focusDetected' @blur='blurDetected'
+                      v-model="account.loc_country"
+                      label="País"
                     ></v-text-field>
-                    <v-text-field                         @blur='blurDetected'
+                    <v-text-field                        @focus='focusDetected' @blur='blurDetected'
                       v-model="account.loc_postal_code"
                       label="CEP"
                     ></v-text-field>
@@ -110,9 +108,12 @@
                 </v-stepper-content>
                 
                 <v-stepper-content step="3">
+
+                  <p>
+                    Ao clicar o botão, você receberá um email em {{account.pers_email}} para alterar email ou senha cadastrados.
+                  </p>
+                  <button class="button" @click='alterarCredenciais'>Alterar email ou senha</button>
                   
                 </v-stepper-content>
           </div>
     </v-stepper>
-
-  </div>

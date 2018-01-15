@@ -1,4 +1,6 @@
 <script>
+import {mapState} from 'vuex';
+
   export default {
     name: 'DashboardPage',
     data(){
@@ -8,32 +10,22 @@
     },
     mounted(){
       function logout(){
-        this.$store.commit('logout');      
+        this.$store.commit('account/logout');
       }
-      
-      greetings(this.$sysMsg, this.accountInfo.pers_display_name);
     },
       computed:{ 
-      accountInfo(){
-        return this.$store.getters.account;
-      },
-      widgets(){
-        return this.$store.getters.modulesWidgets;
-      }
+        ...mapState({
+          widgets: state=>state.modules.widgets
+        })
     }
   } 
-function greetings(sm, display_name){
-  
-  sm.interrupt(`Olá, ${display_name}, seja bem vindo.`, 'cheer', sm.DURATION_LONG);
-
-}
 </script>
 
 
 <template>
   <div id="dashboardPage" class="page">
     <section id="widgets" >
-      <component v-for='widget in widgets' :key='widget.uid' :is="widget.component" :class='{fullWidth: widget.fulWidth}' class="widget"></component>
+      <component v-for='widget in widgets' :key='widget.uid' :is="widget.component" :class='{fullWidth: widget.fulWidth}' class="widget elevation-2"></component>
     </section>
   </div>
 </template>
@@ -51,10 +43,11 @@ function greetings(sm, display_name){
 
     .widget{
       $margin: 8px;
-
+      padding: 8px;
       flex: 0 1 100%;
       max-width: 100%;
       margin: $margin;
+      
 
       &.fullWidth{
         max-width: 100% !important;

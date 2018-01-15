@@ -7,11 +7,11 @@ let authService = new ApiService('auth');
 let basicOptions = {};
 
 export default {
+    namespaced: true,
     state: {
         loginEmail: null,
         token: null,
-        info: null,
-        loggedUI: false
+        info: null
     },
     getters: {
         loginInfo(state){
@@ -40,9 +40,10 @@ export default {
     },
     mutations: {
         login(state, {email, token}){
+
             state.loginEmail = email;
             state.token = token;
-
+            
             basicOptions.headers = {
                 Authorization: `Bearer ${token}`
             };
@@ -54,7 +55,7 @@ export default {
     },
     actions: {
         login({commit, dispatch}, {email, password}){
-
+            
             return new Promise((resolve, reject)=>{
                 let authorization = btoa(`${email}:${password}`);
             
@@ -64,8 +65,9 @@ export default {
                     }
                 })
                 .then(response=>{
-                    commit('login', {email, token:response.token});
-                    resolve(response);
+                    let login = {email, token:response.token};
+                    commit('login', login);
+                    resolve(login);
                 })
                 .catch(reject);
             });
@@ -80,15 +82,15 @@ export default {
             state.info = null;
         },
         fetchAccountInformation({getters}){
-            return new Promise((resolve,reject)=>{
-                let {email} = getters.loginInfo;
-
-                accountService.get(email, basicOptions)
-                .then(info=>{
-                    resolve(info);
-                })
-                .catch(reject);
-            });
+            let {email} = getters.loginInfo;
+            return accountService.get(email, basicOptions);
+                
+        },
+        sendAccountInformation({state, getters}, info){
+            
+            let {email} = getters.loginInfo;
+            return accountService.put(email, getters.account);
+            
         }
     }    
 }

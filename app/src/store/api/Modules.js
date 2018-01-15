@@ -10,54 +10,53 @@ const nativeModules = [
     Tasks, Patients
 ]
 export default {
+    namespaced: true,
     state: {
-        modulesList: {},
-        modulesDoneLoading: false,
-        modulesSidetabs: [],
-        modulesWidgets: []
+        list: {},
+        doneLoading: false,
+        sidetabs: [],
+        widgets: []
     },
     getters: {
-        modulesList(state){
+        list(state){
             return state.list;
         },
-        modulesIsDoneLoading(state){
+        isDoneLoading(state){
             return state.doneLoading;
         },
-        modulesSidetabs(state){
-            return state.modulesSidetabs;
+        sidetabs(state){
+            return state.sidetabs;
         },
-        modulesWidgets(state){
-            return state.modulesWidgets;
+        widgets(state){
+            return state.widgets;
         }
     },
     mutations: {
-        modulesAdd(state, {uid, module}){
+        add(state, {uid, module}){
             
             module.sidetabs.forEach(tab=>{
-                state.modulesSidetabs.push(tab);
+                state.sidetabs.push(tab);
             });
             module.widgets.forEach(widget=>{
-                state.modulesWidgets.push(widget);
+                state.widgets.push(widget);
             });
-            state.modulesList[uid] = module;
+            state.list[uid] = module;
         },
-        modulesDoneLoading(state){
-            state.modulesDoneLoading = true;
+        doneLoading(state){
+            state.doneLoading = true;
         }
     },
     actions: {
-        modulesClear({state}){
-            for(module in state.modulesList)
-                if(state.modulesList.hasOwnProperty(module))
-                    delete state.modulesList[module];
-            state.modulesSidetabs.length = 0;
-            state.modulesWidgets.length = 0;
-            state.modulesDoneLoading = false;
-        },
         clear({state, dispatch}){
-            dispatch('modulesClear');
+            
+            for(module in state.list)
+                if(state.list.hasOwnProperty(module))
+                    delete state.list[module];
+            state.sidetabs.length = 0;
+            state.widgets.length = 0;
+            state.doneLoading = false;
         },
-        modulesLoad({commit}){
+        load({commit}){
             
             // install native async
             setTimeout(()=>{
@@ -70,9 +69,11 @@ export default {
                 // then modules => each module modulesAdd(new Module(module))
                 // --> Module constructor => if url then Module.loadScript(url)
                 // --> loaded script => store.getters.modulesList[uid] = new Module();
+
+                commit('doneLoading');
+                
             });
 
-            commit('modulesDoneLoading');
         }
     }    
 }

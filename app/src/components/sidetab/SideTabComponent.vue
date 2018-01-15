@@ -28,7 +28,11 @@ export default {
     },
     methods:{
         clicked(){
-            this.$emit('click', this.tab.component);
+
+            let component = this.tab.component;
+            let title = this.tab.title;
+
+            this.$emit('click', {component, title});
         }
     }
 }
@@ -43,9 +47,7 @@ export default {
 <style lang='scss' scoped>
     @import '../../assets/styles/config';
     div.side-tab{
-        display: flex;
-        justify-content: stretch;
-        align-items: stretch;
+        
         cursor:pointer;
         border: 4px solid;
         background-color: $color__base_lowsat;
@@ -75,7 +77,11 @@ export default {
         
     }
     .icon{
-        flex: 1 1 auto;
+        
+        width: 100%;
+        height: 100%;
+        
+
     }
     .icon /deep/ .icon{
         width: 100%;

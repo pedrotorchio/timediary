@@ -37,7 +37,7 @@ abstract class BaseModel extends Model{
     }
     public static function getFields(){
         $fields = [
-            'status' => 'boolean',
+            'status' => '',
             'root' => '',        
             'id' => ''
         ];

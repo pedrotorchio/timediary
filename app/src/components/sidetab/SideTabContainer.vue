@@ -24,13 +24,15 @@ export default {
             shown: false,
             docHeight: 800,
             topContainer: this.topPosition,
-            footerHeight: 45
+            footerHeight: 45,
+            componentTitle: ''
         }
     },
     methods: {
-        showComponent(component){
+        showComponent({component, title}){
+            this.componentTitle = title || '';
             this.component = component;
-            this.show();            
+            this.show();
         },
         show(value=true){
             this.shown = value;
@@ -71,6 +73,7 @@ export default {
                 <v-btn flat icon @click='show(false)'>
                     <v-icon>close</v-icon>
                 </v-btn>
+                <h2 class="side-tab-component-title">{{componentTitle}}</h2>
             </div>
             <div ref='side-tab-component-container' class="component-container"  :style='{maxHeight: `${maxHeight}px`}'>
                 <component class="component" :is='component'></component>
@@ -122,6 +125,7 @@ export default {
 
         .tab{
             margin-top: 4px;
+            padding: 4px;
         }
     }
     .side-tab-component{
@@ -135,17 +139,45 @@ export default {
         &._left{
             border-top-right-radius: 10px;
             border-bottom-right-radius: 10px;
+
+            .side-tab-component-title{
+                text-align: right;
+            }
+            .header, .footer{
+                flex-direction: row-reverse;
+            }
         }
         &._right{
             border-top-left-radius: 10px;
             border-bottom-left-radius: 10px;
-        }       
 
+            .side-tab-component-title{
+                text-align: left;
+            }
+        }       
+        .header{
+            border-bottom:1px solid 
+        }
+        .footer{
+            border-top: 1px solid;
+        }
         .header, .footer{
+            border-color: #326786;
             width: 100%;
             z-index: 99;
             box-shadow: 0 0px 2px rgba(0, 0, 0, 0.251);
             text-align: left;
+            display: flex;
+            align-items: center;
+            justify-content: stretch;
+
+            .btn{
+                flex: 0 0 auto;
+            }
+            .side-tab-component-title{
+                flex: 1 1 auto;
+                padding: 0 8px;
+            }
         }
         
         .component-container{
@@ -158,6 +190,9 @@ export default {
                     box-shadow: none;
                 }
             }
+        }
+        /deep/ .stepper__header{
+            justify-content: center !important;
         }
     }
     

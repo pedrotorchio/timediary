@@ -1,15 +1,13 @@
 <script>
+import {mapState} from 'vuex';
   export default {
     name: 'HeaderBar',
     props: [],
-    computed: {
-      displayName(){
-        return this.$store.getters.account.pers_display_name;
-      },
-      accountImage(){
-        return this.$store.getters.account.pers_picture_url;
-      }
-      
+    computed:{ 
+        ...mapState({
+          displayName: state=>state.account.info.pers_display_name,
+          accountImage: state=>state.account.info.pers_picture_url
+        })
     },
     methods:{
       logout(){

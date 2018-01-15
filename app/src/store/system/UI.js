@@ -22,6 +22,7 @@ const nativeConfigTabs = [
     })
 ];
 export default {
+    namespaced: true,
     state: {
         configTabs: nativeConfigTabs,
         uiLogged: false
@@ -44,8 +45,8 @@ export default {
         modulesClear({state}){
             
         },
-        clear({state, dispatch}){
-            
+        clear({commit}){
+            commit('uiLogged', false);
         },
         modulesLoad({getters, commit}){
 

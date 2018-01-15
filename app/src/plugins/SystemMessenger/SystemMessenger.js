@@ -7,7 +7,7 @@ import DOMMessenger from './DOMMessenger';
 import Message from './Message';
 import Queue from 'fifo';
 
-class SystemMessenger{
+export class SystemMessenger{
     constructor(options){
         options = options || {};
         options.colors = options.colors || {};

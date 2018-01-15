@@ -24,6 +24,6 @@ export default class TasksModule{
             .addTab(tab);
         let uid = module.uid;
 
-        this.store.commit('modulesAdd', {module, uid});
+        this.store.commit('modules/add', {module, uid});
     }
 }
