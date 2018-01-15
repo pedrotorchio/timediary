@@ -65,11 +65,7 @@ export default {
                 })
                 .then(response=>{
                     commit('login', {email, token:response.token});
-                    dispatch('fetchAccountInformation')
-                        .then(response=>{
-                            commit('setAccount', response);
-                            resolve(response);
-                        })
+                    resolve(response);
                 })
                 .catch(reject);
             });

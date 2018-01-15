@@ -11,7 +11,15 @@ import ui from './system/UI';
 Vue.use(Vuex);
 const persistence = new VuexPersist({
     key: `${appName}-vuex`,
-    storage: window.localStorage
+    storage: window.localStorage,
+    reducer(state) {
+        return{
+            account:{
+                token: state.account.token,
+                loginEmail: state.account.loginEmail
+            }
+        }
+    }
 });
 export default new Vuex.Store({
     modules: {
@@ -19,5 +27,5 @@ export default new Vuex.Store({
         modules, 
         ui
     },
-    // plugins: [persistence.plugin]
+    plugins: [persistence.plugin]
 });

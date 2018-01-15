@@ -50,6 +50,9 @@ export default {
             for(module in state.modulesList)
                 if(state.modulesList.hasOwnProperty(module))
                     delete state.modulesList[module];
+            state.modulesSidetabs.length = 0;
+            state.modulesWidgets.length = 0;
+            state.modulesDoneLoading = false;
         },
         clear({state, dispatch}){
             dispatch('modulesClear');

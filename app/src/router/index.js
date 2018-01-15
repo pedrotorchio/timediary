@@ -24,37 +24,36 @@ let router = new Router({
   
 });
 
-router.beforeEach((to, from, next)=>{
+router.beforeEach(guardAndPrepare);
+function guardAndPrepare(to, from, next){
   let isLogged = store.getters.isLogged;
-
-  guardPages(to, isLogged, next);
-});
-router.afterEach((to, from)=>{
-  let isLogged = store.getters.isLogged;
-  
   if(isLogged){
-    store.commit('uiLogged', true);
-    store.dispatch('modulesLoad');
+    store.dispatch('fetchAccountInformation')
+          .then(response=>{
+
+            store.commit('setAccount', response);
+            store.commit('uiLogged', true);
+            store.dispatch('modulesLoad');
+            
+            if(publicPages.indexOf(to.name) != -1) // se é pagina publica
+              next({
+                name: mainPage
+              });
+            else
+                next();
+        });
+
   }else{
+
     store.commit('uiLogged', false);
     store.dispatch('modulesClear');
-  }
-});
 
-function guardPages(to, isLogged, next){
-  
-  if(publicPages.indexOf(to.name) == -1 && !isLogged){
-    // se é pagina reservada e nao está logado, login
+    if(publicPages.indexOf(to.name) == -1) // se é pagina reservada 
       next({
         name: 'Login'
-      })
-  }else if(publicPages.indexOf(to.name) != -1 && isLogged){
-    // se é pagina publica e está logado, vai para principal
-    
-    next({
-      name: mainPage
-    });
+      });
+    else
+      next();
   }
-  next();
 }
 export default router;
