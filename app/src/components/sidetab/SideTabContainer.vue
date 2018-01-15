@@ -22,7 +22,9 @@ export default {
             side: 64,
             component: null,
             shown: false,
-            docHeight: 800
+            docHeight: 800,
+            topContainer: this.topPosition,
+            footerHeight: 45
         }
     },
     methods: {
@@ -36,23 +38,22 @@ export default {
     },
     computed:{
         maxHeight(){
-            return this.docHeight - this.topPosition;
+            
+            return this.docHeight - this.topContainer - this.footerHeight - 10;
         },
-        componentElement(){
-            return this.$refs['side-tab-component'];
-        }
     },
     components:{
         SideTab
     },
     mounted(){
         this.docHeight = document.body.clientHeight || document.documentElement.clientHeight || document.documentElement.scrollHeight || 800;
+        this.topContainer = this.$refs['side-tab-component-container'].getBoundingClientRect().top;
     }
 } 
 </script>
 <template>
-    <section>
-        <aside class="side-tab-container" :class="[!shown ? 'shown' : '', `_${position}`]" :style='{top: `${topPosition}px`}'>
+    <section class="root" :class="[`_${position}`]" :style='{top: `${topPosition}px`}'>
+        <aside class="side-tab-container" :class="[!shown ? 'shown' : '', `_${position}`]" >
                 <side-tab
                 class='tab'
                 
@@ -65,32 +66,40 @@ export default {
                 :disabled='tab.component == null' 
                 @click='showComponent' />
         </aside>
-        <aside ref='side-tab-component' class='side-tab-component elevation-24' :class="[shown ? 'shown' : '', `_${position}`]" :style='{top: `${topPosition}px`, maxHeight: `${maxHeight}px`}'>
-            <v-layout row class="controllers">
+        <aside  class='side-tab-component elevation-24' :class="[shown ? 'shown' : '', `_${position}`]">
+            <div class="header">
                 <v-btn flat icon @click='show(false)'>
                     <v-icon>close</v-icon>
                 </v-btn>
-            </v-layout>
-            
-            <component :is='component'></component>
+            </div>
+            <div ref='side-tab-component-container' class="component-container"  :style='{maxHeight: `${maxHeight}px`}'>
+                <component class="component" :is='component'></component>
+            </div>
+            <div class="footer" :style="{height: footerHeight}">
+
+            </div>
         </aside>
     </section>
 </template>
 <style lang='scss' scoped>
     @import '../../assets/styles/config';
-    $width: 600px;
 
-    .controllers{
-        position: absolute;
-        left: 0;
-        top:0;
-        z-index: 99;
+    .root{
+        position: fixed;
+        &._left{
+            left:0;
+        }
+        &._right{
+            right:0;
+        }
     }
+    $width: 600px;
+    
     .side-tab-container, .side-tab-component{
         
         transition-duration: .5s;
         transition-property: left, right;
-        position: fixed;
+        position: absolute;
 
         
         &._left{
@@ -106,8 +115,6 @@ export default {
                 right:0;
             }
         }
-
-
         
     }
     .side-tab-container{
@@ -119,13 +126,11 @@ export default {
     }
     .side-tab-component{
         min-height: 60px;
-        display:flex;
-        flex-direction: column;
+        
         width: $width - 8px;
         box-sizing: border-box;
         background-color: white;
         border: 4px solid $color__base;
-        overflow-y: scroll;
 
         &._left{
             border-top-right-radius: 10px;
@@ -134,7 +139,26 @@ export default {
         &._right{
             border-top-left-radius: 10px;
             border-bottom-left-radius: 10px;
-        }        
+        }       
+
+        .header, .footer{
+            width: 100%;
+            z-index: 99;
+            box-shadow: 0 0px 2px rgba(0, 0, 0, 0.251);
+            text-align: left;
+        }
+        
+        .component-container{
+            overflow-y: scroll;
+            
+            &>.component{
+                width: 95%;
+
+                /deep/ .stepper{
+                    box-shadow: none;
+                }
+            }
+        }
     }
     
 
