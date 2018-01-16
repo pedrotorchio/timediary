@@ -10,5 +10,80 @@
         </v-stepper-step>
     </v-stepper-header>
         <div class="steps">
+                <v-stepper-content step='1'>
+                        <v-expansion-panel popout>
+                            <v-expansion-panel-content v-for="(patient, i) in patientsList" :key="i">
+                                <div slot="header">{{i}} {{patient.pers_first_name}}</div>
+                                <v-card>
+                                    {{patient}}
+                                </v-card>
+                            </v-expansion-panel-content>
+                        </v-expansion-panel>
+                </v-stepper-content>
+                <v-stepper-content step="2">
+                        
+                        <div class="fieldset">
+                            <v-text-field class='input'
+                                @focus='focusDetected' @blur='blurDetected'
+                                v-model='newPatient.pers_first_name'
+                                label="Nome"
+                            ></v-text-field>
+                            <v-text-field class='input'                       
+                                @focus='focusDetected' @blur='blurDetected'
+                                v-model='newPatient.pers_last_name'
+                                label="Sobrenome"
+                            ></v-text-field>
+                            <v-select
+                            @focus='focusDetected' @blur='blurDetected'
+                            class="input"
+                            v-bind:items="['Masculino', 'Feminino', 'Outro']"
+                            v-model="newPatient.pers_gender"
+                            label="Gênero"
+                            single-line
+                            bottom
+                          ></v-select>
+                        </div>
+                        
+                        <div class="fieldset">
+                            <v-text-field class='s3 input' 
+                            
+                            @focus='focusDetected' @blur='blurDetected'
+                            color="primary" 
+                            label="Escolaridade" 
+                            v-model="newPatient.education_years"
+                            hint='0 a 25 anos'
+                            suffix=' anos'
+                            mask='##'
+                            loading>
+                                
+                                <v-progress-linear slot="progress" :value="educationProgress" height="7" color="primary"></v-progress-linear>
+                            </v-text-field>
+                            <v-text-field class='input'                        
+                            @focus='focusDetected' @blur='blurDetected'
+                            v-model="newPatient.pers_occupation"
+                            label="Ocupação"
+                            ></v-text-field>
+                        </div>
+                        <div class="fieldset">
+                            <v-text-field class=' input s3'                        
+                            @focus='focusDetected' @blur='blurDetected'
+                            v-model="newPatient.pers_phone"
+                            label="Telefone"
+                            ></v-text-field>
+                            <v-text-field class='input'                        
+                                @focus='focusDetected' @blur='blurDetected'
+                                v-model="newPatient.pers_email"
+                                label="Email"
+                            ></v-text-field>
+                        </div>
+
+                        <v-btn flat icon @click='submit2'>
+                            <v-icon>add_circle</v-icon>
+                        </v-btn>
+                        
+                        
+                        
+      
+                </v-stepper-content>
         </div>
 </v-stepper>

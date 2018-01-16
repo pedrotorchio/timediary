@@ -54,12 +54,12 @@ import {mapState} from 'vuex';
         flex-basis: 100% !important; 
       }
       @media screen and (min-width: 678px){
-        flex-basis: 20%;        
-        flex-basis: calc(25% - 2 * #{$margin});
+        flex-basis: 40%;        
+        flex-basis: calc(50% - 2 * #{$margin});
       }
       @media screen and (min-width: 1200px){
-        flex-basis: 40%;
-        flex-basis: calc(50% - 2 * #{$margin});
+        flex-basis: 30%;
+        flex-basis: calc(#{100%/3} - 2 * #{$margin});
       }
     }
 

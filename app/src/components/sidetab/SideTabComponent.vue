@@ -41,7 +41,7 @@ export default {
 <template>
 <div class="side-tab elevation-3" v-bind:class="[`_${position}`, disabled ? 'disabled' : 'enabled']" v-bind:style='{width:sidePx, height:sidePx}'
 @click='clicked'>
-    <component v-if='tab.icon' class="icon" :is="tab.icon"></component>
+    <component v-if='tab.icon' class="icon_component" :is="tab.icon"></component>
 </div>
 </template>
 <style lang='scss' scoped>
@@ -75,18 +75,12 @@ export default {
             border-bottom-left-radius: 10px;
         }
         
+        /deep/ i.icon{
+            width: 100%;
+            height: 100%;
+            font-size: 50px;
+        }
     }
-    .icon{
-        
-        width: 100%;
-        height: 100%;
-        
-
-    }
-    .icon /deep/ .icon{
-        width: 100%;
-        height: 100%;
-        font-size: 50px;
-    }
+    
 
 </style>

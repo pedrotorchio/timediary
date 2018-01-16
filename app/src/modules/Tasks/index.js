@@ -1,7 +1,9 @@
 import {ModuleElement, Module} from '../../store/Module';
 
 let tab = new ModuleElement({
-    icon: '',
+    icon: {
+        template: '<v-icon>fa-tasks</v-icon>'
+    },
     title: 'Atividades',
     component: {template:'<div>Atividade tab</div>'}
 });

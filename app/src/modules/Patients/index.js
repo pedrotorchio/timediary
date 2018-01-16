@@ -17,7 +17,7 @@ let tab = new ModuleElement({
 let widget = new ModuleElement({
     icon: '',
     title: 'Pacientes',
-    component: {template:'<div> <h1>Número de pacientes cadastradas</h1> <p>27 desde 01/01/2018</p> </div>'}
+    component: {template:'<h1>27 Pacientes Cadastrados</h1>'}
 });
 
 const title = 'Atividades';
@@ -34,10 +34,7 @@ export default class TasksModule{
         this.store = this.app.$store;
         this.router = this.app.$router;
 
-        this.store.registerModule('patients', {
-            patientsList: ['pedro', 'lucas']
-
-        });
+        this.store.registerModule('patients', store);
         
         let module = new Module({title, routes})
             .addTab(tab)
