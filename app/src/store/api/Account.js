@@ -36,6 +36,16 @@ export default {
             return {
                 Authorization: `Bearer ${token}`
             }
+        },
+        id(state, getters){
+            if(!getters.account)
+                return null;
+            return getters.account.id;
+        },
+        email(state, getters){
+            if(!getters.account)
+                return null;
+            return getters.account.loginEmail;
         }
     },
     mutations: {

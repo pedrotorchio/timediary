@@ -12,10 +12,81 @@
         <div class="steps">
                 <v-stepper-content step='1'>
                         <v-expansion-panel popout>
-                            <v-expansion-panel-content v-for="(patient, i) in patientsList" :key="i">
-                                <div slot="header">{{i}} {{patient.pers_first_name}}</div>
+                            <v-expansion-panel-content v-for="(patient, i) in patientsList" :key="patient.id">
+                                <div slot="header">{{++i}} {{patient.pers_first_name}} {{patient.pers_last_name}}</div>
                                 <v-card>
-                                    {{patient}}
+
+                                    <div class="fieldset">
+                                        <v-text-field class='input'
+                                            @focus='focusDetected($event.target.value)' @blur='blurDetected($event.target.value, patient)'
+                                            v-model='patient.pers_first_name'
+                                            label="Nome"
+                                        ></v-text-field>
+                                        <v-text-field class='input'                       
+                                        @focus='focusDetected($event.target.value)' @blur='blurDetected($event.target.value, patient)'
+                                            v-model='patient.pers_last_name'
+                                            label="Sobrenome"
+                                        ></v-text-field>
+                                        <v-select
+                                        @focus='focusDetected($event.target.value)' @blur='blurDetected($event.target.value, patient)'
+                                        class="input"
+                                        v-bind:items="['Masculino', 'Feminino', 'Outro']"
+                                        v-model="patient.pers_gender"
+                                        label="Gênero"
+                                        single-line
+                                        bottom
+                                      ></v-select>
+                                    </div>
+                                    
+                                    <div class="fieldset">
+                                        <v-text-field class='s3 input' 
+                                        
+                                        @focus='focusDetected($event.target.value)' @blur='blurDetected($event.target.value, patient)'
+                                        color="primary" 
+                                        label="Escolaridade" 
+                                        v-model="patient.education_years"
+                                        hint='0 a 25 anos'
+                                        suffix=' anos'
+                                        mask='##'
+                                        loading>
+                                            
+                                            <v-progress-linear slot="progress" :value="educationProgress" height="7" color="primary"></v-progress-linear>
+                                        </v-text-field>
+                                        <v-text-field class='input'                        
+                                        @focus='focusDetected($event.target.value)' @blur='blurDetected($event.target.value, patient)'
+                                        v-model="patient.pers_occupation"
+                                        label="Ocupação"
+                                        ></v-text-field>
+                                    </div>
+                                    <div class="fieldset">
+                                        <v-text-field class=' input s3'                        
+                                        @focus='focusDetected($event.target.value)' @blur='blurDetected($event.target.value, patient)'
+                                        v-model="patient.pers_phone"
+                                        label="Telefone"
+                                        ></v-text-field>
+                                        <v-text-field class='input'                        
+                                        @focus='focusDetected($event.target.value)' @blur='blurDetected($event.target.value, patient)'
+                                            v-model="patient.pers_email"
+                                            label="Email"
+                                        ></v-text-field>
+                                    </div>
+                                    <v-text-field class='input'                        
+                                        rows='1'
+                                        multi-line
+                                        auto-grow
+                                        @focus='focusDetected($event.target.value)' @blur='blurDetected($event.target.value, patient)'
+                                            v-model="patient.comments"
+                                            label="Comentários"
+                                    ></v-text-field>
+                                    
+                                    
+
+                                    <button-cancelation text='Remover' callbackText='Clique novamente para CANCELAR remoção' :onComplete='[deletePatient, patient.id]'>
+                                        <v-btn slot='button' slot-scope='{text, active}' block :color="active? 'warning':'error'" :class='{active}' class="btn-submit">
+                                            {{text}}
+                                        </v-btn>
+                                        <v-progress-linear  slot='progress'  slot-scope='{value}' v-model='value' height='4'></v-progress-linear>
+                                    </button-cancelation>
                                 </v-card>
                             </v-expansion-panel-content>
                         </v-expansion-panel>
@@ -24,17 +95,17 @@
                         
                         <div class="fieldset">
                             <v-text-field class='input'
-                                @focus='focusDetected' @blur='blurDetected'
+                                
                                 v-model='newPatient.pers_first_name'
-                                label="Nome"
+                                label="Nome*"
                             ></v-text-field>
                             <v-text-field class='input'                       
-                                @focus='focusDetected' @blur='blurDetected'
+                                
                                 v-model='newPatient.pers_last_name'
                                 label="Sobrenome"
                             ></v-text-field>
                             <v-select
-                            @focus='focusDetected' @blur='blurDetected'
+                            
                             class="input"
                             v-bind:items="['Masculino', 'Feminino', 'Outro']"
                             v-model="newPatient.pers_gender"
@@ -47,7 +118,7 @@
                         <div class="fieldset">
                             <v-text-field class='s3 input' 
                             
-                            @focus='focusDetected' @blur='blurDetected'
+                            
                             color="primary" 
                             label="Escolaridade" 
                             v-model="newPatient.education_years"
@@ -59,25 +130,25 @@
                                 <v-progress-linear slot="progress" :value="educationProgress" height="7" color="primary"></v-progress-linear>
                             </v-text-field>
                             <v-text-field class='input'                        
-                            @focus='focusDetected' @blur='blurDetected'
+                            
                             v-model="newPatient.pers_occupation"
                             label="Ocupação"
                             ></v-text-field>
                         </div>
                         <div class="fieldset">
                             <v-text-field class=' input s3'                        
-                            @focus='focusDetected' @blur='blurDetected'
+                            
                             v-model="newPatient.pers_phone"
                             label="Telefone"
                             ></v-text-field>
                             <v-text-field class='input'                        
-                                @focus='focusDetected' @blur='blurDetected'
+                                
                                 v-model="newPatient.pers_email"
                                 label="Email"
                             ></v-text-field>
                         </div>
 
-                        <v-btn flat icon @click='submit2'>
+                        <v-btn :style="{height:newPatient.pers_first_name ? '60px' : '0' }" flat icon color='primary' @click='submit2' height='60px' class='btn-submit'>
                             <v-icon>add_circle</v-icon>
                         </v-btn>
                         

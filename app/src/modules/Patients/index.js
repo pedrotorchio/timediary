@@ -1,3 +1,4 @@
+import Vue from 'vue';
 import {ModuleElement, Module} from '../../store/Module';
 import Registration from './RegistrationSidebar';
 import RegistrationIcon from './patient.svg';
@@ -17,7 +18,14 @@ let tab = new ModuleElement({
 let widget = new ModuleElement({
     icon: '',
     title: 'Pacientes',
-    component: {template:'<h1>27 Pacientes Cadastrados</h1>'}
+    component: {
+        template:'<h1>{{count}} Pacientes Cadastrados</h1>',
+        computed:{
+            count(){
+                return this.$store.getters['patients/list'].length;
+            }
+        }
+    }
 });
 
 const title = 'Atividades';
@@ -30,17 +38,19 @@ export default class TasksModule{
         this.install();
     }
     install(){
+        
         this.app = window.DIARY;
         this.store = this.app.$store;
         this.router = this.app.$router;
 
         this.store.registerModule('patients', store);
-        
+          
         let module = new Module({title, routes})
             .addTab(tab)
             .addWidget(widget);
         let uid = module.uid;
 
         this.store.commit('modules/add', {module, uid});
+        this.store.dispatch('patients/loadList');
     }
 }

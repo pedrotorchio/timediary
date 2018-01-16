@@ -63,26 +63,62 @@ abstract class BaseModel extends Model{
 
         return $count;
     }
+    protected static function conditionalRelations($relations){
+        $relationsWithStatus = [];
+        foreach($relations as $field){
+            $relationsWithStatus[$field] = function($query){
+                $query->where('status', 1);
+            };
+        }
+
+        return $relationsWithStatus;
+    }
     public static function getAll(array $columns = ['*'], $relations = []){
-        
-        $results = self::with($relations)->get($columns);
+        $relations = self::conditionalRelations($relations);
+        $results = self::with($relations)->where('status', 1)->get($columns);
         
         return $results;
     }
+    
     public static function fromId($id, array $columns = ['*'], $relations = []){
-        // $results = self::where(static::ID_FIELD, $id)->take(1);
         
-        $results = self::with($relations)->where(static::ID_FIELD, $id)->take(1);
+        // $results = self::where(static::ID_FIELD, $id)->take(1);
+        $relations = self::conditionalRelations($relations);        
+        $id_field = self::idField($id);
+        $results = self::with($relations)->where($id_field, $id)->where('status', 1)->take(1);
         
         if($results->count() < 1)
             return null;
         
         return $results->first($columns);
     }
+    protected static function idField($id){
+        if(is_numeric($id))
+            $id_field = 'id';
+        else
+            $id_field = static::ID_FIELD;
 
+        return $id_field;
+    }
     public function fill(array $data){
         
         $validator = (new Validator())->setRules(self::getFields()); 
+        $fields = self::getFields();
+
+        $relFields = self::getRelFields();
+        foreach($relFields as $field){
+            if(isset($data[$field])){
+                call_user_func([$this, $field])->attach($data[$field]);
+                // $this->subjects()->attach($data['subjects']);
+                unset($data[$field]);
+            }
+        }
+
+        foreach($data as $field => $value){
+            if(!isset($fields[$field])){
+                unset($data[$field]);
+            }
+        }
         
         if($validator !== null){
             

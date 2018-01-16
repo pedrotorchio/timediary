@@ -43,6 +43,7 @@ class Account extends BaseModel{
         return $this->belongsToMany(Subject::class, 'account_x_subject', 'account', 'subject');
     }
     public function fill(array $data=[]){
+
         if(empty($data['pers_display_name'])){
             if(!empty($data['pers_first_name'])){
                 $data['pers_display_name'] = $data['pers_first_name'];
@@ -57,4 +58,5 @@ class Account extends BaseModel{
         
         parent::fill($data);
     }
+    
 }

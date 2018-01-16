@@ -1,5 +1,8 @@
 import Axios from 'axios';
 import {apiUrl} from '../../config';
+import qs from 'qs';
+
+
 
 let axios = null;
 
@@ -13,26 +16,33 @@ export default class ApiService {
   
   get(id = '', config = {}) {
 
-    config.Authenticatino
-
     id = this.url(id);
     
     return this.repromise(axios.get(id, config));
   }
   post(data, config = {}) {
-    let url = this.url()
+    
 
-    return this.repromise(axios.post('', data, config));
+    if(!config.formData)
+      data = qs.stringify(data, {skipNulls: true});
+      
+    let url = this.url()
+    
+    return this.repromise(axios.post(url, data, config));
   }
   put(id, data, config = {}) {
-    id = this.url(id);
 
+    if(!config.formData)
+      data = qs.stringify(data, {skipNulls: true});
+
+    id = this.url(id);
+    
     return this.repromise(axios.put(id, data, config));
   }
   delete(id, config = {}) {
     id = this.url(id);
 
-    return this.repromise(axios.delete('', config));
+    return this.repromise(axios.delete(id, config));
   }
   repromise(_promise) {
     return new Promise((resolve, reject) => _promise.then(response=>{
@@ -69,11 +79,11 @@ export default class ApiService {
 
     }));
   }
-  url(id = '') {
+  url(id = null) {
     
     let url = '';
         url = this.endpoint;
-    if (id !== '')
+    if (id && id !== '')
       url += `/${id}`;
 
     return url;

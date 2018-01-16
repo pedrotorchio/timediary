@@ -28,6 +28,9 @@ export default new Vuex.Store({
         modules, 
         ui
     },
+    state:{
+        DELETION_TIMEOUT: 5000
+    },
     getters:{
         namespaces(state){
             let nsList = [];
@@ -37,7 +40,8 @@ export default new Vuex.Store({
             }
 
             return nsList;
-        }
+        },
+
     },
     actions:{
         clear({getters, dispatch}){

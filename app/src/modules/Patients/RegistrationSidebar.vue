@@ -1,7 +1,9 @@
 <script>
-import {mapState} from 'vuex';
+import ButtonCancelation from '@/components/forms/ButtonWithCancelation';
+import {mapActions, mapState} from 'vuex';
 const MAX_EDUCATION_YEARS = 25;
 
+let fieldValue = null;
 const resetPatient = function(){
     return {
         pers_first_name: null,
@@ -36,23 +38,43 @@ export default {
       }
   },
   methods:{
-      focusDetected(){
-
+      ...mapActions({
+          update: 'patients/update',
+          status: 'patients/status'
+      }),
+      focusDetected($value){
+          fieldValue = $value;
       },
-      blurDetected(){
-
+      blurDetected($value, $patient){
+          if($value !== fieldValue)
+            this.update($patient);
       },
       submit2(){
-          this.$store.dispatch('patients/create', this.newPatient);
-          this.newPatient = resetPatient();
+        this.$emit('loading', true);
+        this.$store.dispatch('patients/create', this.newPatient)
+            .then((patient)=>{
+                this.$emit('loading', false);
+                this.step = 1;
+                this.newPatient = resetPatient();
+                
+            });
+        
+      },
+      deletePatient(id){
+        this.status({
+              id,
+              status: 0
+        });
       }
+  },
+  components:{
+      ButtonCancelation 
   }
 }
 </script>
 <template src='./registration.htm'>
 </template>
 <style lang='scss'>
-@import '../../assets/styles/config';
 
 .fieldset{
     display: flex;
@@ -66,7 +88,20 @@ export default {
     flex-basis: #{100%/3};
     flex-basis: calc(#{100%/3} - 16px);
 }
-button.btn{
-    color: $color__base !important;
+.btn-submit{
+    overflow: hidden;
+    position: relative;
+    transition-property: bottom, box-shadow, background-color;
+    transition-duration: .5s;
+    &.active{
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+        bottom: 8px;
+    }
+    bottom: 0;
+    display: flex;
+    font-weight: bold;
+}
+.deletion-progress{
+    margin: 0;
 }
 </style>
