@@ -6,7 +6,6 @@ export default {
     state:{
         patientsList: []
     },
-    
     actions:{
         create({actions}, patient){
             console.dir(patient);
@@ -15,5 +14,4 @@ export default {
                 .catch(error =>console.log(error));
         }
     }
-
 };
