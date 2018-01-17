@@ -2,10 +2,6 @@ import Router from '../../router';
 import ApiService from './ApiService';
 import axios from 'axios';
 
-let accountService = new ApiService('account');
-let authService = new ApiService('auth');
-
-let basicOptions = {};
 
 export default {
     namespaced: true,
@@ -39,31 +35,37 @@ export default {
             }
         },
         id(state, getters){
-            if(!getters.account)
-                return null;
-            return getters.account.id;
+            let id = getters.account
+            if(id != null)
+                id = id.id;
+            
+            return id;
         },
         email(state, getters){
-            if(!getters.account)
-                return null;
-            return getters.account.loginEmail;
+            let email = getters.account;
+            if(email != null)
+                email = email.email;
+
+            return email;
         },
         root(state, getters){
-            return getters.account.root;
+            let root = getters.account;
+            if(root != null)
+                root = root.root;
+
+            return root;
         }
     },
     mutations: {
         login(state, {email, token}){
-
+            
             state.loginEmail = email;
             state.token = token;
             
-            basicOptions.headers = {
-                Authorization: `Bearer ${token}`
-            };
             axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
         },
         setAccount(state, account){
+            
             state.info = account;
         },
     },
@@ -72,14 +74,14 @@ export default {
             
             return new Promise((resolve, reject)=>{
                 let authorization = btoa(`${email}:${password}`);
-            
-                authService.get('', {
+                axios.get('/auth', {
                     headers: {
                         Authorization: `basic ${authorization}`
                     }
                 })
                 .then(response=>{
-                    let login = {email, token:response.token};
+                    
+                    let login = {email, token:response.data.token};
                     commit('login', login);
                     resolve(login);
                 })
@@ -95,15 +97,17 @@ export default {
             state.token = null;
             state.info = null;
         },
-        fetchAccountInformation({getters}){
+        fetchAccountInformation({getters, commit}){
             let {email} = getters.loginInfo;
-            return accountService.get(email, basicOptions);
+
+            return new Promise((resolve, reject)=>{
+                axios.get(`account/${email}`).then(({data}) => resolve(data)).catch(reject);
+            });
                 
         },
         sendAccountInformation({state, getters}, info){
             
-            return accountService.put(info.id, info);
-            
+            return axios.put(`account/${info.id}`, info);
         }
     }    
 }

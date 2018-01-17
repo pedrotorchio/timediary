@@ -95,6 +95,12 @@ export default {
     flex-basis: #{100%/3};
     flex-basis: calc(#{100%/3} - 16px);
 }
+.s4{
+    min-width: 10px;
+    flex: 0 1;
+    flex-basis: #{100%/4};
+    flex-basis: calc(#{100%/4} - 16px);
+}
 .btn-submit{
     margin: 0 auto !important;
     overflow: hidden;

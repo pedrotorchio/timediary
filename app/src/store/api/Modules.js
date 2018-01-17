@@ -1,8 +1,6 @@
 import Router from '../../router';
 import ApiService from './ApiService';
 
-let accountService = new ApiService('account');
-
 import Tasks from '../../modules/Tasks';
 import Patients from '../../modules/Patients';
 

@@ -51,7 +51,7 @@
                                         ></v-text-field>
                                         <v-select
                                         @change="changeDetected($event, patient, 'pers_gender')"
-                                        class="input"
+                                        class="s4 input"
                                         v-bind:items="['Masculino', 'Feminino', 'Outro']"
                                         v-model="patient.pers_gender"
                                         label="Gênero"
@@ -130,7 +130,7 @@
 
                             <v-select
                             
-                            class="input"
+                            class="s4 input"
                             v-bind:items="['Masculino', 'Feminino', 'Outro']"
                             v-model="newPatient.pers_gender"
                             label="Gênero"

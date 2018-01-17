@@ -54,9 +54,7 @@ export default {
 </template>
 
 <style lang='scss' scoped>
-.fieldset{
-  display: flex;
-}
+
 button.button{
     background-color: #326786;
     padding: 16px;
@@ -65,5 +63,24 @@ button.button{
     font-weight: bold;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.149);
     margin-bottom: 5px;
+}
+.fieldset{
+    display: flex;
+    &> .input{
+        margin: 0 8px;
+        flex: 1;
+    }
+}
+.s3{
+    min-width: 150px;
+    flex: 0 1;
+    flex-basis: #{100%/3};
+    flex-basis: calc(#{100%/3} - 16px);
+}
+.s4{
+    min-width: 10px;
+    flex: 0 1;
+    flex-basis: #{100%/4};
+    flex-basis: calc(#{100%/4} - 16px);
 }
 </style>
