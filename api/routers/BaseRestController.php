@@ -28,11 +28,21 @@ abstract class BaseRestController extends BaseController{
     public function getOne(Request $request, Response $response, array $args){
         $params = $this->getQueryParameters($request);
         $id = $request->getAttribute('id');
+        $relation = $request->getAttribute('relation');
+
+        if($relation){
+            $one = $this->readOne($id, ['id'], [$relation]);
+            
+            return $this->makeResponse(
+                $response,
+                $one[$relation]
+            );
+        }
         
         try{
          
             $one = $this->readOne($id, $params['fields'], $params['relationships']);
-
+            
             if($one === null)
                 $this->_404();
             
@@ -65,6 +75,7 @@ abstract class BaseRestController extends BaseController{
         );
     }
     public function postAll(Request $request, Response $response, array $args){
+        
         $params = $this->getQueryParameters($request);
         $data = $request->getParsedBody();
         try{
@@ -113,6 +124,19 @@ abstract class BaseRestController extends BaseController{
         $data = $request->getParsedBody();
         
         $id = $request->getAttribute('id');
+
+        $relation = $request->getAttribute('relation');
+
+        if($relation){
+            $one = $this->readOne($id);
+            
+            call_user_func([$one, $relation])->attach($data[$relation]);
+            
+            return $this->makeResponse(
+                $response,
+                $one
+            );
+        }
         
         try{
             
@@ -156,7 +180,23 @@ abstract class BaseRestController extends BaseController{
         $params = $request->getQueryParams();
         
         $id = $request->getAttribute('id');
-        
+
+        $data = $request->getParsedBody();
+
+        $relation = $request->getAttribute('relation');
+
+        if($relation){
+            $one = $this->readOne($id, 'id', [$relation]);
+
+            var_dump($one);die();
+            
+            call_user_func([$one, $relation])->detach($data[$relation]);
+            
+            return $this->makeResponse(
+                $response,
+                $one
+            );
+        }
         try{
          
             $this->delete($id);

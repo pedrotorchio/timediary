@@ -18,24 +18,24 @@
           <div class="steps">
               <v-stepper-content step="1">
                   <v-text-field
-                                                       @focus='focusDetected' @blur='blurDetected'
+                                                       @change="changeDetected($event, account, 'pers_display_name')"
                         label="Nome de Exibição"
                         v-model='account.pers_display_name'
                   ></v-text-field>
           
-                  <v-text-field                        @focus='focusDetected' @blur='blurDetected'
+                  <v-text-field                        @change="changeDetected($event, account, 'pers_first_name')"
                         v-model='account.pers_first_name'
                         label="Primeiro Nome"
                   ></v-text-field>
-                  <v-text-field                        @focus='focusDetected' @blur='blurDetected'
+                  <v-text-field                        @change="changeDetected($event, account, 'pers_last_name')"
                       v-model='account.pers_last_name'
                         label="Sobrenome"
                   ></v-text-field>
-                  <v-text-field                        @focus='focusDetected' @blur='blurDetected'
+                  <v-text-field                        @change="changeDetected($event, account, 'pers_phone')"
                         v-model="account.pers_phone"
                         label="Telefone"
                   ></v-text-field>
-                  <v-text-field                        @focus='focusDetected' @blur='blurDetected'
+                  <v-text-field                        @change="changeDetected($event, account, 'pers_occupation')"
                         v-model="account.pers_occupation"
                         label="Ocupação"
                   ></v-text-field>
@@ -53,7 +53,7 @@
                     label="Data de Nascimento"
                     v-model="dateFormatted"
                     prepend-icon="event"
-                    @blur="account.pers_birth = parseDate(dateFormatted)"
+                    @change="changeDetected($event, account, 'pers_birth')"
                   ></v-text-field>
                   <v-date-picker v-model="account.pers_birth" @input="dateFormatted = formatDate(event)" no-title scrollable actions>
                     <template slot-scope="{ save, cancel }">
@@ -73,32 +73,32 @@
                 
                 <v-stepper-content step="2">
                   
-                  <v-text-field                        @focus='focusDetected' @blur='blurDetected'
+                  <v-text-field                        @change="changeDetected($event, account, 'loc_complement')"
                     v-model="account.loc_complement"
                     label="Endereço"
                     hint="Rua, Número, Apt"
                     persistent-hint
                   ></v-text-field>
                   <div class="fieldset">
-                      <v-text-field                        @focus='focusDetected' @blur='blurDetected'
+                      <v-text-field                        @change="changeDetected($event, account, 'loc_neighbourhood')"
                       v-model="account.loc_neighbourhood"
                       label="Bairro"
                     ></v-text-field>
-                    <v-text-field                        @focus='focusDetected' @blur='blurDetected'
+                    <v-text-field                        @change="changeDetected($event, account, 'loc_city')"
                     v-model="account.loc_city"
                       label="Cidade"
                     ></v-text-field>
                   </div>
                   <div class="fieldset">
-                      <v-text-field                        @focus='focusDetected' @blur='blurDetected'
+                      <v-text-field                        @change="changeDetected($event, account, 'loc_state')"
                       v-model="account.loc_state"
                       label="Estado"
                     ></v-text-field>
-                    <v-text-field                        @focus='focusDetected' @blur='blurDetected'
+                    <v-text-field                        @change="changeDetected($event, account, 'loc_country')"
                       v-model="account.loc_country"
                       label="País"
                     ></v-text-field>
-                    <v-text-field                        @focus='focusDetected' @blur='blurDetected'
+                    <v-text-field                        @change="changeDetected($event, account, 'loc_postal_code')"
                       v-model="account.loc_postal_code"
                       label="CEP"
                     ></v-text-field>

@@ -102,17 +102,7 @@ abstract class BaseModel extends Model{
     }
     public function fill(array $data){
         
-        $validator = (new Validator())->setRules(self::getFields()); 
         $fields = self::getFields();
-
-        $relFields = self::getRelFields();
-        foreach($relFields as $field){
-            if(isset($data[$field])){
-                call_user_func([$this, $field])->attach($data[$field]);
-                // $this->subjects()->attach($data['subjects']);
-                unset($data[$field]);
-            }
-        }
 
         foreach($data as $field => $value){
             if(!isset($fields[$field])){
@@ -120,13 +110,20 @@ abstract class BaseModel extends Model{
             }
         }
         
+        // $data = $this->validate($data);
+            
+        parent::fill($data);
+    }
+    public function validate($data){
+        $validator = (new Validator())->setRules(self::getFields()); 
+        
         if($validator !== null){
             
             $validator->setData($data);
             $validator->validate();            
         }
-            
-        parent::fill($data);
+
+        return $data;
     }
     public function root(){
         return $this->belongsTo(Account::class, 'root');

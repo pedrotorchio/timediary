@@ -48,9 +48,6 @@ class Subject extends BaseModel{
     }
     public function fill(array $data){
         
-        if(isset($data['diagnostics']))
-            $this->diagnostics()->attach($data['diagnostics']);
-        unset($data['diagnostics']);
         
         parent::fill($data);
     }

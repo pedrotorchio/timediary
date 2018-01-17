@@ -13,3 +13,4 @@ export const unguardedPages = [
   'Login'
 ];
 export const mainPage = 'Dashboard';
+export const DELETION_TIMEOUT = 5000;

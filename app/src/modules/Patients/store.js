@@ -1,7 +1,5 @@
 import ApiService from '../../store/api/ApiService';
-
-let patientService = new ApiService('subject');
-let accountService = new ApiService('account');
+import axios from 'axios';
 
 export default {
     namespaced: true,
@@ -23,19 +21,27 @@ export default {
         create({rootGetters, commit}, patient){
             return new Promise((resolve,reject)=>{
                 
-                patient.root = rootGetters['account/id'];;
+                patient.root = rootGetters['account/root'];
+                let id = rootGetters['account/id'];
             
-                patientService.post(patient)
+                axios.post('/subject', patient)
                     .then(response => {
-                        commit('addPatient', patient);
-                        resolve(response);
+
+                        let patient = response.data;
+                        
+                        axios.put(`/subject/${patient.id}/accounts`, {accounts: id})
+                            .then(()=>{
+                                commit('addPatient', patient);
+                                resolve(response);
+                            });
                     })
+                
             });
         },
         update({}, patient){
             return new Promise((resolve,reject)=>{
                 
-                patientService.put(patient.id, patient)
+                axios.put(`/subject/${patient.id}`, patient)
                     .then(response => {
                         resolve(response);
                     })
@@ -53,9 +59,11 @@ export default {
             return new Promise((resolve, reject)=>{
                 if(!state.patientsLoaded){
                     let id = rootGetters['account/id'];
-                    accountService.get(id, {params:{ relationships: 'subjects', fields: 'id'}})
+
+                    
+                    axios.get(`account/${id}/subjects`)
                         .then(response=>{
-                            let patients = response.subjects;
+                            let patients = response.data;
                             patients.forEach(patient=> commit('addPatient', patient));
                             
                             state.patientsLoaded = true;

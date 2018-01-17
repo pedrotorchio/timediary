@@ -25,11 +25,11 @@ function registerController(string $key , string $className){
 function generateRoutes(string $key, string $controller){
     global $APP;
     $APP->get("/{$key}", "{$controller}:getAll");
-    $APP->get("/{$key}/{id}", "{$controller}:getOne");
+    $APP->get("/{$key}/{id}[/{relation}]", "{$controller}:getOne");
     $APP->post("/{$key}", "{$controller}:postAll");
-    $APP->post("/{$key}/{id}", "{$controller}:postOne");
+    $APP->post("/{$key}/{id}[/{relation}]", "{$controller}:postOne");
     $APP->put("/{$key}", "{$controller}:putAll");
-    $APP->put("/{$key}/{id}", "{$controller}:putOne");
+    $APP->put("/{$key}/{id}[/{relation}]", "{$controller}:putOne");
     $APP->delete("/{$key}", "{$controller}:deleteAll");
-    $APP->delete("/{$key}/{id}", "{$controller}:deleteOne");
+    $APP->delete("/{$key}/{id}[/{relation}]", "{$controller}:deleteOne");
 }

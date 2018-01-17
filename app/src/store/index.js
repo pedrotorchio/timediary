@@ -3,7 +3,7 @@ import Vuex, { mapActions } from 'vuex';
 import VuexPersist from 'vuex-persist';
 import {appName} from '../config';
 import router from '../router';
-0
+
 import account from './api/Account';
 import modules from './api/Modules';
 import ui from './system/UI';
@@ -29,7 +29,7 @@ export default new Vuex.Store({
         ui
     },
     state:{
-        DELETION_TIMEOUT: 5000
+      // NAO COLOCAR NADA AQUI, USAR GETTERS  
     },
     getters:{
         namespaces(state){
@@ -40,7 +40,7 @@ export default new Vuex.Store({
             }
 
             return nsList;
-        },
+        }
 
     },
     actions:{

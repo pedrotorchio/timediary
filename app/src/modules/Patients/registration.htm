@@ -1,47 +1,39 @@
 
 <v-stepper v-model="step">
-    <v-stepper-header>
-        <v-stepper-step editable step="1" v-bind:complete="false">
+    <v-stepper-header class="stepper-header">
+        <v-stepper-step edit-icon='group' complete editable step="1">
             Ver Todos
         </v-stepper-step>
         
-        <v-stepper-step editable step="2" v-bind:complete="false">
+        <v-stepper-step edit-icon='person_add' step="2" complete editable >
             Inserir Novo
         </v-stepper-step>
     </v-stepper-header>
         <div class="steps">
                 <v-stepper-content step='1'>
                         <v-expansion-panel popout>
-                            <v-expansion-panel-content v-for="(patient, i) in patientsList" :key="patient.id">
+                            <v-expansion-panel-content lazy v-for="(patient, i) in patientsList" :key="patient.id">
                                 <div slot="header">{{++i}} {{patient.pers_first_name}} {{patient.pers_last_name}}</div>
                                 <v-card>
 
                                     <div class="fieldset">
-                                        <v-text-field class='input'
-                                            @focus='focusDetected($event.target.value)' @blur='blurDetected($event.target.value, patient)'
+                                        <v-text-field class='s3 input'
+                                        @change="changeDetected($event, patient, 'pers_first_name')"
+                                        
                                             v-model='patient.pers_first_name'
                                             label="Nome"
                                         ></v-text-field>
                                         <v-text-field class='input'                       
-                                        @focus='focusDetected($event.target.value)' @blur='blurDetected($event.target.value, patient)'
+                                        @change="changeDetected($event, patient, 'pers_last_name')"
                                             v-model='patient.pers_last_name'
                                             label="Sobrenome"
                                         ></v-text-field>
-                                        <v-select
-                                        @focus='focusDetected($event.target.value)' @blur='blurDetected($event.target.value, patient)'
-                                        class="input"
-                                        v-bind:items="['Masculino', 'Feminino', 'Outro']"
-                                        v-model="patient.pers_gender"
-                                        label="Gênero"
-                                        single-line
-                                        bottom
-                                      ></v-select>
                                     </div>
                                     
                                     <div class="fieldset">
                                         <v-text-field class='s3 input' 
                                         
-                                        @focus='focusDetected($event.target.value)' @blur='blurDetected($event.target.value, patient)'
+                                        @change="changeDetected($event, patient, 'education_years')"
                                         color="primary" 
                                         label="Escolaridade" 
                                         v-model="patient.education_years"
@@ -50,22 +42,31 @@
                                         mask='##'
                                         loading>
                                             
-                                            <v-progress-linear slot="progress" :value="educationProgress" height="7" color="primary"></v-progress-linear>
+                                            <v-progress-linear slot="progress" :value="educationProgress(patient.education_years)" height="7" color="primary"></v-progress-linear>
                                         </v-text-field>
                                         <v-text-field class='input'                        
-                                        @focus='focusDetected($event.target.value)' @blur='blurDetected($event.target.value, patient)'
+                                        @change="changeDetected($event, patient, 'pers_occupation')"
                                         v-model="patient.pers_occupation"
                                         label="Ocupação"
                                         ></v-text-field>
+                                        <v-select
+                                        @change="changeDetected($event, patient, 'pers_gender')"
+                                        class="input"
+                                        v-bind:items="['Masculino', 'Feminino', 'Outro']"
+                                        v-model="patient.pers_gender"
+                                        label="Gênero"
+                                        single-line
+                                        bottom
+                                      ></v-select>
                                     </div>
                                     <div class="fieldset">
                                         <v-text-field class=' input s3'                        
-                                        @focus='focusDetected($event.target.value)' @blur='blurDetected($event.target.value, patient)'
+                                        @change="changeDetected($event, patient, 'pers_phone')"
                                         v-model="patient.pers_phone"
                                         label="Telefone"
                                         ></v-text-field>
                                         <v-text-field class='input'                        
-                                        @focus='focusDetected($event.target.value)' @blur='blurDetected($event.target.value, patient)'
+                                        @change="changeDetected($event, patient, 'pers_email')"
                                             v-model="patient.pers_email"
                                             label="Email"
                                         ></v-text-field>
@@ -74,14 +75,14 @@
                                         rows='1'
                                         multi-line
                                         auto-grow
-                                        @focus='focusDetected($event.target.value)' @blur='blurDetected($event.target.value, patient)'
+                                        @change="changeDetected($event, patient, 'comments')"
                                             v-model="patient.comments"
                                             label="Comentários"
                                     ></v-text-field>
                                     
                                     
 
-                                    <button-cancelation text='Remover' callbackText='Clique novamente para CANCELAR remoção' :onComplete='[deletePatient, patient.id]'>
+                                    <button-cancelation :totalTime='totalCancelationTime' text='Remover' callbackText='Clique novamente para CANCELAR remoção' :onComplete='[deletePatient, patient.id]'>
                                         <v-btn slot='button' slot-scope='{text, active}' block :color="active? 'warning':'error'" :class='{active}' class="btn-submit">
                                             {{text}}
                                         </v-btn>
@@ -94,7 +95,7 @@
                 <v-stepper-content step="2">
                         
                         <div class="fieldset">
-                            <v-text-field class='input'
+                            <v-text-field class='s3 input'
                                 
                                 v-model='newPatient.pers_first_name'
                                 label="Nome*"
@@ -104,15 +105,7 @@
                                 v-model='newPatient.pers_last_name'
                                 label="Sobrenome"
                             ></v-text-field>
-                            <v-select
-                            
-                            class="input"
-                            v-bind:items="['Masculino', 'Feminino', 'Outro']"
-                            v-model="newPatient.pers_gender"
-                            label="Gênero"
-                            single-line
-                            bottom
-                          ></v-select>
+                           
                         </div>
                         
                         <div class="fieldset">
@@ -127,13 +120,24 @@
                             mask='##'
                             loading>
                                 
-                                <v-progress-linear slot="progress" :value="educationProgress" height="7" color="primary"></v-progress-linear>
+                                <v-progress-linear slot="progress" :value="educationProgress(newPatient.education_years)" height="7" color="primary"></v-progress-linear>
                             </v-text-field>
                             <v-text-field class='input'                        
                             
                             v-model="newPatient.pers_occupation"
                             label="Ocupação"
                             ></v-text-field>
+
+                            <v-select
+                            
+                            class="input"
+                            v-bind:items="['Masculino', 'Feminino', 'Outro']"
+                            v-model="newPatient.pers_gender"
+                            label="Gênero"
+                            single-line
+                            bottom
+
+                          ></v-select>
                         </div>
                         <div class="fieldset">
                             <v-text-field class=' input s3'                        

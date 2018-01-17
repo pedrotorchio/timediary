@@ -18,7 +18,7 @@ export default {
       },
       step:{
           type: Number,
-          default: 25
+          default: 20
       }
   },
   data(){
@@ -71,7 +71,7 @@ export default {
           return this.timeoutTime > 0 ? this.callbackText : this.text;
       },
       time(){
-          return this.totalTime || this.$store.state['DELETION_TIMEOUT']
+          return this.totalTime || 4000;
       },
       stepFraction(){
           return this.step/100;

@@ -1,7 +1,10 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
+
 import Vue from 'vue'
 import App from './App'
+
+
 
 import {googleClientConfig, apiUrl} from '@/config.js';
 import GoogleLoginApi from '@/plugins/GoogleLoginApi/GoogleLoginApi';
@@ -9,6 +12,10 @@ Vue.use(GoogleLoginApi, {
   client_id: googleClientConfig.id,
   scope: googleClientConfig.scope
 });
+
+import axios from 'axios';
+axios.defaults.baseURL = apiUrl;
+axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 
 import Vuetify from 'vuetify';
 import ('../node_modules/vuetify/dist/vuetify.min.css');
@@ -37,3 +44,4 @@ window.DIARY = new Vue({
   created(){
   }
 });
+

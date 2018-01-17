@@ -1,5 +1,5 @@
 <script>
-let currentFieldValue = null;
+
 export default {
 
   data(){
@@ -17,15 +17,12 @@ export default {
     focusDetected(event){
       currentFieldValue = event.target.value;
     },
-    blurDetected(event){
-      
-      if(currentFieldValue != event.target.value){
-        
-        this.$store.dispatch('sendAccountInformation').catch(error=>{
-          this.$sysMsg.interrupt(error.message, 'error');
-        })
-      }
-      
+    changeDetected($value, patient, field) {
+      let model = {};
+      model['id'] = patient.id;
+      model[field] = $value;
+
+      this.$store.dispatch('account/sendAccountInformation', model);
     },
     formatDate (date) {
         if (!date) {

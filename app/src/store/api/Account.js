@@ -1,5 +1,6 @@
 import Router from '../../router';
 import ApiService from './ApiService';
+import axios from 'axios';
 
 let accountService = new ApiService('account');
 let authService = new ApiService('auth');
@@ -46,6 +47,9 @@ export default {
             if(!getters.account)
                 return null;
             return getters.account.loginEmail;
+        },
+        root(state, getters){
+            return getters.account.root;
         }
     },
     mutations: {
@@ -57,9 +61,9 @@ export default {
             basicOptions.headers = {
                 Authorization: `Bearer ${token}`
             };
+            axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
         },
         setAccount(state, account){
-            
             state.info = account;
         },
     },
@@ -98,8 +102,7 @@ export default {
         },
         sendAccountInformation({state, getters}, info){
             
-            let {email} = getters.loginInfo;
-            return accountService.put(email, getters.account);
+            return accountService.put(info.id, info);
             
         }
     }    

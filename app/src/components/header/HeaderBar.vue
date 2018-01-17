@@ -5,13 +5,14 @@ import {mapState} from 'vuex';
     props: [],
     computed:{ 
         ...mapState({
-          displayName: state=>state.account.info.pers_display_name,
-          accountImage: state=>state.account.info.pers_picture_url
+          displayName: state=>state.account.info.pers_display_name || (`${state.account.info.pers_first_name} ${state.account.info.pers_last_name}`),
+          accountImage: state=>state.account.info.pers_picture_url,
+          occupation: state=>state.account.info.pers_occupation
         })
     },
     methods:{
       logout(){
-        this.$store.dispatch('logout');
+        this.$store.dispatch('account/logout');
       }
     }
   }
@@ -25,6 +26,7 @@ import {mapState} from 'vuex';
     <div class="right">
         <div class="column center">
           <h2>{{displayName}}</h2>
+          <h3 v-if="occupation">{{occupation}}</h3>
           <span title="Sair do TimeDiary" @click='logout' class="clickable">Sair</span>
         </div>
         <div class="img">
