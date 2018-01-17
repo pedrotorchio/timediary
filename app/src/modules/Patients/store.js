@@ -5,7 +5,9 @@ export default {
     namespaced: true,
     state:{
         list: [],
-        patientsLoaded: false
+        inactiveList: [],
+        patientsLoaded: false,
+        inactivePatientsLoaded: false
     },
     getters:{
         list(state){
@@ -15,7 +17,10 @@ export default {
     mutations:{
         addPatient(state, patient){
             state.list.push(patient);
-        }
+        },
+        addInactive(state, patient){
+            state.inactiveList.push(patient);
+        },
     },
     actions:{
         create({rootGetters, commit}, patient){
@@ -47,6 +52,26 @@ export default {
                     })
             });
         },
+        activate({dispatch, state, commit}, id){
+            return new Promise((resolve,reject)=>{
+                dispatch('update', {id, status: 1})
+                    .then(()=>{
+                        let i = state.inactiveList.findIndex(p=>p.id==id);
+                        let p = (state.inactiveList.splice(i, 1))[0];
+                        commit('addPatient', p);
+                    });
+            });
+        },
+        deactivate({dispatch, state, commit}, id){
+            return new Promise((resolve,reject)=>{
+                dispatch('update', {id, status: 0})
+                    .then(()=>{
+                        let i = state.list.findIndex(p=>p.id==id);
+                        let p = (state.list.splice(i, 1))[0];
+                        commit('addInactive', p);
+                    });
+            });
+        },
         status({getters, dispatch}, idAndStatus){
             if(idAndStatus.status == 0){
                 let i = getters.list.findIndex(pat => pat.id == idAndStatus.id);
@@ -54,6 +79,26 @@ export default {
             }
 
             return dispatch('update', idAndStatus);
+        },
+        loadInactive({state, commit, rootGetters}){
+            return new Promise((resolve, reject)=>{
+                if(!state.inactivePatientsLoaded){
+                    let id = rootGetters['account/id'];
+
+                    axios.get(`account/${id}/subjects`, {
+                        params: { conditions:['status:=0'] }
+                    })
+                        .then(response=>{
+                            let patients = response.data;
+                            
+                            patients.forEach(patient=> commit('addInactive', patient));
+                            state.inactivePatientsLoaded = true;
+                            resolve(state.inactiveList);
+                        });    
+                
+                }else resolve(state.list);
+                
+            });
         },
         loadList({state, commit, rootGetters}){
             return new Promise((resolve, reject)=>{
@@ -67,7 +112,7 @@ export default {
                             patients.forEach(patient=> commit('addPatient', patient));
                             
                             state.patientsLoaded = true;
-                            resolve(state.list);
+                            resolve(state.inactivelist);
                         });    
                 
                 }else resolve(state.list);

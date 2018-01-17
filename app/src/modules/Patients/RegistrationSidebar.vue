@@ -1,4 +1,5 @@
 <script>
+// http://local.api.timediary.com.br/account/99/subjects?conditions[]=status:=0
 import ButtonCancelation from '@/components/forms/ButtonWithCancelation';
 import {DELETION_TIMEOUT} from '../../config';
 import {
@@ -34,6 +35,7 @@ export default {
   },
   computed: {
     ...mapState({
+      inactiveList: state => state.patients.inactiveList,
       patientsList: state => state.patients.list,
       account: state => state.account.info
     }),
@@ -44,6 +46,8 @@ export default {
   methods: {
     ...mapActions({
       update: 'patients/update',
+      deactivate: 'patients/deactivate',
+      activate: 'patients/activate',
       status: 'patients/status'
     }),
     educationProgress(years) {
@@ -67,10 +71,10 @@ export default {
 
     },
     deletePatient(id) {
-      this.update({
-        id,
-        status: 0
-      });
+      this.deactivate(id);
+    },
+    activatePatient(id) {
+      this.activate(id);
     }
   },
   components: {
