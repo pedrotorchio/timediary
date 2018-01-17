@@ -8,7 +8,10 @@ use \App\models\subject\Subject;
 class Account extends BaseModel{
     public const TABLE = 'account';
     public const ID_FIELD = 'pers_email';
-    public const RELATIONSHIP_FIELDS = ['children', 'subjects'];
+    public const RELATIONSHIP_FIELDS = [
+        'children' => 'account', 
+        'subjects' => 'subject'
+    ];
     public const FIELDS = [
         
         'api_token' => '',

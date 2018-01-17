@@ -20,21 +20,38 @@ abstract class BaseModel extends Model{
     ];
     protected $table = null;
     protected $relationshipFields;
-    public function disable(){
-        $this->status = 0;
-        $this->save();
+    
+    
+    protected static function applyConditions($builder, $conditions){
+        
+        foreach($conditions as $column => $value){
+            $builder->where($column, $value);
+        }
+        
+        return $builder;
     }
-    public function enable(){
-        $this->status = 1;
-        $this->save();        
+    protected static function makeNewRelationQuery($relation, $conditions, $columns){
+        $table = static::RELATIONSHIP_FIELDS[$relation];
+        
+        foreach($columns as &$column){
+            $column = "{$table}.{$column}";
+        }
+        
+        $relationA[$relation] = function ($query) use ($conditions, $columns){
+            $query->select($columns);
+            foreach($conditions as $column => $value)
+                $query->where($column, $value);
+        };
+        
+        return self::with($relationA);
     }
-    public static function getRelFields(){
-        $fields = ['root'];
-        if(defined('static::RELATIONSHIP_FIELDS') && static::RELATIONSHIP_FIELDS !== null)
-            $fields = array_merge($fields, static::RELATIONSHIP_FIELDS);
+    protected static function makeNewQuery($conditions){
+        $builder = (new static)->newQuery();
+        $builder = self::applyConditions($builder, $conditions);
 
-        return $fields;
+        return $builder;
     }
+    
     public static function getFields(){
         $fields = [
             'status' => '',
@@ -49,49 +66,52 @@ abstract class BaseModel extends Model{
             
         return $fields;
     }
-    public static function exists($id){
-
-        $acc = self::fromId($id);
+    
+    
+    public static function getRelationship($id, $relation, $conditions, $columns){
         
-        return $acc !== null;
-
-    }
-    public static function count($where = null){
-        $count = 0;
-        $results = self::all();
-        $count = $results->count();
-
-        return $count;
-    }
-    protected static function conditionalRelations($relations){
-        $relationsWithStatus = [];
-        foreach($relations as $field){
-            $relationsWithStatus[$field] = function($query){
-                $query->where('status', 1);
-            };
-        }
-
-        return $relationsWithStatus;
-    }
-    public static function getAll(array $columns = ['*'], $relations = []){
-        $relations = self::conditionalRelations($relations);
-        $results = self::with($relations)->where('status', 1)->get($columns);
+        $conditions = $conditions;
+        $columns = $columns?: ['*'];
         
+        $results = self::makeNewRelationQuery($relation, $conditions, $columns);
+        
+        $id_field = self::idField($id);
+        $results->where($id_field, $id);
+        $results = $results->first();
+
         return $results;
     }
+
+    public static function getAll($conditions, $columns){
+        
+        $conditions = $conditions;
+        $columns = $columns?: ['*'];
+
+        $results = self::makeNewQuery($conditions);
+        
+        return $results->get($columns);
+    }
     
-    public static function fromId($id, array $columns = ['*'], $relations = []){
+    public static function fromId($id, $conditions, $columns){
         
-        // $results = self::where(static::ID_FIELD, $id)->take(1);
-        $relations = self::conditionalRelations($relations);        
+        $conditions = $conditions;
+        $columns = $columns?: ['*'];
+
         $id_field = self::idField($id);
-        $results = self::with($relations)->where($id_field, $id)->where('status', 1)->take(1);
-        
+        $results = self::where($id_field, $id);
+        $results = self::applyConditions($results, $conditions);
+       
+        $results->take(1);
+
         if($results->count() < 1)
             return null;
         
         return $results->first($columns);
     }
+
+
+
+
     protected static function idField($id){
         if(is_numeric($id))
             $id_field = 'id';
@@ -127,6 +147,20 @@ abstract class BaseModel extends Model{
     }
     public function root(){
         return $this->belongsTo(Account::class, 'root');
+    }
+    public static function exists($id){
+
+        $acc = self::fromId($id);
+        
+        return $acc !== null;
+
+    }
+    public static function count($where = null){
+        $count = 0;
+        $results = self::all();
+        $count = $results->count();
+
+        return $count;
     }
         
 }

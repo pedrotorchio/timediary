@@ -10,7 +10,7 @@ use \App\models\task\Task;
 class Subject extends BaseModel{
     public const TABLE = 'subject';
     public const ID_FIELD = 'id';
-    public const RELATIONSHIP_FIELDS = ['diagnostics', 'main_diagnostic', 'tasks', 'accounts'];
+    public const RELATIONSHIP_FIELDS = ['diagnostics' => 'diagnostic', 'main_diagnostic' => 'diagnostic', 'tasks' => 'task', 'accounts' => 'account'];
     public const FIELDS = [
         
         'pers_email' => '',

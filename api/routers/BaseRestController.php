@@ -15,33 +15,36 @@ abstract class BaseRestController extends BaseController{
         'not_found' => 404,
         'erro_interno' => 500
     ];
-    
-    public function getAll(Request $request, Response $response, array $args){
-        $params = $this->getQueryParameters($request);
 
-        $many = $this->readAll($params['fields'], $params['relationships']);
+    public function getAll(Request $request, Response $response, array $args){
+        $params = $request->getQueryParams();
+        extract($this->extractQueryParameters($params));
+
+        $many = $this->readAll($conditions, $columns);
         
         return $this->makeResponse(
             $response,
             $many);
     }
     public function getOne(Request $request, Response $response, array $args){
-        $params = $this->getQueryParameters($request);
+        $params = $request->getQueryParams();
+        extract($this->extractQueryParameters($params));
+
         $id = $request->getAttribute('id');
         $relation = $request->getAttribute('relation');
-
-        if($relation){
-            $one = $this->readOne($id, ['id'], [$relation]);
-            
-            return $this->makeResponse(
-                $response,
-                $one[$relation]
-            );
-        }
         
         try{
+
+            if($relation){
+                $one = $this->readRelation($id, $relation, $conditions, $columns);
+                
+                return $this->makeResponse(
+                    $response,
+                    $one[$relation]
+                );
+            }
          
-            $one = $this->readOne($id, $params['fields'], $params['relationships']);
+            $one = $this->readOne($id, $conditions, $columns);
             
             if($one === null)
                 $this->_404();
@@ -76,7 +79,8 @@ abstract class BaseRestController extends BaseController{
     }
     public function postAll(Request $request, Response $response, array $args){
         
-        $params = $this->getQueryParameters($request);
+        $params = $request->getQueryParams();
+        extract($this->extractQueryParameters($params));
         $data = $request->getParsedBody();
         try{
 
@@ -119,16 +123,15 @@ abstract class BaseRestController extends BaseController{
 
     }
     public function putOne(Request $request, Response $response, array $args){
-        $params = $this->getQueryParameters($request);
+        $params = $request->getQueryParams();
+        extract($this->extractQueryParameters($params));
         
         $data = $request->getParsedBody();
-        
         $id = $request->getAttribute('id');
-
         $relation = $request->getAttribute('relation');
 
         if($relation){
-            $one = $this->readOne($id);
+            $one = $this->readOne($id, [], ['*']);
             
             call_user_func([$one, $relation])->attach($data[$relation]);
             
@@ -178,17 +181,15 @@ abstract class BaseRestController extends BaseController{
     }
     public function deleteOne(Request $request, Response $response, array $args){
         $params = $request->getQueryParams();
+        extract($this->extractQueryParameters($params));
         
-        $id = $request->getAttribute('id');
-
         $data = $request->getParsedBody();
-
+        $id = $request->getAttribute('id');
         $relation = $request->getAttribute('relation');
 
         if($relation){
-            $one = $this->readOne($id, 'id', [$relation]);
-
-            var_dump($one);die();
+            
+            $one = $this->readOne($id, [], ['*']);
             
             call_user_func([$one, $relation])->detach($data[$relation]);
             
@@ -237,23 +238,24 @@ abstract class BaseRestController extends BaseController{
     }
 
 
-    protected function getQueryParameters(Request $request){
-        $params = $request->getQueryParams();
-        $params = $this->queryParamsInterpret($params);
-
-        return $params;
-    }
-    protected function queryParamsInterpret($params = []){
+    protected function extractQueryParameters($params){
+        $conditions = $params['conditions']?: ['status:=1'];
+        $columns    = $params['columns']?: '*';
+        $relConditions = $params['relation_conditions']?: ['status:=1'];
         
-        $params['fields'] = isset($params['fields']) ? $this->queryParamList2Array($params['fields']) : ['*'];
-        $params['relationships'] = isset($params['relationships']) ? $this->queryParamList2Array($params['relationships']) : [];
-
-        return $params;
-    }
-    protected function queryParamList2Array($param){
+        $columns = explode(',', $columns);
         
-        return explode(',', $param);
-    } 
+        $conditions2 = [];
+        foreach($conditions as $string){
+            $condition = explode(':=', $string);
+            $conditions2[$condition[0]] = $condition[1];
+        }
+        
+        return [
+            'conditions' => $conditions2,
+            'columns' => $columns
+        ];
+    }
 
     protected function _405(string $method = ''){
         throw new HttpException(

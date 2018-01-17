@@ -1,15 +1,20 @@
 <?php namespace App\routers;
 
 abstract class BaseController{
-    
-    public function readOne(string $id, array $fields = ['*'], array $relations = []){
+    public function readRelation($id, $relation, $conditions, $columns){
+        $one = self::modelCall('getRelationship', [$id, $relation, $conditions, $columns]);
+
+        return $one;
+    }
+    public function readOne($id, $conditions, $columns){
         
-        $one = self::modelCall('fromId', [$id, $fields, $relations]);
+        $one = self::modelCall('fromId', [$id, $conditions, $columns]);
         
         return $one;
     }
-    public function readAll(array $fields = ['*'], array $relations = []){
-        return self::modelCall('getAll', [$fields, $relations]);
+    public function readAll($conditions, $columns){
+
+        return self::modelCall('getAll', [$conditions, $columns]);
     }
     public function create(array $data){
         $data = $this->preFillData($data);
