@@ -25,7 +25,11 @@ abstract class BaseModel extends Model{
     protected static function applyConditions($builder, $conditions){
         
         foreach($conditions as $column => $value){
-            $builder->where($column, $value);
+            
+            if($value == null || $value == 'null')
+                $builder->whereNull($column);
+            else
+                $builder->where($column, $value);            
         }
         
         return $builder;

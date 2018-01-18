@@ -8,43 +8,10 @@ use \App\routers\BaseRestController;
 use \App\exceptions\HttpException;
 
 class DiagnosticController extends BaseRestController {
+    public const MODEL = Diagnostic::class;
+
     
-    public function readOne(string $id){
-        $acc = Diagnostic::fromId($id);
-        
-        if($acc === null){
-            $this->_404();
-        }
-
-        return $acc;
-    }
-    public function readAll(){
-        return Diagnostic::all();
-    }
-    public function create(array $data){
-        $acc = new Diagnostic($data);
-        $acc->save();
-
-        return $acc;
-    }
-    public function update($id, array $data){
-        $acc = Diagnostic::fromId($id);
-        
-        if($acc === null){
-            $this->_404();
-        }
-
-        $acc->fill($data);
-        $acc->save();
-
-        return $acc;
-    }
-    public function delete($id){}
-    public function _404(){
-        throw (new HttpException(
-            "Diagnóstico não encontrado",
-            21,
-            404
-        ));
+    public function _404(string $field = 'Id'){
+        parent::_404($field);
     }
 }

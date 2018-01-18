@@ -1,5 +1,4 @@
 import Router from '../../router';
-import ApiService from './ApiService';
 
 import Tasks from '../../modules/Tasks';
 import Patients from '../../modules/Patients';

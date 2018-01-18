@@ -1,252 +1,179 @@
+<v-stepper v-model="step" id="root">
+  <v-stepper-header class="stepper-header">
+    <v-stepper-step edit-icon='group' complete editable step="1">
+      Ver Todos
+    </v-stepper-step>
 
-<v-stepper v-model="step">
-    <v-stepper-header class="stepper-header">
-        <v-stepper-step edit-icon='group' complete editable step="1">
-            Ver Todos
-        </v-stepper-step>
-        
-        <v-stepper-step edit-icon='person_add' step="2" complete editable >
-            Inserir Novo
-        </v-stepper-step>
+    <v-stepper-step edit-icon='person_add' step="2" complete editable>
+      Inserir Novo
+    </v-stepper-step>
 
-        <v-stepper-step edit-icon='person_outline' step="3" complete editable >
-            Desativados
-        </v-stepper-step>
-    </v-stepper-header>
-        <div class="steps">
-                <v-stepper-content step='1'>
-                        <v-expansion-panel popout>
-                            <v-expansion-panel-content lazy v-for="(patient, i) in patientsList" :key="patient.id">
-                                <div slot="header">{{++i}} {{patient.pers_first_name}} {{patient.pers_last_name}}</div>
-                                <v-card>
+    <v-stepper-step edit-icon='person_outline' step="3" complete editable>
+      Desativados
+    </v-stepper-step>
 
-                                    <div class="fieldset">
-                                        <v-text-field class='s3 input'
-                                        @change="changeDetected($event, patient, 'pers_first_name')"
-                                        
-                                            v-model='patient.pers_first_name'
-                                            label="Nome"
-                                        ></v-text-field>
-                                        <v-text-field class='input'                       
-                                        @change="changeDetected($event, patient, 'pers_last_name')"
-                                            v-model='patient.pers_last_name'
-                                            label="Sobrenome"
-                                        ></v-text-field>
-                                    </div>
-                                    
-                                    <div class="fieldset">
-                                        <v-text-field class='s3 input' 
-                                        
-                                        @change="changeDetected($event, patient, 'education_years')"
-                                        color="primary" 
-                                        label="Escolaridade" 
-                                        v-model="patient.education_years"
-                                        hint='0 a 25 anos'
-                                        suffix=' anos'
-                                        mask='##'
-                                        loading>
-                                            
-                                            <v-progress-linear slot="progress" :value="educationProgress(patient.education_years)" height="7" color="primary"></v-progress-linear>
-                                        </v-text-field>
-                                        <v-text-field class='input'                        
-                                        @change="changeDetected($event, patient, 'pers_occupation')"
-                                        v-model="patient.pers_occupation"
-                                        label="Ocupação"
-                                        ></v-text-field>
-                                        <v-select
-                                        @change="changeDetected($event, patient, 'pers_gender')"
-                                        class="s4 input"
-                                        v-bind:items="['Masculino', 'Feminino', 'Outro']"
-                                        v-model="patient.pers_gender"
-                                        label="Gênero"
-                                        single-line
-                                        bottom
-                                      ></v-select>
-                                    </div>
-                                    <div class="fieldset">
-                                        <v-text-field class=' input s3'                        
-                                        @change="changeDetected($event, patient, 'pers_phone')"
-                                        v-model="patient.pers_phone"
-                                        label="Telefone"
-                                        ></v-text-field>
-                                        <v-text-field class='input'                        
-                                        @change="changeDetected($event, patient, 'pers_email')"
-                                            v-model="patient.pers_email"
-                                            label="Email"
-                                        ></v-text-field>
-                                    </div>
-                                    <v-text-field class='input'                        
-                                        rows='1'
-                                        multi-line
-                                        auto-grow
-                                        @change="changeDetected($event, patient, 'comments')"
-                                            v-model="patient.comments"
-                                            label="Comentários"
-                                    ></v-text-field>
-                                    
-                                    
+  </v-stepper-header>
+  <div class="steps">
+    <v-stepper-content step='1'>
+      <div v-if='patientsList.length == 0'>
+        <h3>Nenhum Paciente Cadastrado ainda</h3>
+        <h4>Clique em
+          <span>Inserir Novo</span>
+        </h4>
+      </div>
 
-                                    <button-cancelation :totalTime='totalCancelationTime' text='Remover' callbackText='Clique novamente para CANCELAR remoção' :onComplete='[deletePatient, patient.id]'>
-                                        <v-btn slot='button' slot-scope='{text, active}' block :color="active? 'warning':'error'" :class='{active}' class="btn-submit">
-                                            {{text}}
-                                        </v-btn>
-                                        <v-progress-linear  slot='progress'  slot-scope='{value}' v-model='value' height='4'></v-progress-linear>
-                                    </button-cancelation>
-                                </v-card>
-                            </v-expansion-panel-content>
-                        </v-expansion-panel>
-                </v-stepper-content>
-                <v-stepper-content step="2">
-                        
-                        <div class="fieldset">
-                            <v-text-field class='s3 input'
-                                
-                                v-model='newPatient.pers_first_name'
-                                label="Nome*"
-                            ></v-text-field>
-                            <v-text-field class='input'                       
-                                
-                                v-model='newPatient.pers_last_name'
-                                label="Sobrenome"
-                            ></v-text-field>
-                           
-                        </div>
-                        
-                        <div class="fieldset">
-                            <v-text-field class='s3 input' 
-                            
-                            
-                            color="primary" 
-                            label="Escolaridade" 
-                            v-model="newPatient.education_years"
-                            hint='0 a 25 anos'
-                            suffix=' anos'
-                            mask='##'
-                            loading>
-                                
-                                <v-progress-linear slot="progress" :value="educationProgress(newPatient.education_years)" height="7" color="primary"></v-progress-linear>
-                            </v-text-field>
-                            <v-text-field class='input'                        
-                            
-                            v-model="newPatient.pers_occupation"
-                            label="Ocupação"
-                            ></v-text-field>
+      <v-expansion-panel v-else popout>
+        <v-expansion-panel-content lazy v-for="(patient, i) in patientsList" :key="patient.id">
+          <div slot="header">{{++i}} {{patient.pers_first_name}} {{patient.pers_last_name}}</div>
+          <v-card>
 
-                            <v-select
-                            
-                            class="s4 input"
-                            v-bind:items="['Masculino', 'Feminino', 'Outro']"
-                            v-model="newPatient.pers_gender"
-                            label="Gênero"
-                            single-line
-                            bottom
+            <div class="fieldset">
+              <v-text-field class='s3 input' @change="changeDetected($event, patient, 'pers_first_name')" v-model='patient.pers_first_name'
+                label="Nome"></v-text-field>
+              <v-text-field class='input' @change="changeDetected($event, patient, 'pers_last_name')" v-model='patient.pers_last_name'
+                label="Sobrenome"></v-text-field>
+            </div>
 
-                          ></v-select>
-                        </div>
-                        <div class="fieldset">
-                            <v-text-field class=' input s3'                        
-                            
-                            v-model="newPatient.pers_phone"
-                            label="Telefone"
-                            ></v-text-field>
-                            <v-text-field class='input'                        
-                                
-                                v-model="newPatient.pers_email"
-                                label="Email"
-                            ></v-text-field>
-                        </div>
+            <div class="fieldset">
 
-                        <v-btn :style="{height:newPatient.pers_first_name ? '60px' : '0' }" flat icon color='primary' @click='submit2' height='60px' class='btn-submit'>
-                            <v-icon>add_circle</v-icon>
-                        </v-btn>
-                        
-                        
-                        
-      
-                </v-stepper-content>
+              <v-text-field class='s3 input' @change="changeDetected($event, patient, 'education_years')" color="primary" label="Escolaridade"
+                v-model="patient.education_years" hint='0 a 25 anos' suffix=' anos' mask='##' loading>
+
+                <v-progress-linear slot="progress" :value="educationProgress(patient.education_years)" height="7" color="primary"></v-progress-linear>
+              </v-text-field>
+              <v-text-field class='input' @change="changeDetected($event, patient, 'pers_occupation')" v-model="patient.pers_occupation"
+                label="Ocupação"></v-text-field>
+              <v-select @change="changeDetected($event, patient, 'pers_gender')" class="s4 input" v-bind:items="['Masculino', 'Feminino', 'Outro']"
+                v-model="patient.pers_gender" label="Gênero" single-line bottom></v-select>
+            </div>
+            <div class="fieldset">
+              <v-text-field class=' input s3' @change="changeDetected($event, patient, 'pers_phone')" v-model="patient.pers_phone" label="Telefone"></v-text-field>
+              <v-text-field class='input' @change="changeDetected($event, patient, 'pers_email')" v-model="patient.pers_email" label="Email"></v-text-field>
+            </div>
+            <div class="fieldset">
+              <v-text-field class='input' @change="changeDetected($event, patient, 'comments')" v-model="patient.comments" label="Comentários"></v-text-field>
+            </div>
+            <div class="fieldset">
+                <v-select
+                label="Diagnósticos"
+                @input="changeDiagnostic($event, patient)"
+                :value='extractDiagnosticTitles(patient.diagnostics)'
+                :items="extractDiagnosticTitles(diagnosticList)"
+                multiple
+                chips
+                tags
+                autocomplete
+                class="input"
+              >
+                <h4 :title="item" slot='item' slot-scope='{item, selected}'
+                style='    
+                height: 100%;
+                width: 100%;
+                text-align: left;
+                display: flex;
+                align-items: center;'
+                :style="{backgroundColor: selected? 'red' : 'transparent'}"
+                >{{item}}</h4>
+                <v-chip small light close 
+                @input='removeDiagnostic(item, patient)'
+                slot='selection' slot-scope='{item, selected, disabled}'
+                :selected='selected'
+                :disabled='disabled'
+                :key='JSON.stringify(item)'
+                class="diagnostic-chip"
+                 >{{item}}</v-chip>
+              </v-select>
+            </div>
+            
+            <button-cancelation :totalTime='totalCancelationTime' text='Remover' callbackText='Clique novamente para CANCELAR remoção'
+              :onComplete='[deletePatient, patient.id]'>
+              <v-btn slot='button' slot-scope='{text, active}' block :color="active? 'warning':'error'" :class='{active}' class="btn-submit">
+                {{text}}
+              </v-btn>
+              <v-progress-linear slot='progress' slot-scope='{value}' v-model='value' height='4'></v-progress-linear>
+            </button-cancelation>
+          </v-card>
+        </v-expansion-panel-content>
+      </v-expansion-panel>
+    </v-stepper-content>
+    <v-stepper-content step="2">
+
+      <div class="fieldset">
+        <v-text-field class='s3 input' v-model='newPatient.pers_first_name' label="Nome*"></v-text-field>
+        <v-text-field class='input' v-model='newPatient.pers_last_name' label="Sobrenome"></v-text-field>
+
+      </div>
+
+      <div class="fieldset">
+        <v-text-field class='s3 input' color="primary" label="Escolaridade" v-model="newPatient.education_years" hint='0 a 25 anos'
+          suffix=' anos' mask='##' loading>
+
+          <v-progress-linear slot="progress" :value="educationProgress(newPatient.education_years)" height="7" color="primary"></v-progress-linear>
+        </v-text-field>
+        <v-text-field class='input' v-model="newPatient.pers_occupation" label="Ocupação"></v-text-field>
+
+        <v-select class="s4 input" v-bind:items="['Masculino', 'Feminino', 'Outro']" v-model="newPatient.pers_gender" label="Gênero"
+          single-line bottom></v-select>
+      </div>
+      <div class="fieldset">
+        <v-text-field class=' input s3' v-model="newPatient.pers_phone" label="Telefone"></v-text-field>
+        <v-text-field class='input' v-model="newPatient.pers_email" label="Email"></v-text-field>
+      </div>
+
+      <v-btn :style="{height:newPatient.pers_first_name ? '60px' : '0' }" flat icon color='primary' @click='submit2' height='60px'
+        class='btn-submit'>
+        <v-icon>add_circle</v-icon>
+      </v-btn>
 
 
-                <v-stepper-content step='3'>
-                        <v-expansion-panel popout>
-                            <v-expansion-panel-content lazy v-for="(patient, i) in inactiveList" :key="patient.id">
-                                <div slot="header">{{++i}} {{patient.pers_first_name}} {{patient.pers_last_name}}</div>
-                                <v-card>
 
-                                    <div class="fieldset">
-                                        <v-text-field class='s3 input'
-                                        @change="changeDetected($event, patient, 'pers_first_name')"
-                                        
-                                            v-model='patient.pers_first_name'
-                                            label="Nome"
-                                        ></v-text-field>
-                                        <v-text-field class='input'                       
-                                        @change="changeDetected($event, patient, 'pers_last_name')"
-                                            v-model='patient.pers_last_name'
-                                            label="Sobrenome"
-                                        ></v-text-field>
-                                    </div>
-                                    
-                                    <div class="fieldset">
-                                        <v-text-field class='s3 input' 
-                                        
-                                        @change="changeDetected($event, patient, 'education_years')"
-                                        color="primary" 
-                                        label="Escolaridade" 
-                                        v-model="patient.education_years"
-                                        hint='0 a 25 anos'
-                                        suffix=' anos'
-                                        mask='##'
-                                        loading>
-                                            
-                                            <v-progress-linear slot="progress" :value="educationProgress(patient.education_years)" height="7" color="primary"></v-progress-linear>
-                                        </v-text-field>
-                                        <v-text-field class='input'                        
-                                        @change="changeDetected($event, patient, 'pers_occupation')"
-                                        v-model="patient.pers_occupation"
-                                        label="Ocupação"
-                                        ></v-text-field>
-                                        <v-select
-                                        @change="changeDetected($event, patient, 'pers_gender')"
-                                        class="s4 input"
-                                        v-bind:items="['Masculino', 'Feminino', 'Outro']"
-                                        v-model="patient.pers_gender"
-                                        label="Gênero"
-                                        single-line
-                                        bottom
-                                      ></v-select>
-                                    </div>
-                                    <div class="fieldset">
-                                        <v-text-field class=' input s3'                        
-                                        @change="changeDetected($event, patient, 'pers_phone')"
-                                        v-model="patient.pers_phone"
-                                        label="Telefone"
-                                        ></v-text-field>
-                                        <v-text-field class='input'                        
-                                        @change="changeDetected($event, patient, 'pers_email')"
-                                            v-model="patient.pers_email"
-                                            label="Email"
-                                        ></v-text-field>
-                                    </div>
-                                    <v-text-field class='input'                        
-                                        rows='1'
-                                        multi-line
-                                        auto-grow
-                                        @change="changeDetected($event, patient, 'comments')"
-                                            v-model="patient.comments"
-                                            label="Comentários"
-                                    ></v-text-field>
-                                    
-                                    
 
-                                    <button-cancelation :totalTime='totalCancelationTime' text='Reativar' callbackText='Clique novamente para CANCELAR ativação' :onComplete='[activatePatient, patient.id]'>
-                                        <v-btn slot='button' slot-scope='{text, active}' block :color="active? 'warning':'primary'" :class='{active}' class="btn-submit">
-                                            {{text}}
-                                        </v-btn>
-                                        <v-progress-linear  slot='progress'  slot-scope='{value}' v-model='value' height='4'></v-progress-linear>
-                                    </button-cancelation>
-                                </v-card>
-                            </v-expansion-panel-content>
-                        </v-expansion-panel>
-                </v-stepper-content>
-        </div>
+    </v-stepper-content>
+
+
+    <v-stepper-content step='3'>
+      <v-expansion-panel popout>
+        <v-expansion-panel-content lazy v-for="(patient, i) in inactiveList" :key="patient.id">
+          <div slot="header">{{++i}} {{patient.pers_first_name}} {{patient.pers_last_name}}</div>
+          <v-card>
+
+            <div class="fieldset">
+              <v-text-field class='s3 input' @change="changeDetected($event, patient, 'pers_first_name')" v-model='patient.pers_first_name'
+                label="Nome"></v-text-field>
+              <v-text-field class='input' @change="changeDetected($event, patient, 'pers_last_name')" v-model='patient.pers_last_name'
+                label="Sobrenome"></v-text-field>
+            </div>
+
+            <div class="fieldset">
+              <v-text-field class='s3 input' @change="changeDetected($event, patient, 'education_years')" color="primary" label="Escolaridade"
+                v-model="patient.education_years" hint='0 a 25 anos' suffix=' anos' mask='##' loading>
+
+                <v-progress-linear slot="progress" :value="educationProgress(patient.education_years)" height="7" color="primary"></v-progress-linear>
+              </v-text-field>
+              <v-text-field class='input' @change="changeDetected($event, patient, 'pers_occupation')" v-model="patient.pers_occupation"
+                label="Ocupação"></v-text-field>
+              <v-select @change="changeDetected($event, patient, 'pers_gender')" class="s4 input" v-bind:items="['Masculino', 'Feminino', 'Outro']"
+                v-model="patient.pers_gender" label="Gênero" single-line bottom></v-select>
+            </div>
+            <div class="fieldset">
+              <v-text-field class=' input s3' @change="changeDetected($event, patient, 'pers_phone')" v-model="patient.pers_phone" label="Telefone"></v-text-field>
+              <v-text-field class='input' @change="changeDetected($event, patient, 'pers_email')" v-model="patient.pers_email" label="Email"></v-text-field>
+            </div>
+            <v-text-field class='input' rows='1' multi-line auto-grow @change="changeDetected($event, patient, 'comments')" v-model="patient.comments"
+              label="Comentários"></v-text-field>
+
+
+
+            <button-cancelation :totalTime='totalCancelationTime' text='Reativar' callbackText='Clique novamente para CANCELAR ativação'
+              :onComplete='[activatePatient, patient.id]'>
+              <v-btn slot='button' slot-scope='{text, active}' block :color="active? 'warning':'primary'" :class='{active}' class="btn-submit">
+                {{text}}
+              </v-btn>
+              <v-progress-linear slot='progress' slot-scope='{value}' v-model='value' height='4'></v-progress-linear>
+            </button-cancelation>
+          </v-card>
+        </v-expansion-panel-content>
+      </v-expansion-panel>
+    </v-stepper-content>
+  </div>
 </v-stepper>

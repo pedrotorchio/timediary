@@ -1,10 +1,5 @@
-import ApiService from '../api/ApiService';
 import {ModuleElement} from '../Module';
-
-import AccountConfig from './configComponents/Account.vue';
-
-let accountService = new ApiService('account');
-
+import AccountConfig from './configComponents/Account';
 const nativeConfigTabs = [
     new ModuleElement({
         icon: {

@@ -53,5 +53,6 @@ export default class TasksModule{
         this.store.commit('modules/add', {module, uid});
         this.store.dispatch('patients/loadList');
         this.store.dispatch('patients/loadInactive');
+        this.store.dispatch('patients/loadDiagnostics');
     }
 }

@@ -1,4 +1,3 @@
-import ApiService from '../../store/api/ApiService';
 import axios from 'axios';
 
 export default {
@@ -6,8 +5,10 @@ export default {
     state:{
         list: [],
         inactiveList: [],
+        diagnosticList: [],
         patientsLoaded: false,
-        inactivePatientsLoaded: false
+        inactivePatientsLoaded: false,
+        diagnosticsLoaded: false
     },
     getters:{
         list(state){
@@ -21,8 +22,53 @@ export default {
         addInactive(state, patient){
             state.inactiveList.push(patient);
         },
+        addDiagnostic(state, diagnostic){
+            state.diagnosticList.push(diagnostic);
+        },
+        addDiagnostic2Patient(state, {id, diagnosticId}){
+            state.list.find(pat => pat.id == id).diagnostics.push(state.diagnosticList.find(d=>d.id == diagnosticId));
+        },
+        removeDiagnostic2Patient(state, {id, diagnosticId}){
+            
+            let diags = state.list.find(pat => pat.id == id).diagnostics;
+            let i = diags.findIndex(diag => diag.id == diagnosticId);
+            
+            diags.splice(i, 1);
+        }
     },
     actions:{
+        unassignDiagnostic({commit}, {id, diagnosticId}){
+            
+            return new Promise((resolve,reject)=>{
+                axios.delete(`/subject/${id}/diagnostics`, {data: {diagnostics: diagnosticId}})
+                    .then(resolve=>{
+                        commit('removeDiagnostic2Patient', {id, diagnosticId});
+                    });
+            })
+        },
+        assignDiagnostic({commit}, {id, diagnosticId}){
+            return new Promise((resolve,reject)=>{
+                axios.put(`/subject/${id}/diagnostics`, {diagnostics: diagnosticId})
+                    .then(resolve=>{
+                        commit('addDiagnostic2Patient', {id, diagnosticId});
+                    });
+            })
+        },
+        createDiagnostic({rootGetters, commit, state}, title){
+            return new Promise((resolve, reject)=>{
+                const root = rootGetters['account/root'];
+                const diagnostic = {
+                    title,
+                    root
+                }
+
+                axios.post('/diagnostic', diagnostic)
+                    .then(response => {
+                        commit('addDiagnostic', response.data);
+                        resolve(response.data);
+                    });
+            });
+        },
         create({rootGetters, commit}, patient){
             return new Promise((resolve,reject)=>{
                 
@@ -100,6 +146,23 @@ export default {
                 
             });
         },
+        loadDiagnostics({state, rootGetters, commit}){
+            return new Promise((resolve, reject)=>{
+                if(!state.diagnosticsLoaded){
+                    let root = rootGetters['account/root'];
+                    
+                    axios.get(`/diagnostic`,{params: {conditions:[`root:=${root}`]}})
+                        .then((response)=>{
+                            response.data.forEach(diagnostic => commit('addDiagnostic', diagnostic));
+                            state.diagnosticsLoaded = true;
+                        });
+                    axios.get(`/diagnostic`,{params: {conditions:[`root:=null`]}})
+                        .then((response)=>{
+                            response.data.forEach(diagnostic => commit('addDiagnostic', diagnostic));
+                        });
+                }
+            });
+        },
         loadList({state, commit, rootGetters}){
             return new Promise((resolve, reject)=>{
                 if(!state.patientsLoaded){
@@ -109,7 +172,13 @@ export default {
                     axios.get(`account/${id}/subjects`)
                         .then(response=>{
                             let patients = response.data;
-                            patients.forEach(patient=> commit('addPatient', patient));
+                            patients.forEach(patient=> {
+                                axios.get(`subject/${patient.id}/diagnostics`)
+                                    .then(response => {
+                                        patient.diagnostics = response.data;
+                                        commit('addPatient', patient)
+                                    });
+                            });
                             
                             state.patientsLoaded = true;
                             resolve(state.inactivelist);

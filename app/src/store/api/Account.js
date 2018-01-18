@@ -1,5 +1,4 @@
 import Router from '../../router';
-import ApiService from './ApiService';
 import axios from 'axios';
 
 
@@ -50,9 +49,12 @@ export default {
         },
         root(state, getters){
             let root = getters.account;
-            if(root != null)
-                root = root.root;
-
+            if(root != null){
+                if(root.root == null)
+                    root = root.id;
+                else
+                    root = root.root;
+            }
             return root;
         }
     },

@@ -37,10 +37,15 @@ export default {
     ...mapState({
       inactiveList: state => state.patients.inactiveList,
       patientsList: state => state.patients.list,
+      diagnosticList: state => state.patients.diagnosticList,
       account: state => state.account.info
     }),
+
     totalCancelationTime(){
       return DELETION_TIMEOUT;
+    },
+    MAX_EDUCATION_YEARS(){
+      return MAX_EDUCATION_YEARS;
     }
   },
   methods: {
@@ -48,12 +53,19 @@ export default {
       update: 'patients/update',
       deactivate: 'patients/deactivate',
       activate: 'patients/activate',
-      status: 'patients/status'
+      status: 'patients/status',
+      newDiagnostic: 'patients/createDiagnostic',
+      assignDiagnostic: 'patients/assignDiagnostic',
+      unassignDiagnostic: 'patients/unassignDiagnostic'
     }),
+    extractDiagnosticTitles(diagnostics){
+      return diagnostics.map(diagnostic => diagnostic.title);      
+    },
     educationProgress(years) {
       return Math.min(100, years * 100 / MAX_EDUCATION_YEARS);
     },
     changeDetected($value, patient, field) {
+      
       let model = {};
       model['id'] = patient.id;
       model[field] = $value;
@@ -75,19 +87,77 @@ export default {
     },
     activatePatient(id) {
       this.activate(id);
+    },
+    changeDiagnostic(list, patient){
+      
+      // adição ou remoção?
+      
+      let inputSize = list.length;
+      let listSize  = patient.diagnostics.length;
+
+      let adicao = inputSize > listSize;
+
+      if(adicao){ // adicao      
+        
+        let title = list[inputSize - 1];
+        
+        let i = this.diagnosticList.findIndex(diag=>diag.title == title);
+
+        if(i == -1) // é novo
+          this.newDiagnostic(title)
+              .then(diagnostic =>{
+                this.assignDiagnostic({
+                  id: patient.id,
+                  diagnosticId: diagnostic.id
+                })
+              });
+        else{
+          let diagnostic = this.diagnosticList.find(diag => diag.title == title);
+          
+          this.assignDiagnostic({
+            id: patient.id,
+            diagnosticId: diagnostic.id
+          })
+        }
+
+      }else{ // remoçao
+        
+        let [{title}] = patient.diagnostics.filter(diag => list.indexOf(diag.title) == -1);
+        this.removeDiagnostic(title, patient);
+      }
+
+    },
+    removeDiagnostic(title, patient){
+      
+      let i = patient.diagnostics.findIndex(diag => diag.title == title);
+      
+      if(i > -1){
+        let diagnostic = patient.diagnostics[i];
+        
+        this.unassignDiagnostic({
+          id: patient.id,
+          diagnosticId: diagnostic.id
+        });
+      }
     }
+  },
+  created(){
+    
+    if(this.patientsList.length == 0)
+      this.step = 2;
   },
   components: {
     ButtonCancelation
   }
+
 }
 
 </script>
 <template src='./registration.htm'>
 </template>
-<style lang='scss'>
+<style lang='scss' scoped>
 
-.fieldset{
+#root /deep/ .fieldset{
     display: flex;
     &> .input{
         margin: 0 8px;
@@ -126,5 +196,9 @@ export default {
   .stepper__step--active{
     background-color: rgba(0,0,0,.1);
   }
+}
+.diagnostic-chip{
+  margin: 1px;
+  font-size: 10px;
 }
 </style>

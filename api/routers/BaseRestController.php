@@ -19,7 +19,6 @@ abstract class BaseRestController extends BaseController{
     public function getAll(Request $request, Response $response, array $args){
         $params = $request->getQueryParams();
         extract($this->extractQueryParameters($params));
-
         $many = $this->readAll($conditions, $columns);
         
         return $this->makeResponse(
