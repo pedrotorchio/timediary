@@ -4,7 +4,8 @@
 import Vue from 'vue'
 import App from './App'
 
-
+import d3 from '@/plugins/d3';
+Vue.use(d3);
 
 import {googleClientConfig, apiUrl} from '@/config.js';
 import GoogleLoginApi from '@/plugins/GoogleLoginApi/GoogleLoginApi';

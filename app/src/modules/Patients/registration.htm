@@ -132,6 +132,9 @@
 
 
     <v-stepper-content step='3'>
+      <div v-if='inactiveList.length == 0'>
+        <h3>Nenhum Paciente Inativo</h3>
+      </div>
       <v-expansion-panel popout>
         <v-expansion-panel-content lazy v-for="(patient, i) in inactiveList" :key="patient.id">
           <div slot="header">{{++i}} {{patient.pers_first_name}} {{patient.pers_last_name}}</div>

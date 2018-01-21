@@ -33,13 +33,17 @@ import {mapState} from 'vuex';
 <style lang="scss" scoped>
   #widgets{
     display: flex;
-    width: 90%;
-    width: calc(100% - 64px * 2);
+    width: 100%;
     margin: 0 auto;
-    padding: 16px;
+    padding: 4px;
     align-items: stretch;
     justify-content: space-between;
     flex-wrap: wrap;
+    @media screen and (min-width: 678px){
+      width: 90%;
+      width: calc(100% - 48px * 2);
+      padding: 16px;    
+    }
 
     .widget{
       $margin: 8px;

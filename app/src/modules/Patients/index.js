@@ -1,11 +1,12 @@
 import Vue from 'vue';
-import {ModuleElement, Module} from '../../store/Module';
+import {Element, Module, Installer} from 'keepup-modules';
 import Registration from './RegistrationSidebar';
 import RegistrationIcon from './patient.svg';
+import Widget from './Widget';
 
 import store from './store';
 
-let tab = new ModuleElement({
+let tab = new Element({
     icon: {
         template: `<img src='${RegistrationIcon}' class>`
     },
@@ -15,44 +16,34 @@ let tab = new ModuleElement({
         tooltip: 'Gerencie Pacientes'
     }
 })
-let widget = new ModuleElement({
+let widget = new Element({
     icon: '',
     title: 'Pacientes',
-    component: {
-        template:'<h1>{{count}} Pacientes Cadastrados</h1>',
-        computed:{
-            count(){
-                return this.$store.getters['patients/list'].length;
-            }
-        }
-    }
+    component: Widget
 });
 
-const title = 'Atividades';
-const routes = [];
 
-
-export default class TasksModule{
+export default class PatientsModule extends Installer{
     constructor(){
-        
-        this.install();
+        super();
     }
-    install(){
-        
-        this.app = window.DIARY;
-        this.store = this.app.$store;
-        this.router = this.app.$router;
-
-        this.store.registerModule('patients', store);
-          
-        let module = new Module({title, routes})
-            .addTab(tab)
-            .addWidget(widget);
-        let uid = module.uid;
-
-        this.store.commit('modules/add', {module, uid});
-        this.store.dispatch('patients/loadList');
-        this.store.dispatch('patients/loadInactive');
-        this.store.dispatch('patients/loadDiagnostics');
+    getTitle(){
+        return 'Pacientes';
+    }
+    getStores(){
+        return [store];
+    }
+    getTabs(){
+        return [tab];
+    }
+    getWidgets(){
+        return [widget];
+    }
+    getDispatches(){
+        return [
+            'patients/loadList',
+            'patients/loadInactive',
+            'patients/loadDiagnostics'
+        ];
     }
 }

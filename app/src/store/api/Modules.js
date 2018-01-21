@@ -1,10 +1,12 @@
 import Router from '../../router';
 
-import Tasks from '../../modules/Tasks';
+
 import Patients from '../../modules/Patients';
+import Tasks from '../../modules/Tasks';
 
 const nativeModules = [
-    Tasks, Patients
+    Patients,
+    Tasks
 ]
 export default {
     namespaced: true,
@@ -29,15 +31,14 @@ export default {
         }
     },
     mutations: {
-        add(state, {uid, module}){
-            
+        add(state, module){
             module.sidetabs.forEach(tab=>{
                 state.sidetabs.push(tab);
             });
             module.widgets.forEach(widget=>{
                 state.widgets.push(widget);
             });
-            state.list[uid] = module;
+            state.list[module.uid] = module;
         },
         doneLoading(state){
             state.doneLoading = true;
@@ -53,10 +54,12 @@ export default {
             state.widgets.length = 0;
             state.doneLoading = false;
         },
-        load({commit}){
-            
+        load({getters, commit}){
+            if(getters.isDoneLoading)
+                return;
             // install native async
             setTimeout(()=>{
+                
                 nativeModules.forEach(className=>{
                     let module = new className();
                 });

@@ -1,31 +1,44 @@
-import {ModuleElement, Module} from '../../store/Module';
+import Vue from 'vue';
+import {Element, Module, Installer} from 'keepup-modules';
+import RegistrationIcon from './tasks.svg';
+import Registration from './TasksSidebar';
+import TasksPage from './TasksPage';
 
-let tab = new ModuleElement({
+import store from './store';
+
+let tab = new Element({
     icon: {
-        template: '<v-icon>fa-tasks</v-icon>'
+        template: `<img src='${RegistrationIcon}' class>`
     },
-    title: 'Atividades',
-    component: {template:'<div>Atividade tab</div>'}
+    title: 'Rotina do ciclo diário dos pacientes',
+    component: Registration,
+    extra:{
+        tooltip: 'Gerencie Atividades',
+        routerPush: {
+            name: 'Atividades'
+        }
+    }
 });
 
-const title = 'Atividades';
-const routes = [];
-
-
-export default class TasksModule{
-    constructor(){
-        
-        this.install();
+export default class TasksModule extends Installer{
+    getTitle(){
+        return 'Atividades';
     }
-    install(){
-        this.app = window.DIARY;
-        this.store = this.app.$store;
-        this.router = this.app.$router;
-        
-        let module = new Module({title, routes})
-            .addTab(tab);
-        let uid = module.uid;
-
-        this.store.commit('modules/add', {module, uid});
+    getStores(){
+        return [store];
+    }
+    getRoutes(){
+        return [{
+            name: 'Atividades',
+            path: '/atividades',
+            component: TasksPage
+        }]
+    }
+    getTabs(){
+        return [tab];
+    }
+    getDispatches(){
+        return [
+        ];
     }
 }

@@ -31,8 +31,9 @@ export default {
 
             let component = this.tab.component;
             let title = this.tab.title;
+            let routerPush = this.tab.extra.routerPush;
 
-            this.$emit('click', {component, title});
+            this.$emit('click', {component, title, routerPush});
         }
     }
 }
@@ -46,6 +47,11 @@ export default {
 </template>
 <style lang='scss' scoped>
     @import '../../assets/styles/config';
+    .icon_component{
+        opacity: .4;
+        width: 100%;
+        height: auto;
+    }
     div.side-tab{
         
         cursor:pointer;

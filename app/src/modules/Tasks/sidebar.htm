@@ -1,0 +1,39 @@
+<v-stepper v-model="step" id="root">
+  <v-stepper-header class="stepper-header">
+    <v-stepper-step edit-icon='group' complete editable step="1">
+      Ver Todos
+    </v-stepper-step>
+
+    <v-stepper-step edit-icon='person_add' step="2" complete editable>
+      Inserir Novo
+    </v-stepper-step>
+
+    <v-stepper-step edit-icon='person_outline' step="3" complete editable>
+      Desativados
+    </v-stepper-step>
+
+  </v-stepper-header>
+  <div class="steps">
+    <v-stepper-content step='1'>
+      <div v-if='patientsList.length == 0'>
+        <h3 class="text-center">Nenhum Paciente Cadastrado ainda</h3>
+      </div>
+
+      <v-list v-else>
+        
+          <v-list-tile ripple class="clickable" v-for="(patient, i) in patientsList" :key="patient.id">
+            <v-list-tile-action>
+              <v-icon color="primary">input</v-icon>
+            </v-list-tile-action>
+            <v-list-tile-content >
+              <v-list-tile-title>{{++i}} {{patient.pers_first_name}} {{patient.pers_last_name}}</v-list-tile-title>
+            </v-list-tile-content>
+          </v-list-tile>
+        
+      </v-list>
+    
+    </v-stepper-content>
+    <v-stepper-content step="2">
+    </v-stepper-content>
+  </div>
+</v-stepper>

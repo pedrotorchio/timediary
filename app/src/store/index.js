@@ -7,6 +7,7 @@ import router from '../router';
 import account from './api/Account';
 import modules from './api/Modules';
 import ui from './system/UI';
+import configurations from './system/Configurations';
 
 Vue.use(Vuex);
 const persistence = new VuexPersist({
@@ -26,7 +27,8 @@ export default new Vuex.Store({
     modules: {
         account,
         modules, 
-        ui
+        ui,
+        configurations
     },
     state:{
       // NAO COLOCAR NADA AQUI, USAR GETTERS  

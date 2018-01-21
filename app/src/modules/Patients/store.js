@@ -1,6 +1,7 @@
 import axios from 'axios';
 
 export default {
+    name: 'patients',
     namespaced: true,
     state:{
         list: [],

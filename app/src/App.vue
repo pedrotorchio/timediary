@@ -31,7 +31,7 @@ export default {
       displayName: state=>state.account.info.pers_display_name,
       showGuardedUi: state => state.ui.uiLogged,
       moduleTabs: state => state.modules.sidetabs,
-      configTabs: state => state.ui.configTabs
+      configTabs: state => state.configurations.configTabs
     })
   }
 }

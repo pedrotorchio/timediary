@@ -29,10 +29,21 @@ export default {
         }
     },
     methods: {
-        showComponent({component, title}){
+        showComponent({component, title, routerPush}){
             this.componentTitle = title || '';
             this.component = component;
-            this.show();
+
+            const currRoute = this.$router.currentRoute;
+            let alreadyHere = false;
+
+            if(routerPush)
+                alreadyHere = currRoute.name == routerPush.name || currRoute.path == routerPush.path;
+            
+            if(routerPush && !alreadyHere){
+                this.$router.push(routerPush, this.show);
+            }
+            else
+                this.show();
         },
         show(value=true){
             this.shown = value;
@@ -40,7 +51,6 @@ export default {
     },
     computed:{
         maxHeight(){
-            
             return this.docHeight - this.topContainer - this.footerHeight - 10;
         },
     },
@@ -88,6 +98,7 @@ export default {
     @import '../../assets/styles/config';
 
     .root{
+        z-index: 999;
         position: fixed;
         &._left{
             left:0;
