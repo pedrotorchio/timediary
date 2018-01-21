@@ -1,17 +1,18 @@
 import Vue from 'vue';
 import {Element, Module, Installer} from 'keepup-modules';
-import RegistrationIcon from './tasks.svg';
-import Registration from './TasksSidebar';
+import Icon from './Icon.svg';
+import Sidebar from './Sidebar';
+import Store from './Store';
+
 import TasksPage from './TasksPage';
 
-import store from './store';
 
 let tab = new Element({
     icon: {
-        template: `<img src='${RegistrationIcon}' class>`
+        template: `<img src='${Icon}' class>`
     },
     title: 'Rotina do ciclo diário dos pacientes',
-    component: Registration,
+    component: Sidebar,
     extra:{
         tooltip: 'Gerencie Atividades',
         routerPush: {
@@ -25,7 +26,7 @@ export default class TasksModule extends Installer{
         return 'Atividades';
     }
     getStores(){
-        return [store];
+        return [Store];
     }
     getRoutes(){
         return [{

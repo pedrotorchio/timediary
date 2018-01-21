@@ -1,17 +1,17 @@
 import Vue from 'vue';
 import {Element, Module, Installer} from 'keepup-modules';
-import Registration from './RegistrationSidebar';
-import RegistrationIcon from './patient.svg';
+import Sidebar from './Sidebar';
+import Icon from './Icon.svg';
 import Widget from './Widget';
 
-import store from './store';
+import store from './Store';
 
 let tab = new Element({
     icon: {
-        template: `<img src='${RegistrationIcon}' class>`
+        template: `<img src='${Icon}' class>`
     },
     title: 'Pacientes',
-    component: Registration,
+    component: Sidebar,
     extra:{
         tooltip: 'Gerencie Pacientes'
     }
