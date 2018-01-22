@@ -1,5 +1,5 @@
 <script>
-import {mapState, mapMutations} from 'vuex';
+import {mapState, mapGetters} from 'vuex';
 import TabIcon from './Icon.svg';
 
 export default {
@@ -11,12 +11,15 @@ export default {
   computed: {
     ...mapState({
       patientsList: state => state.patients.list
+    }),
+    ...mapGetters({
+      patient: 'tasks/currPatient'
     })
   },
   methods:{
-    ...mapMutations({
-        setPatient: 'tasks/setCurrentPatient',
-    })
+    choosePatient(patientId){
+      this.step = 2;
+    }
   }
 }
 </script>

@@ -1,10 +1,10 @@
 <template>
 
   <v-app id="main">
-    <header-bar v-if='showGuardedUi'></header-bar>
+    <header-bar id="header-bar" v-if='showGuardedUi'></header-bar>
     <side-tab-container v-if='showGuardedUi' :tabs='moduleTabs' position='left' :topPosition='200'/>
 
-    <router-view/>
+    <router-view id='page-view' class="blurIn"/>
     
     <side-tab-container v-if='showGuardedUi' :tabs='configTabs' position='right' :topPosition='200'/>    
     <system-message></system-message>
@@ -58,8 +58,13 @@ function greetings(sm, displayName){
   text-align: center;
   color: $color__text;
 }
+
+#header-bar{
+  flex: 0 0 auto;
+}
+#page-view{
+  flex: 1 0 auto;
+}
 </style>
-
-
 <style lang="scss" src='./assets/styles/global.scss'>
 </style>

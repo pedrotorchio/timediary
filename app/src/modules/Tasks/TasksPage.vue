@@ -1,14 +1,29 @@
 <script>
-import {mapState} from 'vuex';
+import {mapState, mapMutations, mapGetters} from 'vuex';
 import tabIcon from './Icon.svg';
 export default {
+    props:{
+        patientId: {
+        }
+    },
     computed:{
         ...mapState({
-            patient: state => state.tasks.openPatient,
+            patient: state=>state.patients.list
+        }),
+        ...mapGetters({
+            patient: 'tasks/currPatient'
         }),
         tabIcon(){
             return tabIcon;
         }
+    },
+    methods:{
+        ...mapMutations({
+            setPatient: 'tasks/setCurrPatientId'
+        })
+    },
+    created(){
+        this.setPatient(this.patientId);
     }
 }
 </script>

@@ -1,19 +1,16 @@
 <v-stepper v-model="step" id="root">
   <v-stepper-header class="stepper-header">
     <v-stepper-step edit-icon='group' complete editable step="1">
-      Ver Todos
+      Escolher Paciente
     </v-stepper-step>
 
-    <v-stepper-step edit-icon='person_add' step="2" complete editable>
-      Inserir Novo
-    </v-stepper-step>
-
-    <v-stepper-step edit-icon='person_outline' step="3" complete editable>
-      Desativados
+    <v-stepper-step edit-icon='transfer_within_a_station' step="2" complete editable>
+      Inserir Atividade
     </v-stepper-step>
 
   </v-stepper-header>
   <div class="steps">
+    
     <v-stepper-content step='1'>
       <div v-if='patientsList.length == 0'>
         <h3 class="text-center">Nenhum Paciente Cadastrado ainda</h3>
@@ -21,7 +18,13 @@
 
       <v-list v-else>
         
-          <v-list-tile ripple class="clickable" v-for="(patient, i) in patientsList" :key="patient.id">
+          <v-list-tile ripple 
+          class="clickable" 
+          v-for="(patient, i) in patientsList" 
+          :key="patient.id"
+          :to="{name: 'Tasks', params:{patientId:patient.id}}"
+          @click='choosePatient(patient.id)'
+          >
             <v-list-tile-action>
               <v-icon color="primary">input</v-icon>
             </v-list-tile-action>

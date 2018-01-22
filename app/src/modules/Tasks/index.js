@@ -16,7 +16,7 @@ let tab = new Element({
     extra:{
         tooltip: 'Gerencie Atividades',
         routerPush: {
-            name: 'Atividades'
+            name: 'Tasks'
         }
     }
 });
@@ -30,8 +30,9 @@ export default class TasksModule extends Installer{
     }
     getRoutes(){
         return [{
-            name: 'Atividades',
-            path: '/atividades',
+            name: 'Tasks',
+            path: '/atividades/:patientId?',
+            props: true,
             component: TasksPage
         }]
     }

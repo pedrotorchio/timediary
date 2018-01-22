@@ -4,11 +4,22 @@ export default {
     name:'tasks',
     namespaced: true,
     state:{
-        openPatient: null
+        currPatientId: null
     },
     mutations:{
-        setCurrentPatient(state, patient){
-            state.openPatient = patient;
+        setCurrPatientId(state, id){
+            state.currPatientId = id;
+        }
+    },
+    getters:{
+        currPatient(state, getters, rootState, rootGetters){
+            let patient = state.currPatientId;
+            
+            if(patient !== null){
+                patient = rootGetters['patients/list'].find(pat => pat.id == patient);
+            }
+
+            return patient;
         }
     }
 }
