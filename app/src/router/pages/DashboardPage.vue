@@ -23,7 +23,7 @@ import {mapState} from 'vuex';
 
 
 <template>
-  <div id="dashboardPage" class="page">
+  <div id="dashboardPage">
     <section id="widgets" >
       <component v-for='widget in widgets' :key='widget.uid' :is="widget.component" :class='{fullWidth: widget.fulWidth}' class="widget elevation-2"></component>
     </section>
@@ -33,17 +33,9 @@ import {mapState} from 'vuex';
 <style lang="scss" scoped>
   #widgets{
     display: flex;
-    width: 100%;
-    margin: 0 auto;
-    padding: 4px;
     align-items: stretch;
     justify-content: space-between;
     flex-wrap: wrap;
-    @media screen and (min-width: 678px){
-      width: 90%;
-      width: calc(100% - 48px * 2);
-      padding: 16px;    
-    }
 
     .widget{
       $margin: 8px;

@@ -1,21 +1,22 @@
 <script>
 export default {
   props: {
-    width: {
-      type: String,
+    margin:{
+      type:Object,
+      default: ()=>({left: 0, right: 0, top: 0, bottom: 0})
+    },
+    width:{
       default: '100%'
     },
-    height: {
-      type: String,
+    height:{
       default: '100%'
     }
   },
-  mounted() {
-    window.addEventListener('resize', this.onResize);
-    this.onResize();
-  },
-  beforeDestroy() {
-    window.removeEventListener('resize', this.onResize);
+  data(){
+    return {
+      cWidth: null,
+      cHeight: null
+    }
   },
   methods: {
     onResize() {
@@ -23,22 +24,30 @@ export default {
       this.cHeight = this.$el.offsetHeight;
     },
   },
-  watch:{
-    width: function (){
-      this.initialize();
-      this.update();
-    }
-  },
+  // watch:{
+  //   innerSizes: function (){
+  //     this.initialize();
+  //     this.update();
+  //   }
+  // },
   computed: {
-    padded() {
-      const width = this.cWidth - this.margin.left - this.margin.right;
-      const height = this.cHeight - this.margin.top - this.margin.bottom;
+    innerSizes() {
+      const width = this.width - this.margin.left - this.margin.right;
+      const height = this.height - this.margin.top - this.margin.bottom;
 
       return {
         width,
         height
       };
-    }
+    },
+    
+  },
+  mounted() {
+    this.$el.addEventListener('resize', this.onResize);
+    this.onResize();
+  },
+  beforeDestroy() {
+    window.removeEventListener('resize', this.onResize);
   }
   
 }

@@ -48,8 +48,9 @@ export default new Vuex.Store({
     actions:{
         clear({getters, dispatch}){
             getters.namespaces.forEach(module=>{
-                
-                dispatch(`${module}/clear`);
+                let action = `${module}/clear`;
+                if(this._actions[action])
+                    dispatch(action);
             });
         }
     },

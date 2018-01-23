@@ -77,8 +77,8 @@ function greetings(sm){
 
 
 <template>
-  <div id="loginPage" class="page">
-    <div id="content">
+  <div id="loginPage">
+    
       <form-card id="login-form" @submit='passwordSignIn'>
         <text-input name='login_email' v-model='emailInput' type='email' placeholder='Email'></text-input>
         <text-input name='login_password' v-model='passwordInput' type='password' placeholder='Senha'></text-input>
@@ -91,25 +91,22 @@ function greetings(sm){
           Entrar com Google
         </div>
       </div>
-    </div>
+    
   </div>
 </template>
 
 <style lang="scss" scoped>
   @import '../../assets/styles/config';
   #loginPage{
-    flex:1;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     font-size: 32px;
-  }
-  #content{
-    font-size: inherit;
     width: 100%;
     max-width: $size__phone;
   }
+  
   #providers{
     $height: 2em;
     $pad: .5px;

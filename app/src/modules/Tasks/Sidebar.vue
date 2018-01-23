@@ -5,7 +5,7 @@ import TabIcon from './Icon.svg';
 export default {
   data(){
     return {
-      step: 1
+     
     }
   },
   computed: {
@@ -18,7 +18,7 @@ export default {
   },
   methods:{
     choosePatient(patientId){
-      this.step = 2;
+     
     }
   }
 }

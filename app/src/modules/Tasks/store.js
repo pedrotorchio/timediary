@@ -8,6 +8,7 @@ export default {
     },
     mutations:{
         setCurrPatientId(state, id){
+            
             state.currPatientId = id;
         }
     },

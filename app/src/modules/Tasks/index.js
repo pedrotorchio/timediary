@@ -6,7 +6,6 @@ import Store from './Store';
 
 import TasksPage from './TasksPage';
 
-
 let tab = new Element({
     icon: {
         template: `<img src='${Icon}' class>`

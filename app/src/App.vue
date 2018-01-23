@@ -1,10 +1,12 @@
 <template>
 
   <v-app id="main">
+    <router-link v-if='showGuardedUi' id="dash-link"  class='pulse' :to="{name: 'Dashboard'}" color='orange'><v-icon>dashboard</v-icon></router-link>
+    
     <header-bar id="header-bar" v-if='showGuardedUi'></header-bar>
     <side-tab-container v-if='showGuardedUi' :tabs='moduleTabs' position='left' :topPosition='200'/>
 
-    <router-view id='page-view' class="blurIn"/>
+    <router-view class="page blurIn"/>
     
     <side-tab-container v-if='showGuardedUi' :tabs='configTabs' position='right' :topPosition='200'/>    
     <system-message></system-message>
@@ -62,9 +64,25 @@ function greetings(sm, displayName){
 #header-bar{
   flex: 0 0 auto;
 }
-#page-view{
+.page{
   flex: 1 0 auto;
+
+  width: 100%;
+  margin: 0 auto;
+  padding: 4px;
+  @media screen and (min-width: 678px){
+    width: 90%;
+    width: calc(100% - 48px * 2);
+    padding: 16px;    
+  }
 }
+#dash-link{
+  position: fixed;
+  left: 8px;
+  top: 8px;
+  animation-duration: 4s;
+}
+
 </style>
 <style lang="scss" src='./assets/styles/global.scss'>
 </style>

@@ -7,9 +7,6 @@ export default {
         }
     },
     computed:{
-        ...mapState({
-            patient: state=>state.patients.list
-        }),
         ...mapGetters({
             patient: 'tasks/currPatient'
         }),
@@ -22,8 +19,16 @@ export default {
             setPatient: 'tasks/setCurrPatientId'
         })
     },
+    beforeRouteUpdate (to, from, next) {
+        let id = to.params.patientId;
+        if(id)
+            this.setPatient(id);
+        next();
+    },
     created(){
-        this.setPatient(this.patientId);
+        
+        if(this.patientId)
+            this.setPatient(this.patientId);
     }
 }
 </script>
@@ -32,7 +37,7 @@ export default {
     <div>
         <h2 id="empty-message" v-if='!patient'>Selecione um Paciente na lista à esquerda <img id="tabIcon-img" :src="tabIcon" alt=""></h2>
         <section v-else>
-            {{patient}}
+            
         </section>
     </div>
 </template>

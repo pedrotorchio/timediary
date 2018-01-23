@@ -1,11 +1,7 @@
-<v-stepper v-model="step" id="root">
+<v-stepper :value='1' id="root">
   <v-stepper-header class="stepper-header">
     <v-stepper-step edit-icon='group' complete editable step="1">
       Escolher Paciente
-    </v-stepper-step>
-
-    <v-stepper-step edit-icon='transfer_within_a_station' step="2" complete editable>
-      Inserir Atividade
     </v-stepper-step>
 
   </v-stepper-header>
@@ -34,9 +30,7 @@
           </v-list-tile>
         
       </v-list>
-    
-    </v-stepper-content>
-    <v-stepper-content step="2">
+      
     </v-stepper-content>
   </div>
 </v-stepper>
