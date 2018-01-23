@@ -76,7 +76,8 @@ export default {
                 :position='position' 
                 :tab='tab'
                 :disabled='tab.component == null' 
-                @click='showComponent' />
+                @click='showComponent'
+                />
         </aside>
         <aside  class='side-tab-component elevation-24' :class="[shown ? 'shown' : '', `_${position}`]">
             <div class="header">
@@ -86,7 +87,7 @@ export default {
                 <h2 class="side-tab-component-title">{{componentTitle}}</h2>
             </div>
             <div ref='side-tab-component-container' class="component-container"  :style='{maxHeight: `${maxHeight}px`}'>
-                <component class="component" :is='component'></component>
+                <component class="component" :is='component' @close='show(false)'></component>
             </div>
             <div class="footer" :style="{height: footerHeight}">
 
