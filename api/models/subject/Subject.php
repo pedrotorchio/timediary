@@ -40,11 +40,11 @@ class Subject extends BaseModel{
         return $this->belongsToMany(Account::class, 'account_x_subject', 'subject', 'account');
     }
     public function tasks(){
-        return $this->hasMany(Task::class, 'subject');
+        return $this->hasMany(Task::class, 'subject_id');
     }
     public function main_diagnostic()
     {
-        return $this->belongsTo(Diagnostic::class, 'main_diagnostic');
+        return $this->belongsTo(Diagnostic::class, 'main_diagnostic_id');
     }
     public function fill(array $data){
         

@@ -7,13 +7,13 @@ use \App\models\category\Category;
 class Activity extends BaseModel{
     public const TABLE = 'activity';
     public const ID_FIELD = 'id';
-    public const RELATIONSHIP_FIELDS = ['category'];
+    public const RELATIONSHIP_FIELDS = ['category'=>'activity_category'];
     public const FIELDS = [
         'title' => '',
         'category'=>'integer'
     ];
     public function category(){
-        return $this->belongsTo(Category::class, 'category');
+        return $this->belongsTo(Category::class, 'category_id');
     }
 
 }

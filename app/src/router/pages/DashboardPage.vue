@@ -1,7 +1,8 @@
 <script>
 import {mapState} from 'vuex';
-
+import {PageComponent} from 'keepup-modules'; 
   export default {
+    extends: PageComponent,
     name: 'DashboardPage',
     data(){
       return {

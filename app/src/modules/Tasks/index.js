@@ -14,8 +14,12 @@ let tab = new Element({
     component: Sidebar,
     extra:{
         tooltip: 'Gerencie Atividades',
+        firstClick: true,
         routerPush: {
             name: 'Tasks'
+        },
+        onClick(){
+            this.firstClick = false;
         }
     }
 });
@@ -40,6 +44,7 @@ export default class TasksModule extends Installer{
     }
     getDispatches(){
         return [
+            'tasks/init',
         ];
     }
 }

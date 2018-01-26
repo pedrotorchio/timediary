@@ -19,6 +19,7 @@
           v-for="(patient, i) in patientsList" 
           :key="patient.id"
           :to="{name: 'Tasks', params:{patientId:patient.id}}"
+          :value='patient.id == currPatientId'
           @click='choosePatient(patient.id)'
           >
             <v-list-tile-action>

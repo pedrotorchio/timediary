@@ -1,43 +1,52 @@
 <script>
-import {mapState, mapMutations, mapGetters} from 'vuex';
+import {mapMutations, mapState, mapActions, mapGetters} from 'vuex';
 import tabIcon from './Icon.svg';
+import {PageComponent} from 'keepup-modules'; 
+
+
 export default {
-    props:{
-        patientId: {
+    
+    props:['patientId'],
+    extends: PageComponent,
+    data(){
+        return {
+            tabIcon
         }
     },
     computed:{
         ...mapGetters({
-            patient: 'tasks/currPatient'
+            patient: 'tasks/currPatient',
         }),
-        tabIcon(){
-            return tabIcon;
-        }
+        ...mapState({
+            activities: state => state.tasks.activityList,
+            category: state => state.tasks.categoryList,
+            tasks: state=> state.tasks.currPatientTasks
+        })
     },
     methods:{
         ...mapMutations({
-            setPatient: 'tasks/setCurrPatientId'
+            setPatient: 'tasks/setCurrPatientId',            
+        }),
+        ...mapActions({
+            fetchTasks: 'tasks/fetchTasks',
         })
     },
     beforeRouteUpdate (to, from, next) {
-        let id = to.params.patientId;
-        if(id)
-            this.setPatient(id);
-        next();
-    },
-    created(){
-        
-        if(this.patientId)
-            this.setPatient(this.patientId);
+        let patientId = to.params.patientId;
+        if(patientId){
+            this.setPatient(patientId);
+            this.fetchTasks(next);
+        }
     }
 }
 </script>
 
 <template>
     <div>
-        <h2 id="empty-message" v-if='!patient'>Selecione um Paciente na lista à esquerda <img id="tabIcon-img" :src="tabIcon" alt=""></h2>
+        
+        <h2 id="empty-message" v-if='patient === null'>Selecione um Paciente na lista à esquerda <img id="tabIcon-img" :src="tabIcon" alt=""></h2>
         <section v-else>
-            
+            <d3-ganttchart height="600px" :tasks="tasks" :activities="activities"></d3-ganttchart>
         </section>
     </div>
 </template>

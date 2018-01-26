@@ -13,7 +13,7 @@ abstract class BaseController{
         return $one;
     }
     public function readAll($conditions = null, $columns = null){
-
+        
         return self::modelCall('getAll', [$conditions, $columns]);
     }
     public function create(array $data){

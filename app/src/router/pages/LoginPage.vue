@@ -1,5 +1,7 @@
 <script>
 // UI
+import {PageComponent} from 'keepup-modules'; 
+
 import TextInput from '@/components/forms/TextInput.vue';
 import ButtonInput from '@/components/forms/ButtonInput.vue';
 import FormCard from '@/components/forms/FormCard.vue';
@@ -11,6 +13,7 @@ import PasswordValidator from '@/models/validators/PasswordValidator';
 
 import {mapActions} from 'vuex';
 export default {
+  extends: PageComponent,
   name: 'LoginPage',
   components:{TextInput, ButtonInput, FormCard},
   data () {

@@ -26,7 +26,7 @@ abstract class BaseModel extends Model{
         
         foreach($conditions as $column => $value){
             
-            if($value == null || $value == 'null')
+            if($value == null || strtoupper($value) ==  'NULL')
                 $builder->whereNull($column);
             else
                 $builder->where($column, $value);            
@@ -49,12 +49,7 @@ abstract class BaseModel extends Model{
         
         return self::with($relationA);
     }
-    protected static function makeNewQuery($conditions){
-        $builder = (new static)->newQuery();
-        $builder = self::applyConditions($builder, $conditions);
-
-        return $builder;
-    }
+    
     
     public static function getFields(){
         $fields = [
@@ -62,8 +57,6 @@ abstract class BaseModel extends Model{
             'root' => '',        
             'id' => ''
         ];
-
-        
 
         if(defined('static::FIELDS') && static::FIELDS !== null)
             $fields = array_merge($fields, static::FIELDS);
@@ -87,11 +80,13 @@ abstract class BaseModel extends Model{
     }
 
     public static function getAll($conditions, $columns){
-        
-        $conditions = $conditions;
         $columns = $columns?: ['*'];
 
-        $results = self::makeNewQuery($conditions);
+        $relations = self::relations();        
+        
+        $results = self::with($relations);
+
+        $results = self::applyConditions($results, $conditions);
         
         return $results->get($columns);
     }
@@ -102,7 +97,11 @@ abstract class BaseModel extends Model{
         $columns = $columns?: ['*'];
 
         $id_field = self::idField($id);
-        $results = self::where($id_field, $id);
+        $relations = self::relations();
+        
+        $results = self::with($relations);
+
+        $results->where($id_field, $id);
         $results = self::applyConditions($results, $conditions);
        
         $results->take(1);
@@ -115,7 +114,13 @@ abstract class BaseModel extends Model{
 
 
 
+    protected static function relations(){
+        $fields = [];
+        if(defined('static::RELATIONSHIP_FIELDS'))
+            $fields = static::RELATIONSHIP_FIELDS;
 
+        return array_keys($fields);
+    }
     protected static function idField($id){
         if(is_numeric($id))
             $id_field = 'id';

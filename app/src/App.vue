@@ -6,7 +6,7 @@
     <header-bar id="header-bar" v-if='showGuardedUi'></header-bar>
     <side-tab-container v-if='showGuardedUi' :tabs='moduleTabs' position='left' :topPosition='200'/>
 
-    <router-view class="page blurIn"/>
+    <router-view class="page" :class="{blur}" @ready='pageReady'/>
     
     <side-tab-container v-if='showGuardedUi' :tabs='configTabs' position='right' :topPosition='200'/>    
     <system-message></system-message>
@@ -22,11 +22,20 @@ import {mapState} from 'vuex';
 export default {
   name: 'app',
   components: {HeaderBar, SideTabContainer},
-
+  data(){
+    return {
+      blur: true
+    }
+  },
   mounted(){
     if(this.showGuardedUi)
       greetings(this.$sysMsg, this.displayName);
 
+  },
+  methods:{
+    pageReady(){
+      this.blur = false;
+    }
   },
   computed:{
     ...mapState({
@@ -64,9 +73,13 @@ function greetings(sm, displayName){
 #header-bar{
   flex: 0 0 auto;
 }
+.blur{
+  filter:blur(4px) !important;
+}
 .page{
+  filter: blur(0px);
   flex: 1 0 auto;
-
+  transition: filter 1s;
   width: 100%;
   margin: 0 auto;
   padding: 4px;

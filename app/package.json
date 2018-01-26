@@ -14,16 +14,17 @@
     "d3": "^4.12.2",
     "fifo": "^2.3.0",
     "google-client-api": "^1.0.4",
-    "keepup-modules": "^1.1.0",
+    "keepup-modules": "^1.2.2",
     "load-script": "^1.0.0",
     "qs": "^6.5.1",
     "tween": "^0.9.0",
     "validator": "^9.2.0",
     "vue": "^2.5.13",
+    "vue-easy-gantt": "^1.0.0",
     "vue-router": "^3.0.1",
     "vuetify": "^0.17.6",
     "vuex": "^3.0.1",
-    "vuex-persist": "^1.1.0"
+    "vuex-persist": "^1.1.1"
   },
   "devDependencies": {
     "autoprefixer": "^7.2.5",
@@ -60,11 +61,11 @@
     "uglifyjs-webpack-plugin": "^1.1.6",
     "url-loader": "^0.5.8",
     "vue-loader": "^13.7.0",
-    "vue-style-loader": "^3.0.1",
+    "vue-style-loader": "^3.1.1",
     "vue-template-compiler": "^2.5.13",
     "webpack": "^3.6.0",
     "webpack-bundle-analyzer": "^2.9.2",
-    "webpack-dev-server": "^2.11.0",
+    "webpack-dev-server": "^2.11.1",
     "webpack-merge": "^4.1.0"
   },
   "engines": {

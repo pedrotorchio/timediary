@@ -19,9 +19,19 @@ export default {
     }
   },
   methods: {
+    range(extent, step = 1){
+      let steps = [];
+      for(let i = extent[0]; i <= extent[1] ; i+=step)
+          steps.push(i);
+
+      return steps;
+    },
     onResize() {
+      
       this.cWidth = this.$el.offsetWidth;
       this.cHeight = this.$el.offsetHeight;
+
+
     },
   },
   // watch:{
@@ -32,8 +42,8 @@ export default {
   // },
   computed: {
     innerSizes() {
-      const width = this.width - this.margin.left - this.margin.right;
-      const height = this.height - this.margin.top - this.margin.bottom;
+      const width = this.cWidth - this.margin.left - this.margin.right;
+      const height = this.cHeight - this.margin.top - this.margin.bottom;
 
       return {
         width,

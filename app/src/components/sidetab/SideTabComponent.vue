@@ -28,7 +28,8 @@ export default {
     },
     methods:{
         clicked(){
-
+            if(this.tab.extra.onClick)
+                this.tab.extra.onClick();
             let component = this.tab.component;
             let title = this.tab.title;
             let routerPush = this.tab.extra.routerPush;

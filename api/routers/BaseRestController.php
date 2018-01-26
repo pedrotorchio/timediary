@@ -19,6 +19,7 @@ abstract class BaseRestController extends BaseController{
     public function getAll(Request $request, Response $response, array $args){
         $params = $request->getQueryParams();
         extract($this->extractQueryParameters($params));
+
         $many = $this->readAll($conditions, $columns);
         
         return $this->makeResponse(
@@ -124,7 +125,7 @@ abstract class BaseRestController extends BaseController{
     public function putOne(Request $request, Response $response, array $args){
         $params = $request->getQueryParams();
         extract($this->extractQueryParameters($params));
-        
+
         $data = $request->getParsedBody();
         $id = $request->getAttribute('id');
         $relation = $request->getAttribute('relation');
@@ -263,7 +264,7 @@ abstract class BaseRestController extends BaseController{
             self::STATUS_CODE['invalid_method']
         );
     }
-    protected function _404(string $field){
+    protected function _404(string $field = 'Id'){
         throw new HttpException(
             "{$field} não encontrado",
             21,
