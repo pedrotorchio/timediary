@@ -24,8 +24,11 @@ span{
     }
   }
 }
-
+*, *:before, *:after {
+  box-sizing: inherit;
+}
 html{
+  box-sizing: border-box;  
   overflow-x:hidden;
   overflow-y:scroll;
 }

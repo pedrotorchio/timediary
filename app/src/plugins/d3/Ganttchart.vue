@@ -44,12 +44,6 @@ export default {
     };
   },
   computed:{
-    xTickStyles(){
-      return {
-        width:    `${this.xTickWidth()}px`, 
-        height:   `${this.yHeight}px`
-      }
-    },
     extentBreadth(){
       return this.roundedExtent[1] - this.roundedExtent[0];
     },
@@ -126,8 +120,8 @@ export default {
     onResize(){
       const canvas = this.$el.querySelector('.canvas');
 
-      this.xWidth = canvas.offsetWidth;
-      this.yHeight = canvas.offsetHeight;
+      this.xWidth = canvas.clientWidth;
+      this.yHeight = canvas.clientHeight;
 
     },
     indexed_1_XValue(indexFrom1, step = 15){
@@ -166,13 +160,13 @@ export default {
 
     <section class="canvas">
       <span v-for="i in range(extentBreadth/15, 0)" :key='i' class="x-ticks" 
-        :style="xTickStyles"
+        :style="{width: `${xTickWidth(15)}px`}"
         :class="{pivot: (i == 0 || (i%4 == 0))}" ></span>
     </section>
 
     <section class="bottom-axis">
       <span v-for="i in range(extentBreadth/60, 0)" :key='i' class="x-bottom-values" 
-        :style="{width: `${xTickWidth(60)}px`}"
+        :style="{width: `${xTickWidth(60)}px`}"        
         >{{displayFormat(i*60 + roundedExtent[0])}}h</span>
       </span>
     </section>
@@ -182,6 +176,7 @@ export default {
 <style scoped lang='scss'>
 $tickWidth: 2px;
 .x-ticks{
+  height: 100%;
   border-left: 1px solid;
   border-left-color: lightgrey;
   background-color: rgba(211, 211, 211, 0.2);
@@ -208,11 +203,17 @@ $leftAxisWidth: 150px;
 .gantt{
   display: grid;
   grid-template-columns: auto 1fr;
-  grid-gap: 5px;
   padding: 5px;
+  grid-gap: 5px;
+}
+.cell{
+  // cell
+  padding: 0;
 }
 // 1 2
 .top-axis{
+  @extend .cell;
+  margin-bottom: -5px;
   display: flex;
   align-items: flex-end;
   grid-row: 1;
@@ -220,6 +221,8 @@ $leftAxisWidth: 150px;
 }
 // 2 1
 .left-axis {
+  @extend .cell;
+  
   min-width: $leftAxisWidth;
   position: relative;
   grid-column: 1;
@@ -233,6 +236,8 @@ $leftAxisWidth: 150px;
 }
 // 2 2
 .canvas{
+  @extend .cell;
+  
   position: relative;
   grid-column: 2;
   grid-row: 2;
@@ -240,6 +245,8 @@ $leftAxisWidth: 150px;
 
 // 1 3
 .interception{
+  @extend .cell;
+  
   display: flex;
   align-items: center;
   justify-content: flex-end;  
@@ -247,13 +254,16 @@ $leftAxisWidth: 150px;
   font-size: 16px;
   grid-column: 1;
   grid-row: 3;
-  padding: 0 5px;
 }
 //2 3
 
-.bottom-axis{  
+.bottom-axis{ 
+  @extend .cell;
+  margin-top: -5px;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
+  font-size: 12px;
+  font-weight: 400;
   grid-column: 2;
   grid-row: 3;
   display: flex;
