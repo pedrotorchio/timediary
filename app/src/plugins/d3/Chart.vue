@@ -9,7 +9,7 @@ export default {
       default: '100%'
     },
     height:{
-      default: '100%'
+      default: 'auto'
     }
   },
   data(){
@@ -30,7 +30,6 @@ export default {
       
       this.cWidth = this.$el.offsetWidth;
       this.cHeight = this.$el.offsetHeight;
-
 
     },
   },
@@ -57,7 +56,7 @@ export default {
     this.onResize();
   },
   beforeDestroy() {
-    window.removeEventListener('resize', this.onResize);
+    this.$el.removeEventListener('resize', this.onResize);
   }
   
 }

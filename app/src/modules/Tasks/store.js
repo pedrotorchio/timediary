@@ -5,20 +5,16 @@ export default {
   namespaced: true,
   state: {
     currPatientId: null,
-    currPatientTasks: null,
-    activityList: null,
-    categoryList: null,
+    currPatientTasks: [],
+    activityList: [],
+    categoryList: [],
   },
   mutations: {
     setCurrPatientId(state, id) {
-      if(id !== state.currPatientId){
         state.currPatientId = id;          
-        state.currPatientTasks = null;
-      }
+        state.currPatientTasks.length = 0;
     },
     addActivity(state, activity) {
-      if (state.activityList === null)
-        state.activityList = [];
       const catId = activity.category_id;
       const category = state.categoryList.find(cat => cat.id == catId);
 
@@ -26,14 +22,9 @@ export default {
       state.activityList.push(activity);
     },
     addCategory(state, category) {
-      if (state.categoryList === null)
-        state.categoryList = [];
       state.categoryList.push(category);
     },
     addTask(state, task) {
-      if (state.currPatientTasks === null)
-        state.currPatientTasks = [];
-
       const actId = task.activity_id;
       const activity = state.activityList.find(act => act.id == actId);
 
@@ -136,10 +127,8 @@ export default {
       let root = rootGetters['account/root'],
           id = state.currPatientId;
       
-      state.currPatientTasks = [];
       axios.get(`/subject/${id}/tasks`)
         .then(response => {
-          
           response.data.forEach(task => commit('addTask', task));
 
           if (callback)
@@ -148,9 +137,9 @@ export default {
     },
     clear({state}){
         state.currPatientId = null;
-        state.currPatientTasks = null;
-        state.activityList = null;
-        state.categoryList = null;
+        state.currPatientTasks = [];
+        state.activityList = [];
+        state.categoryList = [];
     }
   }
 }

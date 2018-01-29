@@ -29,7 +29,19 @@ export default {
         }),
         ...mapActions({
             fetchTasks: 'tasks/fetchTasks',
-        })
+        }),
+        taskTimeFormat(timeInMin, task){
+            // const timeInMin = task.start;
+            const hr = Math.floor(timeInMin/60);
+            let min = timeInMin - hr*60;
+            
+            if(min > 0)
+                min = ':' + min;
+            else
+                min = '';
+
+            return hr + min;
+        },
     },
     beforeRouteUpdate (to, from, next) {
         let patientId = to.params.patientId;
@@ -43,10 +55,14 @@ export default {
 
 <template>
     <div>
-        
         <h2 id="empty-message" v-if='patient === null'>Selecione um Paciente na lista à esquerda <img id="tabIcon-img" :src="tabIcon" alt=""></h2>
         <section v-else>
-            <d3-ganttchart height="600px" :tasks="tasks" :activities="activities"></d3-ganttchart>
+            <d3-ganttchart 
+            id='task-chart'
+            interceptionLabel='Atividades/Horários'
+            :tasks="tasks" 
+            :endProperty="(task)=>(task.start + task.duration)"
+            :displayFormat="taskTimeFormat"></d3-ganttchart>
         </section>
     </div>
 </template>
