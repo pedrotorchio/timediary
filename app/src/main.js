@@ -22,10 +22,20 @@ import Vuetify from 'vuetify';
 import ('../node_modules/vuetify/dist/vuetify.min.css');
 Vue.use(Vuetify,{
   theme: {
-    primary: '#326786',
-    secondary: '#b0bec5',
-    accent: '#8c9eff',
-    error: '#F44336'
+    primary:'#326786',
+    secondary:'#ff7700',
+    accent:'#673ab7',
+    error:'#F44336',
+    info:'#2196F3',
+    success:'#4CAF50',
+    warning:'#FFC107'
+  }
+});
+Vue.mixin({
+  methods:{
+    themeColor(name){
+      return this.$vuetify.theme[name];
+    }
   }
 });
 

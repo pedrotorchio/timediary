@@ -2,7 +2,6 @@
 // UI
 import {PageComponent} from 'keepup-modules'; 
 
-import TextInput from '@/components/forms/TextInput.vue';
 import ButtonInput from '@/components/forms/ButtonInput.vue';
 import FormCard from '@/components/forms/FormCard.vue';
 // Login
@@ -15,11 +14,15 @@ import {mapActions} from 'vuex';
 export default {
   extends: PageComponent,
   name: 'LoginPage',
-  components:{TextInput, ButtonInput, FormCard},
+  components:{ButtonInput, FormCard},
   data () {
     return {
       emailInput: '',
-      passwordInput: ''
+      passwordInput: '',
+      inputStyles:{
+        email:{color:this.themeColor('primary'), borderColor: 'currentColor'},
+        passw:{color:this.themeColor('primary'), borderColor: 'currentColor'},
+      }
     }
   },
   mounted(){
@@ -61,7 +64,7 @@ export default {
     },
     googleSignIn(){
       this.$googleLogin.login();
-    }
+    },
   },
   created(){
 
@@ -81,10 +84,9 @@ function greetings(sm){
 
 <template>
   <div id="loginPage">
-    
       <form-card id="login-form" @submit='passwordSignIn'>
-        <text-input name='login_email' v-model='emailInput' type='email' placeholder='Email'></text-input>
-        <text-input name='login_password' v-model='passwordInput' type='password' placeholder='Senha'></text-input>
+        <input class="regular"   autofocus name='login_email' v-model='emailInput' type='email' placeholder='Email' :style="inputStyles.email" />
+        <input class="regular"   name='login_password' v-model='passwordInput' type='password' placeholder='Senha' :style="inputStyles.passw" />
         <button-input text='Entrar/Cadastrar'></button-input>
       </form-card>
       <div id="providers">
@@ -93,13 +95,25 @@ function greetings(sm){
           @click="googleSignIn">
           Entrar com Google
         </div>
-      </div>
-    
+      </div>    
   </div>
 </template>
 
 <style lang="scss" scoped>
   @import '../../assets/styles/config';
+  input.regular{
+    transition: color .4s;
+    border: none;
+    outline: none;
+    border-bottom: 1px solid currentColor;
+    height: 60px;
+    font-size: 40px;
+    &::placeholder{
+      color: currentColor;
+    }
+    &:focus, &:active{
+    }
+  }
   #loginPage{
     display: flex;
     flex-direction: column;
@@ -109,7 +123,6 @@ function greetings(sm){
     width: 100%;
     max-width: $size__phone;
   }
-  
   #providers{
     $height: 2em;
     $pad: .5px;
