@@ -1,4 +1,4 @@
-function state(){
+export function state(){
     return {
         uiLogged: false
     }

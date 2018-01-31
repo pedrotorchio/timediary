@@ -14,7 +14,7 @@ const tabs = [
     })
 ];
 
-function state(){
+export function state(){
     return {
         configTabs: tabs
     }
