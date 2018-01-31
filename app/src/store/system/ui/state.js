@@ -1,6 +1,6 @@
-export function state(){
+export function stateFactory(){
     return {
         uiLogged: false
     }
 }
-export default state();
+export default stateFactory();

@@ -14,9 +14,9 @@ const tabs = [
     })
 ];
 
-export function state(){
+export function stateFactory(){
     return {
         configTabs: tabs
     }
 }
-export default state();
+export default stateFactory();

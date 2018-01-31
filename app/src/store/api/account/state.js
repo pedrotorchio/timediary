@@ -1,8 +1,8 @@
-export function state(){
+export function stateFactory(){
     return {
         loginEmail: null,
         token: null,
         info: null
     }
 }
-export default state();
+export default stateFactory();

@@ -1,4 +1,4 @@
-export function state(){
+export function stateFactory(){
     return {
         list: {},
         doneLoading: false,
@@ -6,4 +6,4 @@ export function state(){
         widgets: []
     }
 }
-export default state();
+export default stateFactory();

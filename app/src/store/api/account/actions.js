@@ -1,6 +1,6 @@
 import Router from '@/router';
 import axios from 'axios';
-
+import state from './state';
 export default {
     login({commit, dispatch}, {email, password}){
         
@@ -25,9 +25,7 @@ export default {
         Router.push({name: 'Login'});
     },
     clear({state}){
-        state.loginEmail = null;
-        state.token = null;
-        state.info = null;
+        state = state();
     },
     fetchAccountInformation({getters, commit}){
         let {email} = getters.loginInfo;
