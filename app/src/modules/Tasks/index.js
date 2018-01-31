@@ -1,6 +1,5 @@
 import Vue from 'vue';
-import {Element, Module} from 'keepup-modules';
-import Installer from '@/plugins/keepup-modules/Installer';
+import {Element, Module, Installer} from 'keepup-modules';
 import Icon from './Icon.svg';
 import Sidebar from './Sidebar';
 import Store from './Store';
