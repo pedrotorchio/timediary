@@ -62,7 +62,11 @@ export default {
             interceptionLabel='Atividades/Horários'
             :tasks="tasks" 
             :endProperty="(task)=>(task.start + task.duration)"
-            :displayFormat="taskTimeFormat"></d3-ganttchart>
+            :displayFormat="taskTimeFormat"
+            :colorDomain='[0,7]'
+            :colorRange="['#000000', this.themeColor('success')]"
+            :colorProperty="(task)=>(task.independency_lvl)"
+            ></d3-ganttchart>
         </section>
     </div>
 </template>

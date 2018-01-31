@@ -9,6 +9,14 @@ export default {
       type:String,
       default: ''
     },
+    colorDomain:{
+      type:Array,
+      required: true
+    },
+    colorRange:{
+      type:Array,
+      required: true
+    },
     lineHeight: {
       type: Number,
       default: 30
@@ -19,6 +27,14 @@ export default {
     tasks: {
       type: Array,
       default: () => []
+    },
+    durationProperty:{
+      type:Function,
+      default: null
+    },
+    colorProperty:{
+      type:Function,
+      required:true
     },
     endProperty: {
       type: Function,
@@ -47,15 +63,24 @@ export default {
     extentBreadth(){
       return this.roundedExtent[1] - this.roundedExtent[0];
     },
+    colorScale(){
+      return d3.scaleLinear()
+        .domain(this.colorDomain)
+        .range(this.colorRange);
+    },
     yScale(){
       return d3.scaleBand()
         .domain([...this.orderedTaskTitles])
         .range([0, this.yHeight])
-        .padding(.1);
     },
     xScale(){
       return d3.scaleLinear()
         .domain([...this.roundedExtent])
+        .range([0, this.xWidth])
+    },
+    widthScale(){
+      return d3.scaleLinear()
+        .domain([0, this.roundedExtent[1] - this.roundedExtent[0]])
         .range([0, this.xWidth])
     },
     orderedTaskTitles(){
@@ -106,6 +131,10 @@ export default {
     }
   },
   methods: {
+    durationRead(task){
+      let durationProperty = this.durationProperty || (task => this.endProperty(task) - this.startProperty(task));
+      return durationProperty(task);
+    },
     range(to, from = 0, step = 1){
       let arr = [];
       
@@ -128,9 +157,6 @@ export default {
       indexFrom1 = indexFrom1-1;
       return indexFrom1 * step + this.roundedExtent[0];
     },
-    xTickWidth(step = 15){
-      return this.xWidth / (this.extentBreadth / step );
-    }
   },
 
   watch:{
@@ -154,19 +180,28 @@ export default {
 
     <section class="top-axis">
       <span v-for="i in range(extentBreadth/15, 0)" :key='i' class="x-top-values" 
-        :style="{width: `${xTickWidth(15)}px`}"
+        :style="{width: `${widthScale(15)}px`}"
         :class="{pivot: (i == 0 || (i%4 == 0))}" >{{i%4 * 15 || '00'}}</span>
     </section>
 
     <section class="canvas">
+      <article class="task-bar" v-for="(task) in orderedTasks" :key='task.id+task.title'
+      :style="{
+        left: `${xScale(startProperty(task))}px`, 
+        top: `${yScale(titleProperty(task))}px`, 
+        height: `${lineHeight}px`,
+        width: `${widthScale(durationRead(task))}px`,
+        backgroundColor: colorScale(colorProperty(task))
+        }"
+        >{{titleProperty(task)}}</article>
       <span v-for="i in range(extentBreadth/15, 0)" :key='i' class="x-ticks" 
-        :style="{width: `${xTickWidth(15)}px`}"
+        :style="{width: `${widthScale(15)}px`}"
         :class="{pivot: (i == 0 || (i%4 == 0))}" ></span>
     </section>
 
     <section class="bottom-axis">
       <span v-for="i in range(extentBreadth/60, 0)" :key='i' class="x-bottom-values" 
-        :style="{width: `${xTickWidth(60)}px`}"        
+        :style="{width: `${widthScale(60)}px`}"        
         >{{displayFormat(i*60 + roundedExtent[0])}}h</span>
       </span>
     </section>
@@ -174,6 +209,7 @@ export default {
   </div>
 </template>
 <style scoped lang='scss'>
+$secondary: '#ff7700';
 $tickWidth: 2px;
 .x-ticks{
   height: 100%;
@@ -241,6 +277,38 @@ $leftAxisWidth: 150px;
   position: relative;
   grid-column: 2;
   grid-row: 2;
+  .x-ticks{
+    cursor: pointer;
+    cursor: crosshair;
+    cursor: cell;
+    cursor: copy;
+
+    &:hover{
+      background-color: unquote($secondary + '55');
+    }
+    &.selected, &:hover{
+      outline: solid;      
+      outline-color: unquote($secondary + 'AA')
+    }
+  }
+  .task-bar{
+    position:absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 2px solid;
+    color: white;
+    font-weight: 600;
+    font-size: 10px;
+    line-height: .8em;
+    text-shadow: 1px 1px black;
+    cursor: pointer;
+    cursor: context-menu;
+    transition: {
+      property: color, width, border-color;
+      duration: .4s;
+    };
+  }
 }
 
 // 1 3
@@ -259,7 +327,7 @@ $leftAxisWidth: 150px;
 
 .bottom-axis{ 
   @extend .cell;
-  margin-top: -5px;
+  margin-top: -2px;
   display: flex;
   align-items: flex-start;
   font-size: 12px;

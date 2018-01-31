@@ -91,7 +91,7 @@ export default {
             });
         },
         logout({dispatch}){
-            dispatch('clear');            
+            dispatch('clear');
             Router.push({name: 'Login'});
         },
         clear({state}){
