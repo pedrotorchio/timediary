@@ -1,19 +1,20 @@
 import Patients from '@/modules/Patients';
 import Tasks from '@/modules/Tasks';
+import {stateFactory} from './state';
 
 const nativeModules = [
     Patients,
     Tasks
 ];
 export default {
-    clear({state, dispatch}){
-        
-        for(module in state.list)
-            if(state.list.hasOwnProperty(module))
-                delete state.list[module];
-        state.sidetabs.length = 0;
-        state.widgets.length = 0;
-        state.doneLoading = false;
+    clear({state}){
+        for(let moduleId in state.list){
+            if(state.list.hasOwnProperty(moduleId)){
+                 const  module = state.list[moduleId]
+                        module.uninstaller.run();
+            }
+        }
+        stateFactory(state);
     },
     load({getters, commit}){
         if(getters.isDoneLoading)

@@ -1,23 +1,25 @@
 import Router from '@/router';
 import axios from 'axios';
-import state from './state';
+import {stateFactory} from './state';
 export default {
     login({commit, dispatch}, {email, password}){
         
         return new Promise((resolve, reject)=>{
+            
             let authorization = btoa(`${email}:${password}`);
+            
             axios.get('/auth', {
                 headers: {
                     Authorization: `basic ${authorization}`
                 }
             })
-            .then(response=>{
-                
+            .then(response=>{ 
                 let login = {email, token:response.data.token};
+                axios.defaults.headers.common['Authorization'] = `Bearer ${login.token}`;
+
                 commit('login', login);
-                resolve(login);
-            })
-            .catch(reject);
+                resolve();
+            });
         });
     },
     logout({dispatch}){
@@ -25,7 +27,7 @@ export default {
         Router.push({name: 'Login'});
     },
     clear({state}){
-        state = state();
+        stateFactory(state);
     },
     fetchAccountInformation({getters, commit}){
         let {email} = getters.loginInfo;

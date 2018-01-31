@@ -1,6 +1,6 @@
-export function stateFactory(){
-    return {
+export function stateFactory(state={}){
+    return Object.assign(state, {
         uiLogged: false
-    }
+    });
 }
 export default stateFactory();
