@@ -21,7 +21,7 @@ export default {
         });
     },
     logout({dispatch}){
-        dispatch('clear');
+        dispatch('clear', null, {root: true});
         Router.push({name: 'Login'});
     },
     clear({state}){
