@@ -24,6 +24,14 @@ export default {
     interceptionLabel:{
       type:String
     },
+    topInterval:{
+      type:Number,
+      default: 15
+    },
+    bottomInterval:{
+      type:Number,
+      default: 60
+    },
     tasks: {
       type: Array,
       default: () => []
@@ -147,7 +155,7 @@ export default {
       return index * this.lineHeight;
     },
     onResize(){
-      const canvas = this.$el.querySelector('.canvas');
+      const canvas = this.$refs.canvas;
 
       this.xWidth = canvas.clientWidth;
       this.yHeight = canvas.clientHeight;
@@ -157,6 +165,19 @@ export default {
       indexFrom1 = indexFrom1-1;
       return indexFrom1 * step + this.roundedExtent[0];
     },
+    columnClick(index, event){
+      const canvasBox = this.$refs.canvas.getBoundingClientRect();
+      
+      const x = event.clientX - canvasBox.left;
+      const y = event.clientY - canvasBox.top;
+      
+      const start = Math.floor(
+          this.xScale.invert(x) / this.topInterval
+        ) * this.topInterval;
+      const taskTitle = this.orderedTaskTitles[Math.floor(y/this.lineHeight)];
+      
+      this.$emit('columnClick', {taskTitle, start, index, event, canvasBox})
+    }
   },
 
   watch:{
@@ -179,12 +200,12 @@ export default {
     <h3 class="interception">{{interceptionLabel}}</h3>
 
     <section class="top-axis">
-      <span v-for="i in range(extentBreadth/15, 0)" :key='i' class="x-top-values" 
-        :style="{width: `${widthScale(15)}px`}"
-        :class="{pivot: (i == 0 || (i%4 == 0))}" >{{i%4 * 15 || '00'}}</span>
+      <span v-for="i in range(extentBreadth/topInterval, 0)" :key='i' class="x-top-values" 
+        :style="{width: `${widthScale(topInterval)}px`}"
+        :class="{pivot: (i == 0 || (i%4 == 0))}" >{{i%4 * topInterval || '00'}}</span>
     </section>
 
-    <section class="canvas">
+    <section class="canvas" ref='canvas'>
       <article class="task-bar" v-for="(task) in orderedTasks" :key='task.id+task.title'
       :style="{
         left: `${xScale(startProperty(task))}px`, 
@@ -194,15 +215,16 @@ export default {
         backgroundColor: colorScale(colorProperty(task))
         }"
         >{{titleProperty(task)}}</article>
-      <span v-for="i in range(extentBreadth/15, 0)" :key='i' class="x-ticks" 
-        :style="{width: `${widthScale(15)}px`}"
+      <span v-for="i in range(extentBreadth/topInterval, 0)" :key='i' class="x-ticks" 
+        @click.stop="columnClick(i, $event)"
+        :style="{width: `${widthScale(topInterval)}px`}"
         :class="{pivot: (i == 0 || (i%4 == 0))}" ></span>
     </section>
 
     <section class="bottom-axis">
-      <span v-for="i in range(extentBreadth/60, 0)" :key='i' class="x-bottom-values" 
-        :style="{width: `${widthScale(60)}px`}"        
-        >{{displayFormat(i*60 + roundedExtent[0])}}h</span>
+      <span v-for="i in range(extentBreadth/bottomInterval, 0)" :key='i' class="x-bottom-values" 
+        :style="{width: `${widthScale(bottomInterval)}px`}"        
+        >{{displayFormat(i*bottomInterval + roundedExtent[0])}}h</span>
       </span>
     </section>
     
@@ -283,6 +305,7 @@ $leftAxisWidth: 150px;
     cursor: cell;
     cursor: copy;
 
+
     &:hover{
       background-color: unquote($secondary + '55');
     }
@@ -305,7 +328,7 @@ $leftAxisWidth: 150px;
     cursor: pointer;
     cursor: context-menu;
     transition: {
-      property: color, width, border-color;
+      property: color, width, border-color, background-color;
       duration: .4s;
     };
   }

@@ -24,7 +24,8 @@
     "vue-router": "^3.0.1",
     "vuetify": "^0.17.6",
     "vuex": "^3.0.1",
-    "vuex-persist": "^1.1.1"
+    "vuex-persist": "^1.1.1",
+    "zero-pad": "^1.0.2"
   },
   "devDependencies": {
     "autoprefixer": "^7.2.5",

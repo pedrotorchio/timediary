@@ -85,3 +85,17 @@ html {
     transform: scale(1);
   }
 }
+
+input.regular{
+  transition: color .4s;
+  border: none;
+  outline: none;
+  border-bottom: 1px solid currentColor;
+  margin: 4px;
+  height: 40px;
+  line-height: 20px;
+  font-size: 20px;
+  &::placeholder{
+    color: lightgrey;
+  }
+}

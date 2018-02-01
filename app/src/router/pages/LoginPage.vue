@@ -101,19 +101,7 @@ function greetings(sm){
 
 <style lang="scss" scoped>
   @import '../../assets/styles/config';
-  input.regular{
-    transition: color .4s;
-    border: none;
-    outline: none;
-    border-bottom: 1px solid currentColor;
-    height: 60px;
-    font-size: 40px;
-    &::placeholder{
-      color: currentColor;
-    }
-    &:focus, &:active{
-    }
-  }
+  
   #loginPage{
     display: flex;
     flex-direction: column;
